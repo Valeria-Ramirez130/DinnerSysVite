@@ -1,0 +1,11 @@
+/* Login.css */
+
+.container-gray {
+    background-color: #f0f0f0; /* Color gris del contenedor */
+    padding: 20px; /* Ajusta el relleno según tus preferencias */
+    border-radius: 8px; /* Ajusta el radio de borde según tus preferencias */
+    max-width: 400px; /* Ajusta el ancho máximo según tus preferencias */
+    margin: auto; /* Centra el contenedor en la página */
+    margin-top: 50px; /* Ajusta el margen superior según tus preferencias */
+  }
+  

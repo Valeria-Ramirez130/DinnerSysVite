@@ -1,9 +1,17 @@
+import ProtectedRouteMesero from "../ProuteContent/ProtectedRouteMesero";
 import HomeMesero from "../pages/mesero/HomeMesero";
 
-export let routesmesero = ([
+export const routesmesero = ([
     {
-        path: "/mesero",
-        element: <HomeMesero />
+        path: "/",
+        element: <ProtectedRouteMesero />,
+        children:[
+            {
+                path: "/mesero",
+                element: <HomeMesero/>
+            },
+        
+        ]
     },
 
 ])

@@ -1,11 +1,11 @@
-import ProtectedRoute from "../PRouteContent/ProtectedRoute";
+import ProtectedRouteAdmin from "../ProuteContent/ProtectedRouteAdmin";
 import HomeAdmin from "../pages/admin/HomeAdmin";
 
 
-export let routesadmin = ([
+export const routesadmin = ([
     {
         path: "/",
-        element: <ProtectedRoute />,
+        element: <ProtectedRouteAdmin />,
         children:[
             {
                 path: "/admin",
