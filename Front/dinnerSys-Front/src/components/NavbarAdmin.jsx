@@ -1,9 +1,6 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import logoprincipal from '../img/logoprincipal.svg'; 
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import logoprincipal from '../img/logoprincipal.svg';
 import './NavbarAdmin.css';
 
 export function NavbarAdmin() {
@@ -11,10 +8,10 @@ export function NavbarAdmin() {
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
         <div>
-        <img src={logoprincipal} alt="logoprincipal" className="navbar-logo" />
+          <img src={logoprincipal} alt="logoprincipal" className="navbar-logo" />
         </div>
         <Navbar.Brand className="navbar-brand" href="#home">DinnerSys</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="Usuarios" id="usuarios" className="nav-dropdown">
