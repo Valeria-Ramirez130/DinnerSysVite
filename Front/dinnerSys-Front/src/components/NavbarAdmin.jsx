@@ -4,13 +4,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import logoprincipal from '../img/logoprincipal.svg'; 
+import './NavbarAdmin.css';
 
 export function NavbarAdmin() {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
         <div>
-          <img src={logoprincipal} alt="logoprincipal" />
+        <img src={logoprincipal} alt="logoprincipal" className="navbar-logo" />
         </div>
         <Navbar.Brand className="navbar-brand" href="#home">DinnerSys</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
