@@ -1,40 +1,43 @@
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import logoprincipal from '../img/logoprincipal.svg'; 
 
 export function NavbarAdmin() {
   return (
-      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-        <Container>
-          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="#features">Features</Nav.Link>
-              <Nav.Link href="#pricing">Pricing</Nav.Link>
-              <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <Nav>
-              <Nav.Link href="#deets">More deets</Nav.Link>
-              <Nav.Link eventKey={2} href="#memes">
-                Dank memes
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    );
-  }
+    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+      <Container>
+        <div>
+          <img src={logoprincipal} alt="logoprincipal" />
+        </div>
+        <Navbar.Brand className="navbar-brand" href="#home">DinnerSys</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <NavDropdown title="Usuarios" id="usuarios" className="nav-dropdown">
+              <NavDropdown.Item className="nav-dropdown-item" href="#action/3.1">Crear Usuario</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item className="nav-dropdown-item" href="#action/3.2">Listado de Usuarios</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Productos" id="productos" className="nav-dropdown">
+              <NavDropdown.Item className="nav-dropdown-item" href="#action/3.1">Crear Producto</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item className="nav-dropdown-item" href="#action/3.2">Listado de Productos</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Ventas" id="ventas" className="nav-dropdown">
+              <NavDropdown.Item className="nav-dropdown-item" href="#action/3.1">Listado de Ventas</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          <Nav>
+            <Nav.Link className="nav-perfil" href="#deets">Perfil</Nav.Link>
+            <Nav.Link className="nav-loguot" href="#deets">Cerrar Sesión</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+}
 
 export default NavbarAdmin;

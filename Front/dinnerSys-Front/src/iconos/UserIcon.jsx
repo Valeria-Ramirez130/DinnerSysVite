@@ -9,4 +9,3 @@ export function UserIcon() {
   }
   
   export default UserIcon;
-  

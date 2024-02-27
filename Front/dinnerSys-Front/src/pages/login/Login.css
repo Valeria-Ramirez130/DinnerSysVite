@@ -23,12 +23,13 @@
 }
 
 .container-gray .btn-primary {
-  width: 100%;
-  margin-top: 15px;
-  align-self: center;
+  width: 50%;
+  display: block;
+  margin: 0 auto;
   background-color: #964B00;
   border-color: #964B00;
 }
+
 
 .error-message {
   color: #ff0000;
