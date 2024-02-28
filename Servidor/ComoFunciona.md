@@ -1,12 +1,9 @@
 Pasos para que funcione el codigo:
 
-1. npm install dentro de la carpeta DinnerSys_Back
-2. npm install dentro de la carpeta Servidor
-3. Para correr el front (dentro de la carpeta DinnerSys_Back):
-    npm run dev
-4. Para correr el back (dentro de la carpeta Servidor):
+1. npm install dentro de la carpeta Servidor
+2. Para correr el back (dentro de la carpeta Servidor):
     npm run back
-5. Instalar la extension REST Client, esto para poder usar el archivo (Peticiones.http)
+3. Instalar la extension REST Client, esto para poder usar el archivo (Peticiones.http)
 
 OTRAS COSAS:
 GESTOR DE BASE DE DATOS Y CREACIÓN DE LA BASE DE DATOS
