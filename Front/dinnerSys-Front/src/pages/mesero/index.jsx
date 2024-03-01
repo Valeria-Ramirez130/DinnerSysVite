@@ -1,1 +1,2 @@
-export * from 'HomeMesero';
+export * from './HomeMesero';
+export * from './OpcionesMesero';
