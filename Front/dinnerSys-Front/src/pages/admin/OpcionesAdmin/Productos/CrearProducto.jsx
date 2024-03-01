@@ -1,4 +1,4 @@
-import './CrearProducto';
+import './CrearProducto.css';
 
 export function CrearProducto() {
   return (
