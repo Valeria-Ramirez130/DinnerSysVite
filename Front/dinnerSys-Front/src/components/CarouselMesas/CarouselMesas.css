@@ -1,0 +1,79 @@
+/* CarouselMesas.css */
+
+.carousel-container {
+    width: 30%; /* Ancho del carrusel en relación con el tamaño de la pantalla */
+    height: 80vh; /* Altura del carrusel en relación con el 80% de la altura de la pantalla */
+    margin: 20px 0 20px 20px; /* Margen superior, derecho, inferior, izquierdo */
+    overflow: hidden; /* Oculta el contenido que se desborde del contenedor */
+    float: left; /* Hace que el carrusel se alinee a la izquierda */
+    background: #CFAF86; /* Fondo del carrusel */
+  }
+  
+  .mesa-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mesa-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70px; /* Ancho del círculo */
+    height: 70px; /* Altura del círculo */
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: -40px; /* Ajusta la posición del círculo arriba del ícono */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1; /* Asegura que el círculo esté encima del ícono */
+  }
+  
+  .mesa-icon {
+    width: 100px; /* Ancho del ícono de mesa */
+    height: 100px; /* Altura del ícono de mesa */
+    position: relative; /* Cambiado a relative para que el ícono esté debajo del círculo */
+    z-index: 0; /* Asegura que el ícono esté debajo del círculo */
+  }
+  
+  .mesa-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .mesa-container:not(:last-child) {
+    margin-bottom: 10px; /* Margen inferior entre las mesas */
+  }
+  
+  @media (max-width: 768px) {
+    .carousel-container {
+      width: 100%; /* Ancho completo en dispositivos móviles */
+      height: 50vh; /* Altura del carrusel en relación con el 50% de la altura de la pantalla */
+      margin: 20px 0; /* Margen superior e inferior */
+      float: none; /* Elimina el float para centrarlo en dispositivos móviles */
+    }
+  }
+    .mesa-circle {
+      width: 60px; /* Ancho del círculo en dispositivos móviles */
+      height: 60px; /* Altura del círculo en dispositivos móviles */
+      top: -30px; /* Ajusta la posición del círculo arriba del ícono en dispositivos móviles */
+    }
+  
+    .mesa-icon {
+      width: 80px; /* Tamaño del ícono de mesa en dispositivos móviles */
+      height: 80px; /* Tamaño del ícono de mesa en dispositivos móviles */
+    }
+  
+    .mesa-number {
+      bottom: -15px
+    }

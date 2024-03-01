@@ -1,4 +1,5 @@
 import ProtectedRouteMesero from "../ProuteContent/ProtectedRouteMesero";
+import CarouselMesas from "../components/CarouselMesas/CarouselMesas";
 import { NavbarMesero } from "../components/NavbarMesero";
 import { ObtenerMesas } from "../pages/mesero";
 import HomeMesero from "../pages/mesero/HomeMesero";
@@ -15,6 +16,7 @@ export const routesmesero = [
             <>
               <NavbarMesero />
               <HomeMesero />
+              <CarouselMesas/>
             </>
           ),
         },

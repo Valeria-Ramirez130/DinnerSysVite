@@ -1,0 +1,44 @@
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  .formulario-header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px 5px 0 0; /* Redondea solo la esquina superior */
+    width: 100%; /* Ancho del 100% */
+  }
+  
+  .header-text {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .formulario-usuario {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 5px 5px; /* Redondea solo la esquina inferior */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px; /* Ajuste en el margen superior */
+  }
+  
+  .button-submit {
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: #cc0000;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
