@@ -32,65 +32,65 @@ export function CrearUsuario() {
       <div className="formulario-header">
         <h1 className="header-text">Crear Usuario</h1>
       </div>
-      <Form className='formulario-usuario' onSubmit={formik.handleSubmit}>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formGridName">
-            <Form.Label>Nombres de usuario</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Digite los nombres"
-              name="nombres"
-              value={formik.values.nombres}
-              onChange={formik.handleChange}
-            />
-            <div className="error-message">{formik.errors.nombres}</div>
-          </Form.Group>
+        <Form className='formulario-usuario' onSubmit={formik.handleSubmit}>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGridName">
+              <Form.Label>Nombres de usuario</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Digite los nombres"
+                name="nombres"
+                value={formik.values.nombres}
+                onChange={formik.handleChange}
+              />
+              <div className="error-message">{formik.errors.nombres}</div>
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridLastname">
-            <Form.Label>Apellidos de usuario</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Digite los apellidos"
-              name="apellidos"
-              value={formik.values.apellidos}
-              onChange={formik.handleChange}
-            />
-            <div className="error-message">{formik.errors.apellidos}</div>
-          </Form.Group>
-        </Row>
+            <Form.Group as={Col} controlId="formGridLastname">
+              <Form.Label>Apellidos de usuario</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Digite los apellidos"
+                name="apellidos"
+                value={formik.values.apellidos}
+                onChange={formik.handleChange}
+              />
+              <div className="error-message">{formik.errors.apellidos}</div>
+            </Form.Group>
+          </Row>
 
-        <Row className="mb-3">
-          <Form.Group className="mb-3" controlId="formGridPassword">
-            <Form.Label>Contraseña</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Digite la contraseña"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-            />
-            <div className="error-message">{formik.errors.password}</div>
-          </Form.Group>
+          <Row className="mb-3">
+            <Form.Group className="mb-3" controlId="formGridPassword">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Digite la contraseña"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+              />
+              <div className="error-message">{formik.errors.password}</div>
+            </Form.Group>
 
-          <Form.Group as={Col} controlId="formGridState">
-            <Form.Label>Rol</Form.Label>
-            <Form.Select
-              name="rol"
-              value={formik.values.rol}
-              onChange={formik.handleChange}
-            >
-              <option>Seleccione rol de usuario</option>
-              <option>Administrador</option>
-              <option>Mesero</option>
-            </Form.Select>
-            <div className="error-message">{formik.errors.rol}</div>
-          </Form.Group>
-        </Row>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Rol</Form.Label>
+              <Form.Select
+                name="rol"
+                value={formik.values.rol}
+                onChange={formik.handleChange}
+              >
+                <option>Seleccione rol de usuario</option>
+                <option>Administrador</option>
+                <option>Mesero</option>
+              </Form.Select>
+              <div className="error-message">{formik.errors.rol}</div>
+            </Form.Group>
+          </Row>
 
-        <Button variant="primary" type="submit" className='button-submit'>
-          Crear Usuario
-        </Button>
-      </Form>
+          <Button variant="primary" type="submit" className='button-submit'>
+            Crear Usuario
+          </Button>
+        </Form>
     </div>
   );
 }
