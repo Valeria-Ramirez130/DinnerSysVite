@@ -12,7 +12,7 @@ export function CrearUsuario() {
     initialValues: {
       nombres: '',
       apellidos: '',
-      password: '',
+      cedula: '',
       rol: 'Seleccione rol de usuario',
     },
     validationSchema: Yup.object({
@@ -61,7 +61,7 @@ export function CrearUsuario() {
 
           <Row className="mb-3">
             <Form.Group className="mb-3" controlId="formGridPassword">
-              <Form.Label>Contraseña</Form.Label>
+              <Form.Label>Cedula</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Digite la contraseña"

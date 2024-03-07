@@ -1,0 +1,74 @@
+.listado-usuarios-container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    margin-bottom: 35px;
+  }
+  
+  .listado-usuarios-header {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #663300 !important;
+    padding: 10px;
+    color: #fff;
+  }
+  
+  .listado-usuarios-input {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .listado-usuarios-scroll-container {
+    overflow-x: auto; /* Añadido para permitir el desplazamiento horizontal */
+  }
+  
+  .listado-usuarios-table {
+    width: 100%;
+  }
+  
+  .listado-usuarios-table th, .listado-usuarios-table td {
+    text-align: center;
+  }
+  
+  .listado-usuarios-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .listado-usuarios-button {
+    width: 120px;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .listado-usuarios-button-update {
+    background-color: #007BFF !important;
+    color: #fff;
+  }
+  
+  .listado-usuarios-button-delete {
+    background-color: #DC3545 !important;
+    color: #fff;
+  }
+  
+  /* Media Query para dispositivos móviles */
+  @media (max-width: 767px) {
+    .listado-usuarios-input {
+      /* Estilos específicos para los inputs en dispositivos móviles */
+    }
+  
+    .listado-usuarios-button {
+      width: 100%;
+      margin-top: 10px;
+      margin-right: 0;
+    }
+  }
+  

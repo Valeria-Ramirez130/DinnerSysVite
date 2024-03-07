@@ -1,84 +1,75 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useAuth } from '../../auth/AuthProvider';
 import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
 
-export function Login() {
+const Login = () => {
   const { setIsAuthenticated } = useAuth();
 
-  const [formulario, setFormulario] = useState({
-    email: '',
-    password: '',
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .matches(/^[a-zA-Z]+$/, 'Ingrese solo letras')
+      .required('Campo requerido'),
+    password: Yup.string().trim().required('Campo requerido'),
   });
 
-  const [errores, setErrores] = useState({
-    email: '',
-    password: '',
+  const onSubmit = (values, { setErrors }) => {
+    // Validation of the form using Yup schema
+    validationSchema
+      .validate(values, { abortEarly: false })
+      .then(() => {
+        console.log('Formulario enviado:', values);
+        localStorage.setItem("User", JSON.stringify({ id: 3 }));
+        setIsAuthenticated(true);
+      })
+      .catch((errors) => {
+        const mappedErrors = {};
+        errors.inner.forEach((error) => {
+          mappedErrors[error.path] = error.message;
+        });
+        setErrors(mappedErrors);
+      });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit,
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormulario((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    setErrores((prevState) => ({
-      ...prevState,
-      [name]: '',
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Validación del correo electrónico
-    if (!formulario.email.includes('@')) {
-      setErrores((prevState) => ({
-        ...prevState,
-        email: 'Correo no es válido',
-      }));
-      return;
-    }
-
-    // Validación de la contraseña
-    if (formulario.password.trim() === '') {
-      setErrores((prevState) => ({
-        ...prevState,
-        password: 'Debe completar este campo',
-      }));
-      return;
-    }
-
-    console.log('Formulario enviado:', formulario);
-    localStorage.setItem("User", JSON.stringify({ id: 3 }));
-    setIsAuthenticated(true);
-  };
 
   return (
     <div className='user-form'>
       <UserCircleIcon />
 
       <div className="container-gray">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Correo electronico</Form.Label>
+        <Form onSubmit={formik.handleSubmit}>
+          <Form.Group className="mb-3" controlId="formBasicUsername">
+            <Form.Label>Nombre de Usuario</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <UserIcon />
               </InputGroup.Text>
               <FormControl
                 type="text"
-                placeholder="Correo electronico"
-                name="email"
-                value={formulario.email}
-                onChange={handleChange}
+                placeholder="Nombre de usuario"
+                name="username"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
             </InputGroup>
-            <div className="error-message">{errores.email}</div>
+            <div className="error-message">
+              {formik.touched.username && formik.errors.username}
+            </div>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -91,11 +82,14 @@ export function Login() {
                 type="password"
                 placeholder="Contraseña"
                 name="password"
-                value={formulario.password}
-                onChange={handleChange}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
             </InputGroup>
-            <div className="error-message">{errores.password}</div>
+            <div className="error-message">
+              {formik.touched.password && formik.errors.password}
+            </div>
           </Form.Group>
 
           <Button variant="primary" type="submit" className="btn-primary">
@@ -105,6 +99,6 @@ export function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

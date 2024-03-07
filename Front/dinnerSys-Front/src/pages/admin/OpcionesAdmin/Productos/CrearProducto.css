@@ -1,0 +1,95 @@
+/* Establece que el contenedor principal ocupe el 100% del ancho de su contenedor padre */
+.contenedor-principal {
+    width: 80%;
+    margin: 0 auto;
+    /* Centra el contenedor en la página */
+    margin-top: 30px;
+    border-radius: 10px;
+    /* Añadido borde redondeado */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* Añadido sombreado */
+    overflow: hidden;
+    /* Para que el sombreado no se desborde si hay elementos internos que sobresalen */
+}
+
+/* Estiliza el encabezado del formulario */
+.formulario-header {
+    text-align: center;
+    /* Centra el texto en el encabezado */
+    margin-bottom: 20px;
+    /* Agrega espacio en la parte inferior del encabezado */
+    background-color: #663300 !important;
+    /* Cambia el color de fondo del encabezado (usa tu propio color) */
+    padding: 10px;
+    /* Añade un relleno alrededor del encabezado para mayor estilo */
+    color: #fff;
+}
+
+/* Hace que el formulario ocupe el 100% del ancho de su contenedor padre */
+.formulario-productos {
+    width: 100%;
+    padding: 20px;
+    /* Añade relleno alrededor del formulario */
+}
+
+/* Estiliza las filas del formulario */
+.formulario-productos .mb-3 {
+    display: flex;
+    /* Utiliza un diseño flexible para los elementos dentro de cada fila */
+    gap: 20px;
+    /* Agrega espacio entre los elementos dentro de cada fila */
+}
+
+/* Estiliza los inputs del formulario */
+.formulario-productos input {
+    width: 100%;
+    /* Hace que los inputs ocupen el 100% del ancho disponible */
+    padding: 10px;
+    /* Añade relleno a los inputs para separarlos del borde */
+}
+
+/* Estiliza los mensajes de error dentro del formulario */
+.formulario-productos .error-message {
+    color: red;
+    /* Color del texto de error */
+    margin-top: 5px;
+    /* Agrega espacio en la parte superior del mensaje de error */
+}
+
+/* Estiliza el botón de enviar del formulario */
+.button-submit {
+    width: 100%;
+    /* Hace que el botón ocupe el 100% del ancho de su contenedor padre */
+    margin-top: 20px;
+    /* Agrega espacio en la parte superior del botón */
+    background-color: #a85418 !important;
+    border-color: transparent !important;
+}
+
+/* Establece que el formulario ocupe el 100% del ancho en dispositivos móviles */
+@media (max-width: 767px) {
+
+    /* Estiliza las filas del formulario para que sean columnas en dispositivos móviles */
+    .formulario-productos .mb-3 {
+        flex-direction: column;
+        align-items: center !important;
+        /* Centra los elementos en el eje cruzado (vertical) */
+    }
+
+    /* Centra los elementos dentro de cada columna en dispositivos móviles */
+    .formulario-productos .mb-3>* {
+        margin: 0 auto;
+    }
+
+    /* Ajusta el relleno de los inputs para dispositivos móviles */
+    .formulario-productos input {
+        padding: 10px;
+        margin-bottom: 10px;
+        /* Añade espacio entre los inputs en dispositivos móviles */
+    }
+
+    /* Ajusta el margen del botón de enviar para dispositivos móviles */
+    .button-submit {
+        margin-top: 20px;
+    }
+}
