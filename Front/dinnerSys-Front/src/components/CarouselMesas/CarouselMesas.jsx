@@ -1,50 +1,56 @@
-// CarouselMesas.js
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './CarouselMesas.css';
 import mesaRedonda from '../../img/mesaRedonda.svg';
+import './CarouselMesas.css';
 
 const CarouselMesas = () => {
-  const [mesas, setMesas] = useState([
-    { id: 1, numero: 'Mesa 1', color: 'green' },
-    { id: 2, numero: 'Mesa 2', color: 'green' },
-    { id: 3, numero: 'Mesa 3', color: 'green' },
-    { id: 4, numero: 'Mesa 5', color: 'green' },
-    { id: 5, numero: 'Mesa 5', color: 'green' },
-    // Agrega más mesas según sea necesario
-  ]);
+  const [selectedTable, setSelectedTable] = useState(null);
 
   const settings = {
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
   };
 
-  const handleMesaClick = (mesaId) => {
-    setMesas((prevMesas) =>
-      prevMesas.map((mesa) =>
-        mesa.id === mesaId ? { ...mesa, color: mesa.color === 'green' ? 'red' : 'green' } : mesa
-      )
-    );
+  const tables = [
+    { id: 1, number: '1' },
+    { id: 2, number: '2' },
+    { id: 3, number: '3' },
+  ];
+
+  const handleTableClick = (tableId) => {
+    setSelectedTable(tableId);
   };
 
   return (
-    <div className="carousel-container">
-      <Slider {...settings}>
-        {mesas.map((mesa) => (
-          <div key={mesa.id} className="mesa-container" onClick={() => handleMesaClick(mesa.id)}>
-            <div className="mesa-wrapper">
-              <div className="mesa-circle" style={{ backgroundColor: mesa.color }}>
-                <p className="mesa-number">{mesa.numero}</p>
+    <div className='container-principal'>
+      <div className="carousel-container">
+        <Slider {...settings}>
+          {tables.map((table) => (
+            <div
+              key={table.id}
+              className="table-card"
+              style={{ border: selectedTable === table.id ? '2px solid red' : '1px solid #ddd' }}
+              onClick={() => handleTableClick(table.id)}
+            >
+              <div className="circle-container">
+                <div className="circle" style={{ backgroundColor: selectedTable === table.id ? 'red' : 'green' }}>
+                  {table.number}
+                </div>
+                <img
+                  src={mesaRedonda}
+                  alt="Mesa Redonda Icon"
+                  className="table-icon"
+                />
               </div>
-              <img src={mesaRedonda} alt="Mesa Redonda Icon" className="mesa-icon" />
             </div>
-          </div>
-        ))}
-      </Slider>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 };
