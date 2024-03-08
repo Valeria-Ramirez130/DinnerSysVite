@@ -1,7 +1,8 @@
+
 /* Estilos para el container principal */
 .container-principal {
   margin: 20px;
-  background-color: #8B4513;
+  background-color: #CFAF86;
   padding: 20px;
 }
 
@@ -14,10 +15,10 @@
 
 /* Estilos para las tarjetas de mesa */
 .table-card {
-  border: 1px solid #ddd;
+  border: 1px solid transparent; /* Borde transparente */
   padding: 20px;
   text-align: center;
-  background-color: #f9f9f9;
+  background-color: transparent; /* Fondo transparente */
   border-radius: 8px;
   margin: 10px;
   position: relative;
@@ -32,10 +33,10 @@
 
 /* Estilos para el círculo */
 .circle {
-  width: 50px;
-  height: 50px;
+  width: 50px; /* Tamaño del círculo */
+  height: 50px; /* Tamaño del círculo */
   border-radius: 50%;
-  background-color: green;
+  background-color: transparent; /* Fondo transparente */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,8 +46,40 @@
 
 /* Estilos para el icono de la mesa */
 .table-icon {
-  width: 30px;
-  height: 30px;
+  width: 80px; /* Tamaño del ícono de mesa */
+  height: 80px; /* Tamaño del ícono de mesa */
   fill: #333;
-  margin-top: 5px; /* Ajusta según sea necesario para alinear con el círculo */
+  margin-top: -25px; /* Ajusta según sea necesario para alinear con el círculo */
+}
+
+/* Media Query para dispositivos móviles */
+@media only screen and (max-width: 768px) {
+  /* Estilos para el container principal */
+  .container-principal {
+    padding: 10px;
+  }
+
+  /* Estilos para el container del carousel */
+  .carousel-container {
+    max-width: 100%;
+  }
+
+  /* Estilos para las tarjetas de mesa */
+  .table-card {
+    padding: 10px;
+  }
+
+  /* Estilos para el círculo */
+  .circle {
+    width: 40px; /* Tamaño del círculo */
+    height: 40px; /* Tamaño del círculo */
+    margin: 0 auto 5px;
+  }
+
+  /* Estilos para el icono de la mesa */
+  .table-icon {
+    width: 60px; /* Tamaño del ícono de mesa */
+    height: 60px; /* Tamaño del ícono de mesa */
+    margin-top: -15px; /* Ajusta según sea necesario para alinear con el círculo */
+  }
 }

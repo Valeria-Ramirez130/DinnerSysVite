@@ -6,7 +6,7 @@ import mesaRedonda from '../../img/mesaRedonda.svg';
 import './CarouselMesas.css';
 
 const CarouselMesas = () => {
-  const [selectedTable, setSelectedTable] = useState(null);
+  const [selectedTables, setSelectedTables] = useState([]);
 
   const settings = {
     dots: true,
@@ -23,7 +23,16 @@ const CarouselMesas = () => {
   ];
 
   const handleTableClick = (tableId) => {
-    setSelectedTable(tableId);
+    // Comprobamos si la mesa ya está en el array de mesas seleccionadas
+    const isSelected = selectedTables.includes(tableId);
+
+    if (isSelected) {
+      // Si ya está seleccionada, la eliminamos
+      setSelectedTables(selectedTables.filter((id) => id !== tableId));
+    } else {
+      // Si no está seleccionada, la agregamos al array
+      setSelectedTables([...selectedTables, tableId]);
+    }
   };
 
   return (
@@ -34,11 +43,17 @@ const CarouselMesas = () => {
             <div
               key={table.id}
               className="table-card"
-              style={{ border: selectedTable === table.id ? '2px solid red' : '1px solid #ddd' }}
+              style={{
+                border: selectedTables.includes(table.id) ? '2px solid red' : '1px solid #ddd',
+                backgroundColor: selectedTables.includes(table.id) ? 'lightgreen' : 'transparent',
+              }}
               onClick={() => handleTableClick(table.id)}
             >
               <div className="circle-container">
-                <div className="circle" style={{ backgroundColor: selectedTable === table.id ? 'red' : 'green' }}>
+                <div
+                  className="circle"
+                  style={{ backgroundColor: selectedTables.includes(table.id) ? 'red' : 'green' }}
+                >
                   {table.number}
                 </div>
                 <img
@@ -55,4 +70,4 @@ const CarouselMesas = () => {
   );
 };
 
-export default CarouselMesas;
+export default CarouselMesas;
