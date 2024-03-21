@@ -16,7 +16,9 @@ const Login = () => {
     username: Yup.string()
       .matches(/^[a-zA-Z]+$/, 'Ingrese solo letras')
       .required('Campo requerido'),
-    password: Yup.string().trim().required('Campo requerido'),
+    password: Yup.string()
+      .matches(/^[0-9]+$/, 'Ingrese solo números') // Aquí agregamos la validación para solo números
+      .required('Campo requerido'),
   });
 
   const onSubmit = (values, { setErrors }) => {

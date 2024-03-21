@@ -11,11 +11,11 @@ export function ListadoProductos() {
   });
 
   const [productos, setProductos] = useState([
-    { id: 1, nombre: 'Producto 1', categoria: 'Categoría 1', precio: '10' },
-    { id: 2, nombre: 'Producto 2', categoria: 'Categoría 2', precio: '20' },
-    { id: 3, nombre: 'Producto 3', categoria: 'Categoría 3', precio: '30' },
-    { id: 4, nombre: 'Producto 4', categoria: 'Categoría 4', precio: '40' },
-    { id: 5, nombre: 'Producto 5', categoria: 'Categoría 5', precio: '50' },
+    { id: 1, nombre: 'Producto 1', descripcion: 'Descripción 1', categoria: 'Categoría 1', precio: '10' },
+    { id: 2, nombre: 'Producto 2', descripcion: 'Descripción 2', categoria: 'Categoría 2', precio: '20' },
+    { id: 3, nombre: 'Producto 3', descripcion: 'Descripción 3', categoria: 'Categoría 3', precio: '30' },
+    { id: 4, nombre: 'Producto 4', descripcion: 'Descripción 4', categoria: 'Categoría 4', precio: '40' },
+    { id: 5, nombre: 'Producto 5', descripcion: 'Descripción 5', categoria: 'Categoría 5', precio: '50' },
     // Agrega más productos según tus necesidades
   ]);
 
@@ -33,6 +33,7 @@ export function ListadoProductos() {
     const nuevoProducto = {
       id: productos.length + 1,
       nombre: `Producto ${productos.length + 1}`,
+      descripcion: `Descripción ${productos.length + 1}`,
       categoria: `Categoría ${productos.length + 1}`,
       precio: (productos.length + 1) * 10
     };
@@ -89,6 +90,7 @@ export function ListadoProductos() {
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Descripción</th>
                 <th>Categoría</th>
                 <th>Precio</th>
                 <th>Acciones</th>
@@ -99,6 +101,7 @@ export function ListadoProductos() {
                 <tr key={producto.id}>
                   <td>{producto.id}</td>
                   <td>{producto.nombre}</td>
+                  <td>{producto.descripcion}</td>
                   <td>{producto.categoria}</td>
                   <td>{producto.precio}</td>
                   <td>

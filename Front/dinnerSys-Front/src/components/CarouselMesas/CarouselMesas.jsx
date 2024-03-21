@@ -4,9 +4,11 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import mesaRedonda from '../../img/mesaRedonda.svg';
 import './CarouselMesas.css';
+import PedidosMesero from '../../pages/mesero/OpcionesMesero/PedidosMesero/PedidosMesero';
 
 const CarouselMesas = () => {
-  const [selectedTables, setSelectedTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const settings = {
     dots: true,
@@ -23,15 +25,12 @@ const CarouselMesas = () => {
   ];
 
   const handleTableClick = (tableId) => {
-    // Comprobamos si la mesa ya está en el array de mesas seleccionadas
-    const isSelected = selectedTables.includes(tableId);
-
-    if (isSelected) {
-      // Si ya está seleccionada, la eliminamos
-      setSelectedTables(selectedTables.filter((id) => id !== tableId));
+    if (showForm && selectedTable === tableId) {
+      setShowForm(false);
+      setSelectedTable(null);
     } else {
-      // Si no está seleccionada, la agregamos al array
-      setSelectedTables([...selectedTables, tableId]);
+      setShowForm(true);
+      setSelectedTable(tableId);
     }
   };
 
@@ -44,15 +43,15 @@ const CarouselMesas = () => {
               key={table.id}
               className="table-card"
               style={{
-                border: selectedTables.includes(table.id) ? '2px solid red' : '1px solid #ddd',
-                backgroundColor: selectedTables.includes(table.id) ? 'lightgreen' : 'transparent',
+                border: selectedTable === table.id ? '2px solid red' : '1px solid #ddd',
+                backgroundColor: selectedTable === table.id ? 'lightgreen' : 'transparent',
               }}
               onClick={() => handleTableClick(table.id)}
             >
               <div className="circle-container">
                 <div
                   className="circle"
-                  style={{ backgroundColor: selectedTables.includes(table.id) ? 'red' : 'green' }}
+                  style={{ backgroundColor: selectedTable === table.id ? 'red' : 'green' }}
                 >
                   {table.number}
                 </div>
@@ -66,8 +65,13 @@ const CarouselMesas = () => {
           ))}
         </Slider>
       </div>
+      {showForm && selectedTable && (
+        <div className="form-container">
+          <PedidosMesero mesa={selectedTable} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default CarouselMesas;
+export default CarouselMesas;
