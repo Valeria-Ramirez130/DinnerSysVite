@@ -41,7 +41,7 @@ export const verificarCredenciales = async (req, res) => {
 export const getUsuarios = async (req, res) => {
     console.log("\n\nFuncion: getUsuarios()");
     try {
-        const usuarios = await pool.query('SELECT * FROM usuarios U WHERE U.Inactivo = 0;');
+        const usuarios = await pool.query('SELECT * FROM usuarios WHERE Inactivo = 0;');
         console.log(usuarios);
         res.status(200).json(usuarios);
     } catch (error) {
@@ -55,7 +55,7 @@ export const getUsuarioById = async (req, res) => {
     console.log("\n\nFuncion: getUsuarioById()");
     try {
         const id = req.params.id;
-        const usuario = await pool.query('SELECT * FROM usuarios WHERE usuarioId = ?', [id]);
+        const usuario = await pool.query('SELECT * FROM usuarios WHERE usuarioId = ? AND Inactivo = 0', [id]);
         console.log(usuario);
         res.status(200).json(usuario);
     } catch (error) {
@@ -68,7 +68,7 @@ export const getUsuarioById = async (req, res) => {
 export const getMeseros = async (req, res) => {
     console.log("\n\nFuncion: getMeseros()");
     try {
-        const Meseros = await pool.query('SELECT * FROM usuarios WHERE UPPER(TipoUsuario) LIKE "%MESERO"');
+        const Meseros = await pool.query('SELECT * FROM usuarios WHERE UPPER(TipoUsuario) LIKE "%MESERO" AND Inactivo = 0;');
         console.log(Meseros);
         res.status(200).json(Meseros);
     } catch (error) {
@@ -146,9 +146,3 @@ export const deleteUsuario = async (req, res) => {
         res.status(500).json({ Error: 'Error del servidor' });
     }
 }
-
-/* 
-Puedes explicarme lo que hace este archivo? dime si o no
-
-
-*/

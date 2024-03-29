@@ -27,7 +27,7 @@ export const getProductoById = async (req, res) => {
         const { ProductoId } = req.params;
         // Verificar si el ID es un numero valido y es un numero entero positivo
         if (ProductoId > 0) {
-            const [producto] = await pool.query('SELECT * FROM productos WHERE productoid = ?', [ProductoId]);
+            const [producto] = await pool.query('SELECT * FROM productos WHERE ProductoId = ? AND Inactivo = 0;', [ProductoId]);
             console.log('Respuesta consulta producto: ', producto);
             if (producto) {
                 console.log('Producto encontrado: ', producto.rows);
