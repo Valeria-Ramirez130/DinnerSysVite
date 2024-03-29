@@ -1,31 +1,38 @@
 DROP DATABASE IF EXISTS DinnerSys;
 CREATE DATABASE IF NOT EXISTS DinnerSys;
 
-/* Tabla Usuarios */
+/* Tabla Usuarios 
+Este tendrá un campo llamado inactivo, por si se borra simplemente actualizamos el campo
+inactivo a 1 o sea, true */
 CREATE TABLE IF NOT EXISTS Usuarios (
 	usuarioId INT PRIMARY KEY AUTO_INCREMENT,
     Cedula varchar(20) UNIQUE NOT NULL,
     Nombres varchar(50) NOT NULL,
     Apellidos varchar(50) NOT NULL,
-    TipoUsuario varchar(13) NOT NULL
+    TipoUsuario varchar(13) NOT NULL,
+    Inactivo BOOLEAN DEFAULT 0
 );
 
 /* Tabla DatosAcceso (Se llena de manera automática) */
 CREATE TABLE IF NOT EXISTS DatosAcceso(
     usuarioId INT NOT NULL,
-    Usuario varchar(50) UNIQUE NOT NULL,
+    Usuario varchar(50) NOT NULL,
     Contrasena varchar(50) NOT NULL,
     PRIMARY KEY (usuarioId),
     FOREIGN KEY (usuarioId) REFERENCES Usuarios(usuarioId) ON DELETE CASCADE
 );
 
-/* Tabla Productos */
+/* Tabla Productos 
+Esta tabla contará también con un campo llamado inactivo, 
+por si se borra simplemente actualizamos el campo a 1, o sea, true
+*/
 CREATE TABLE IF NOT EXISTS Productos(
     ProductoId INT PRIMARY KEY AUTO_INCREMENT,
     Nombre varchar(50) NOT NULL,
     Descripcion varchar(50) NOT NULL,
+    Categoria varchar(30) NOT NULL,
     Precio INT NOT NULL,
-    Categoria varchar(30) NOT NULL
+    Inactivo BOOLEAN DEFAULT 0
 );
 
 /* Tabla Mesas */
@@ -37,6 +44,7 @@ CREATE TABLE IF NOT EXISTS Mesas(
 /* Tabla Pedidos */
 CREATE TABLE IF NOT EXISTS Pedidos (
     pedidoId INT PRIMARY KEY AUTO_INCREMENT,
+    Comentario TEXT DEFAULT NULL,
     FechaPedido DATETIME DEFAULT NOW() NOT NULL,
     MeseroId INT, /* MeseroId puede ser NULL por si se elimina entonces para que no se pierda la info */
     MesaId INT NOT NULL,
@@ -106,20 +114,20 @@ INSERT INTO Mesas (MesaId) VALUES
 /* Inserción tabla Pedidos */
 INSERT INTO Pedidos (MeseroId, MesaId) VALUES
 (6, 1),
-(6, 2),
-(5, 3);
+(5, 2),
+(4, 3);
 
 /* Inserción tabla DetallePedidoProducto */
 INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES
 /* Inicio insercion pedido con id 1 */
-(1, 1, 1),
-(1, 2, 2),
-(1, 3, 1),
+(1, 2, 3),
+(1, 3, 6),
+(1, 4, 3),
 /* Fin inserción pedido con id 1 */
 /* Inicio insercion pedido con id 2 */
-(2, 4, 1),
+(2, 1, 2),
+(2, 8, 2),
 (2, 5, 2),
-(2, 6, 1),
 /* Fin inserción pedido con id 2 */
 /* Inicio insercion pedido con id 3 */
 (3, 7, 1),
@@ -127,3 +135,44 @@ INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES
 (3, 9, 1);
 /* Fin inserción pedido con id 3 */
 
+
+/* ----------------------------------------
+CONSULTAS DE PRUEBA
+Mostrar todos los pedidos con sus productos, cantidad, precio unitario y precio del total de los productos
+SELECT
+Pe.pedidoId,
+Pe.FechaPedido,
+Pr.ProductoId,
+Pr.Nombre,
+Pr.Precio as PrecioUnitario,
+DPP.Cantidad,
+(Pr.Precio*DPP.Cantidad) as PrecioTotal,
+U.Nombres as Mesero,
+M.MesaId as N°Mesa
+FROM Pedidos Pe
+INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId
+INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId
+INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId
+INNER JOIN mesas M ON M.MesaId = Pe.MesaId;
+
+SELECT SUM(Pr.Precio * DPP.Cantidad) AS PrecioTotalTodosLosPedido FROM detallepedidoproducto DPP
+INNER JOIN productos Pr
+ON Pr.ProductoId = DPP.ProductoId 
+
+SELECT 
+Pe.pedidoId,
+Pe.FechaPedido,
+Pr.ProductoId,
+Pr.Nombre,
+Pr.Precio as PrecioUnitario,
+DPP.Cantidad,
+(Pr.Precio*DPP.Cantidad) as PrecioTotal,
+U.Nombres as Mesero,
+M.MesaId as N°Mesa 
+FROM Pedidos Pe
+INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId
+INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId
+INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId
+INNER JOIN mesas M ON M.MesaId = Pe.MesaId
+WHERE Pe.FechaPedido BETWEEN '2024-02-01-' AND '2024-02-29';
+*/

@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ### Eliminar un Usuario
-DELETE http://localhost:3003/usuarios/deleteUsuario/8
+DELETE http://localhost:3003/usuarios/deleteUsuario/5
 
 
 ### |---------------------------------------------------------------|
@@ -62,6 +62,9 @@ GET http://localhost:3003/pedidos/getPedidos
 ### Obtener los pedido de una mesa mandando el id de la mesa
 GET http://localhost:3003/pedidos/getPedidosXMesaId/20
 
+### Obtener todos los datos de un pedido: n°mesa, mesero, fecha, producto, precio unitario, cantidad, precio total
+GET http://localhost:3003/pedidos/getTotalPedido/2
+
 ### Crear un Pedido
 POST http://localhost:3003/pedidos/createPedido
 Content-Type: application/json
@@ -81,6 +84,28 @@ Content-Type: application/json
     ]
 }
 
+### Agregar nuevos productos a un pedido
+
+
+### Actualizar un Pedido
+PUT http://localhost:3003/pedidos/updatePedido/2
+Content-Type: application/json
+
+{
+    "lstProductos":[
+        {
+            "ProductoId": 1,
+            "Cantidad": 2
+        },
+        {
+            "ProductoId": 5,
+            "Cantidad": 3
+        }
+    ]
+}
+
+### Eliminar un pedido
+DELETE httP://localhost:3003/pedidos/deletePedido/3
 
 ### |---------------------------------------------------------------|
 ### |---------------------------------------------------------------|
@@ -101,7 +126,7 @@ Content-Type: application/json
     "Nombre": "Pizza Mexicana",
     "Descripcion": "Pizza con maiz y carne molida para 4 personas",
     "Precio": 33000,
-    "Categoria": "Comida"
+    "Categoria": "Comida Rapida"
 }
 
 ### Actualizar un Producto

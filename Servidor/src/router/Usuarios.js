@@ -8,12 +8,12 @@ import { getUsuarios, getUsuarioById, getMeseros, verificarCredenciales, createU
 routerUsuario.post('/loggin', verificarCredenciales); //Vetifica credenciales para el loggin
 routerUsuario.post('/createUsuario', createUsuario); //Crea un usuario
 //PETICIONES GET
-routerUsuario.get('/getUsuarios', getUsuarios); //Trae todos los usuarios
+routerUsuario.get('/getUsuarios', getUsuarios); //Trae todos los usuarios que esten activos
 routerUsuario.get('/getUsuario/:id', getUsuarioById); //Trae un usaario por su id
-routerUsuario.get('/getMeseros', getMeseros); //Trae todos los meseros
+routerUsuario.get('/getMeseros', getMeseros); //Trae todos los meseros que esten activos
 //PETICIONES PUT
 routerUsuario.put('/updateUsuario/:UsuarioId', updateUsuario); //Actualiza un usuario
 //PETICIONES DELETE
-routerUsuario.delete('/deleteUsuario/:UsuarioId', deleteUsuario); //Eliminar un usuario
+routerUsuario.delete('/deleteUsuario/:UsuarioId', deleteUsuario); //Actualiza un usuario. inactivo = 1
 
 export default routerUsuario;
