@@ -1,8 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, InputGroup, FormControl, Button, Container } from 'react-bootstrap';
 import './ListadoUsuarios.css';
+import { deleteUser, getUsers } from '../../../../API/Usuarios';
 
 export function ListadoUsuarios() {
+
+  const [registros, setRegistros] = useState([]);
+
+  useEffect(()=>{ //Esta es la estructura para hacer un get
+    getUsers()
+      .then(res => {
+        res ? setRegistros(res) : console.log("Error al obtener los usuarios");
+      })
+  }, [])
+
+  //Para una funcion como por ejemplo delete se necesita nomas llamarla y pasarle los datos, asi:
+  /* const onHandleClickEliminar = (usuarioId) => {
+    deleteUser(usuarioId)
+      .then(res => {
+        res ? alert("Usuario eliminado") : alert("Error al eliminar el usuario");
+      })
+      Todas estas funciones estan ya en la API, solo es llamarlas
+  } */
+
   const [filtros, setFiltros] = useState({
     id: '',
     nombres: '',
@@ -10,24 +30,16 @@ export function ListadoUsuarios() {
     rol: ''
   });
 
-  const [registros, setRegistros] = useState([
-    { id: 1, nombres: 'Registro 1', apellidos: 'Registro 1', rol: 'Registro 1' },
-    { id: 2, nombres: 'Registro 2', apellidos: 'Registro 2', rol: 'Registro 2' },
-    { id: 3, nombres: 'Registro 3', apellidos: 'Registro 3', rol: 'Registro 3' },
-    { id: 4, nombres: 'Registro 4', apellidos: 'Registro 4', rol: 'Registro 4' },
-    { id: 5, nombres: 'Registro 5', apellidos: 'Registro 5', rol: 'Registro 5' },
-    // Agrega más registros según tus necesidades
-  ]);
 
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [mostrarFormularioActualizacion, setMostrarFormularioActualizacion] = useState(false);
 
   const registrosFiltrados = registros.filter(registro =>
     !registro.eliminado &&
-    registro.id.toString().includes(filtros.id) &&
-    registro.nombres.toLowerCase().includes(filtros.nombres.toLowerCase()) &&
-    registro.apellidos.toLowerCase().includes(filtros.apellidos.toLowerCase()) &&
-    registro.rol.toLowerCase().includes(filtros.rol.toLowerCase())
+    registro.usuarioId.toString().includes(filtros.id) &&
+    registro.Nombres.toLowerCase().includes(filtros.nombres.toLowerCase()) &&
+    registro.Apellidos.toLowerCase().includes(filtros.apellidos.toLowerCase()) &&
+    registro.TipoUsuario.toLowerCase().includes(filtros.rol.toLowerCase())
   );
 
   const agregarRegistro = () => {
@@ -55,6 +67,25 @@ export function ListadoUsuarios() {
   const seleccionarRegistro = (registro) => {
     setRegistroSeleccionado(registro);
   };
+
+  const onHandleClickEliminar = (id) => {
+    const opcion = prompt("¿Está seguro que desea eliminar el usuario?").toLowerCase();
+    if(opcion.includes("si")){
+      deleteUser(id)
+        .then(res => {
+          if(res){
+            alert("Usuario eliminado");
+            setRegistros(registros.filter(registro => registro.usuarioId !== id))
+          }else{
+            alert("Error al eliminar el usuario");
+          }
+        })
+    }else{
+      console.log("No se eliminará el usuario");
+    }
+  }
+  // IMPORTANTE LEER ESTO
+  //En cuanto a la funcion actualizar no se como porque no puedo pasarle los datos al componente crear entonces no sé como es
 
   return (
     <div className="listado-usuarios-container">
@@ -98,11 +129,11 @@ export function ListadoUsuarios() {
             </thead>
             <tbody>
               {registrosFiltrados.map(registro => (
-                <tr key={registro.id}>
-                  <td>{registro.id}</td>
-                  <td>{registro.nombres}</td>
-                  <td>{registro.apellidos}</td>
-                  <td>{registro.rol}</td>
+                <tr key={registro.usuarioId}>
+                  <td>{registro.usuarioId}</td>
+                  <td>{registro.Nombres}</td>
+                  <td>{registro.Apellidos}</td>
+                  <td>{registro.TipoUsuario}</td>
                   <td>
                     <Button
                       className="listado-usuarios-button listado-usuarios-button-update"
@@ -112,7 +143,7 @@ export function ListadoUsuarios() {
                     </Button>
                     <Button
                       className="listado-usuarios-button listado-usuarios-button-delete"
-                      onClick={() => eliminarRegistro(registro)}
+                      onClick={() => onHandleClickEliminar(registro.usuarioId)}
                     >
                       Eliminar
                     </Button>

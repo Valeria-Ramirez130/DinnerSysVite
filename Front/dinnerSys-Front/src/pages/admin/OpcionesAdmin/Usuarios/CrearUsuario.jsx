@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './CrearUsuario.css';
+import { createUser } from '../../../../API/Usuarios';
 
 export function CrearUsuario() {
   const formik = useFormik({
@@ -24,6 +25,16 @@ export function CrearUsuario() {
     onSubmit: (formValues) => {
       // Aquí puedes realizar la lógica de envío del formulario
       console.log('Formulario enviado:', formValues);
+      const newUser = {
+        Cedula: formValues.password,
+        Nombres: formValues.nombres,
+        Apellidos: formValues.apellidos,
+        TipoUsuario: formValues.rol
+      }
+      createUser(newUser)
+        .then(res => {
+          res ? alert("Usuario creado") : alert("Error al crear el usuario");
+        })
     },
   });
 
@@ -63,8 +74,8 @@ export function CrearUsuario() {
             <Form.Group className="mb-3" controlId="formGridPassword">
               <Form.Label>Cedula</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Digite la contraseña"
+                type="text"
+                placeholder="Digite la cedula"
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
