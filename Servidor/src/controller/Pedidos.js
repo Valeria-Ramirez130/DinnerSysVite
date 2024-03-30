@@ -44,7 +44,7 @@ export const getPedidos = async (req, res) => {
                     });
 
                     if (pedidosId[index] !== pedidosId[index + 1]) {
-                        
+
                         const objPedido = {
                             PedidoId: i.pedidoId,
                             Fecha: i.FechaPedido,
@@ -174,7 +174,7 @@ export const createPedido = async (req, res) => {
                         if (PedidoId) {
                             let cantidadInserciones = 0;
                             for (var producto of lstProductos) {
-                                const isInsertDetallePedidoProducto = await pool.query('INSERT INTO DetallePedidoProducto (PedidoId, ProductoId) VALUES (?,?)', [PedidoId.PedidoId, producto.ProductoId]);
+                                const isInsertDetallePedidoProducto = await pool.query('INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES (?,?,?)', [PedidoId.PedidoId, producto.ProductoId, producto.Cantidad]);
                                 if (isInsertDetallePedidoProducto.affectedRows === 1) {
                                     cantidadInserciones++;
                                 }
@@ -212,16 +212,27 @@ export const agregarNuevosProductosAlPedido = async (req, res) => {
     try {
         const { pedidoId } = req.params;
         const { lstProductos } = req.body;
+        let cantidadInserciones = 0;
         //La idea esque esto sea una lista de objetos de productos pero que solo tenga el ID del producto y la cantidad
         if (pedidoId) {
-            if (lstProductos) {
-                for (var producto of lstProductos) {
-                    const isInsert = await pool.query('INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES (?,?)', [pedidoId, producto.ProductoId, producto.Cantidad]);
-
+            const [isPedido] = await pool.query('SELECT PedidoId FROM Pedidos WHERE PedidoId = ?', [pedidoId]);
+            if (isPedido) {
+                if (lstProductos) {
+                    for (var producto of lstProductos) {
+                        const isInsert = await pool.query('INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES (?,?,?)', [pedidoId, producto.ProductoId, producto.Cantidad]);
+                        if (isInsert.affectedRows === 1) {
+                            console.log("Producto agregado al pedido");
+                            cantidadInserciones++;
+                        }
+                    }
+                    verificarCantidadInserciones(res, cantidadInserciones, lstProductos, "agregado");
+                } else {
+                    console.log("No se recibieron los productos a agregar al pedido");
+                    res.status(400).json({ Error: 'No se recibieron los productos a agregar al pedido' });
                 }
             } else {
-                console.log("No se recibieron los productos a agregar al pedido");
-                res.status(400).json({ Error: 'No se recibieron los productos a agregar al pedido' });
+                console.log("El pedido no existe");
+                res.status(400).json({ Error: 'El pedido no existe' });
             }
         } else {
             console.log("No se recibió el ID del pedido");
@@ -293,7 +304,7 @@ const verificarCantidadInserciones = (res, cantidadInserciones, lstProductos, ti
     // console.log(cantidadInserciones, lstProductos.length);
     if (cantidadInserciones === lstProductos.length) {//Debe ser IGUAL SIEMPRE al length de la lista
         console.log(`Pedido ${tipoPeticion} correctamente`);
-        res.status(201).json({ Message: `Pedido ${tipoPeticion} correctamente` });
+        res.status(200).json({ Message: `Pedido ${tipoPeticion} correctamente` });
     } else if (cantidadInserciones === 0) {
         console.log("No se insertaron productos al pedido");
         res.status(400).json({ Error: 'No se insertaron productos al pedido' });

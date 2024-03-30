@@ -84,6 +84,24 @@ Content-Type: application/json
     ]
 }
 
+### AGREGAR AL PEDIDO
+POST http://localhost:3003/pedidos/agregarAlPedido/2
+Content-Type: application/json
+
+{
+    "lstProductos": [
+        {
+            "ProductoId": 3,
+            "Cantidad": 1
+        },
+        {
+            "ProductoId": 4,
+            "Cantidad": 2
+        }
+    
+    ]
+}
+
 ### Agregar nuevos productos a un pedido
 
 
