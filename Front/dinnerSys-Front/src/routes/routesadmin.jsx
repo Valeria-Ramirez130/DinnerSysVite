@@ -1,7 +1,7 @@
 import ProtectedRouteAdmin from "../ProuteContent/ProtectedRouteAdmin";
 import { NavbarAdmin } from "../components/NavbarAdmin/NavbarAdmin";
 import HomeAdmin from "../pages/admin/HomeAdmin";
-import { CrearProducto, CrearUsuario, ListadoProductos, ListadoUsuarios, ListadoVentas } from "../pages/admin/OpcionesAdmin";
+import { CrearMesa, CrearProducto, CrearUsuario, ListadoMesas, ListadoProductos, ListadoUsuarios, ListadoVentas } from "../pages/admin/OpcionesAdmin";
 
 
 
@@ -45,6 +45,16 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <ListadoVentas/>
+          </>
+        ),
+      },
+      {
+        path: "/admin/mesas",
+        element: (
+          <>
+            <NavbarAdmin />
+            <CrearMesa/>
+            <ListadoMesas/>
           </>
         ),
       },

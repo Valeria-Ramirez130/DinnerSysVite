@@ -1,4 +1,4 @@
-.listado-productos-container {
+.pedidos-mesero-container {
   width: 80%;
   margin: 0 auto;
   margin-top: 30px;
@@ -6,6 +6,10 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   margin-bottom: 35px;
+}
+
+.listado-productos-container {
+  padding: 20px;
 }
 
 .listado-productos-header {
@@ -44,22 +48,51 @@
 }
 
 .listado-productos-button-update {
-  background-color: #21b55f !important; /* Fondo verde con !important */
-  color: #ffffff; /* Texto blanco */
+  background-color: #21b55f !important; 
 }
 
-.listado-productos-button-delete {
-  background-color: #DC3545;
-  color: #ffffff;
+.pedidos-mesero-container .btn-quitar {
+  background-color: #DC3545 !important; /* Color rojo */
+  color: #fff; /* Texto blanco */
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
-@media (max-width: 767px) {
-  .listado-productos-input {
-  }
+.pedidos-mesero-container .btn-crear {
+  background-color: #28a745 !important; /* Color verde */
+  color: #fff; /* Texto blanco */
+ 
+}
 
-  .listado-productos-button {
-    width: 100%;
-    margin-top: 10px;
-    margin-right: 0;
-  }
+.pedidos-mesero-container .btn-modificar {
+  color: #fff; /* Texto blanco */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.text-danger.mt-3 {
+  margin-top: 20px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Agrega margen en la parte inferior del contenedor de botones */
+}
+
+.btn-container-crearpedido {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Agrega margen en la parte inferior del contenedor de botones */
+}
+
+.btn-modificar {
+  margin-right: 10px; /* Agrega un margen derecho al botón Modificar */
 }

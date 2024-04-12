@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Table, InputGroup, FormControl, Button, Container } from 'react-bootstrap';
+import { Table, InputGroup, FormControl, Button, Container, Alert } from 'react-bootstrap';
 import './PedidosMesero.css'; // Archivo CSS para estilos
 
-export function PedidosMesero({ mesa }) {
+function PedidosMesero({ mesa }) {
   const [filtros, setFiltros] = useState({
     nombre: '',
     categoria: '',
@@ -55,13 +55,43 @@ export function PedidosMesero({ mesa }) {
     console.log("Pedido creado");
   };
 
+  // Datos para la tabla de pedidos
+  const [pedidos, setPedidos] = useState([
+    { id: 1, nombre: 'Plato 1', descripcion: 'Descripción del Plato 1', categoria: 'Entrada', valor: '$10.99' },
+    { id: 2, nombre: 'Plato 2', descripcion: 'Descripción del Plato 2', categoria: 'Plato Principal', valor: '$15.99' },
+    { id: 3, nombre: 'Plato 3', descripcion: 'Descripción del Plato 3', categoria: 'Postre', valor: '$7.99' },
+  ]);
+
+  const [pedidoAModificar, setPedidoAModificar] = useState(null);
+  const [errorMensaje, setErrorMensaje] = useState('');
+
+  const handleQuitar = (id) => {
+    if (pedidoAModificar === null) {
+      setErrorMensaje('Por favor, selecciona un pedido para modificar antes de quitarlo.');
+      return;
+    }
+
+    const updatedPedidos = pedidos.filter((pedido) => pedido.id !== id);
+    setPedidos(updatedPedidos);
+    setErrorMensaje('');
+  };
+
+  const handleModificar = (id) => {
+    setPedidoAModificar(id);
+    setErrorMensaje('');
+  };
+
+  const handleGenerarPedido = () => {
+    // Lógica para generar un nuevo pedido
+  };
+
   return (
-    <div className="listado-productos-container">
+    <div className="pedidos-mesero-container">
       <div className="listado-productos-header">
-        <h1>Pedidos</h1>
+        <h1>Crear Pedido</h1>
       </div>
       <div className="listado-productos-header">
-        <h2>Pedido para la Mesa: {mesa}</h2>
+        <h2>Pedido Mesa: {mesa}</h2>
       </div>
       <Container>
         <InputGroup className="listado-productos-input">
@@ -108,10 +138,47 @@ export function PedidosMesero({ mesa }) {
                     >
                       Añadir
                     </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+
+        <div className="btn-container-crearpedido">
+          <Button
+            variant="success"
+            className="listado-productos-button listado-productos-button-update btn-crear"
+            onClick={crearPedido}
+          >
+            Crear Pedido
+          </Button>
+        </div>
+      </Container>
+      <Container>
+        <div className="listado-productos-scroll-container">
+          <Table striped bordered hover className="listado-productos-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Valor</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pedidos.map((pedido, index) => (
+                <tr key={index}>
+                  <td>{pedido.nombre}</td>
+                  <td>{pedido.descripcion}</td>
+                  <td>{pedido.categoria}</td>
+                  <td>{pedido.valor}</td>
+                  <td>
                     <Button
                       variant="danger"
-                      className="listado-productos-button listado-productos-button-delete"
-                      onClick={() => eliminarProducto(producto)}
+                      className="listado-productos-button listado-productos-button-update btn-quitar"
+                      onClick={() => handleQuitar(pedido.id)}
                     >
                       Quitar
                     </Button>
@@ -122,15 +189,28 @@ export function PedidosMesero({ mesa }) {
           </Table>
         </div>
 
-        <div className="crear-pedido-container">
+        <div className="btn-container">
+          <Button
+            variant="primary"
+            className="btn btn-primary btn-sm btn-modificar"
+            onClick={() => handleModificar(1)}
+          >
+            Modificar
+          </Button>
           <Button
             variant="success"
-            className="listado-productos-button listado-productos-button-update"
-            onClick={crearPedido}
+            className="btn btn-success btn-sm btn-generar"
+            onClick={handleGenerarPedido}
           >
-            Crear Pedido
+            Generar Recibo
           </Button>
         </div>
+
+        {errorMensaje && (
+          <Alert variant="danger" className="text-center mt-3">
+            {errorMensaje}
+          </Alert>
+        )}
       </Container>
     </div>
   );

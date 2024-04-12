@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import mesaRedonda from '../../img/mesaRedonda.svg';
 import './CarouselMesas.css';
-import PedidosMesero from '../../pages/mesero/OpcionesMesero/PedidosMesero/PedidosMesero';
+import PedidosMesero from '../../pages/mesero/OpcionesMesero/PedidosMesero/PedidosMesero'; // Importa PedidosMesero desde la misma carpeta
 
 const CarouselMesas = () => {
   const [selectedTable, setSelectedTable] = useState(null);
@@ -53,7 +53,7 @@ const CarouselMesas = () => {
                   className="circle"
                   style={{ backgroundColor: selectedTable === table.id ? 'red' : 'green' }}
                 >
-                  {table.number}
+                  {table.id}
                 </div>
                 <img
                   src={mesaRedonda}
@@ -65,6 +65,7 @@ const CarouselMesas = () => {
           ))}
         </Slider>
       </div>
+      {/* Mostrar el formulario solo si showForm es true */}
       {showForm && selectedTable && (
         <div className="form-container">
           <PedidosMesero mesa={selectedTable} />

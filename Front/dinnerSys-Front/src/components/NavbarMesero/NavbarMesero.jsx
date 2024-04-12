@@ -18,8 +18,6 @@ export function NavbarMesero() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {/* Utiliza 'as' para renderizar como un componente diferente */}
-            <Nav.Link as={Link} to="/mesero/mesas" className="nav-perfil no-link-style">Mesas</Nav.Link>
-            <Nav.Link as={Link} to="/mesero/pedidos" className="nav-perfil no-link-style">Pedidos</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link className="nav-perfil" href="#deets">Perfil</Nav.Link>

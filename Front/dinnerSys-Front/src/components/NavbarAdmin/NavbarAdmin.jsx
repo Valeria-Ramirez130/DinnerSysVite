@@ -18,6 +18,7 @@ export function NavbarAdmin() {
             <Nav.Link as={Link} to="/admin/usuarios" className="nav-perfil no-link-style">Usuarios</Nav.Link>
             <Nav.Link as={Link} to="/admin/productos" className="nav-perfil no-link-style">productos</Nav.Link>
             <Nav.Link as={Link} to="/admin/ventas" className="nav-perfil no-link-style">Ventas</Nav.Link>
+            <Nav.Link as={Link} to="/admin/mesas" className="nav-perfil no-link-style">Mesas</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link className="nav-perfil" href="#deets">Perfil</Nav.Link>

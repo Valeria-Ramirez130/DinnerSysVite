@@ -1,3 +1,24 @@
+/* Estilos para el formulario de pedidos */
+.form-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Asegura que el formulario esté por encima del carrusel de mesas */
+  width: 100%; /* Ancho del formulario del 80% del contenedor */
+  margin-top: 20px; /* Margen superior */
+  position: relative;
+  margin-left: auto; /* Centrar horizontalmente */
+  margin-right: auto; /* Centrar horizontalmente */
+  display: flex;
+  justify-content: center; /* Centrar en el eje principal */
+}
+
+/* Estilos adicionales para el formulario de pedidos */
+.form-container h2 {
+  margin-top: 0; /* Elimina el margen superior predeterminado */
+  margin-bottom: 20px; /* Añade espacio entre el título y el contenido */
+}
 
 /* Estilos para el container principal */
 .container-principal {
@@ -8,7 +29,7 @@
 
 /* Estilos para el container del carousel */
 .carousel-container {
-  max-width: 600px;
+  max-width: 70%; /* Ancho máximo del carrusel del 70% de la pantalla */
   margin: 0 auto;
   overflow: hidden;
 }
@@ -54,32 +75,5 @@
 
 /* Media Query para dispositivos móviles */
 @media only screen and (max-width: 768px) {
-  /* Estilos para el container principal */
-  .container-principal {
-    padding: 10px;
-  }
-
-  /* Estilos para el container del carousel */
-  .carousel-container {
-    max-width: 100%;
-  }
-
-  /* Estilos para las tarjetas de mesa */
-  .table-card {
-    padding: 10px;
-  }
-
-  /* Estilos para el círculo */
-  .circle {
-    width: 40px; /* Tamaño del círculo */
-    height: 40px; /* Tamaño del círculo */
-    margin: 0 auto 5px;
-  }
-
-  /* Estilos para el icono de la mesa */
-  .table-icon {
-    width: 60px; /* Tamaño del ícono de mesa */
-    height: 60px; /* Tamaño del ícono de mesa */
-    margin-top: -15px; /* Ajusta según sea necesario para alinear con el círculo */
-  }
+  /* Ajustes adicionales para dispositivos móviles si es necesario */
 }

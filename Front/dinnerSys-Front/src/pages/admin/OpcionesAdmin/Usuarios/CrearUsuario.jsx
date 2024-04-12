@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './CrearUsuario.css';
-import { createUser } from '../../../../API/Usuarios';
+import { createUser } from '../../../../API/Usuarios'; // Se asume que esta función hace la solicitud POST al servidor
 
 export function CrearUsuario() {
   const formik = useFormik({
@@ -19,22 +19,27 @@ export function CrearUsuario() {
     validationSchema: Yup.object({
       nombres: Yup.string().required('Digite los nombres'),
       apellidos: Yup.string().required('Digite los apellidos'),
-      password: Yup.string().required('Digite la contraseña'),
+      cedula: Yup.string().required('Digite la cédula'),
       rol: Yup.string().notOneOf(['Seleccione rol de usuario'], 'Seleccione un rol válido'),
     }),
-    onSubmit: (formValues) => {
-      // Aquí puedes realizar la lógica de envío del formulario
-      console.log('Formulario enviado:', formValues);
-      const newUser = {
-        Cedula: formValues.password,
-        Nombres: formValues.nombres,
-        Apellidos: formValues.apellidos,
-        TipoUsuario: formValues.rol
+    onSubmit: async (formValues) => {
+      try {
+        const newUser = {
+          Nombres: formValues.nombres,
+          Apellidos: formValues.apellidos,
+          Cedula: formValues.cedula,
+          TipoUsuario: formValues.rol
+        };
+        const response = await createUser(newUser);
+        if (response.status === 200) {
+          alert("Usuario creado correctamente");
+        } else {
+          alert("Error al crear el usuario");
+        }
+      } catch (error) {
+        console.error("Error al crear usuario:", error);
+        alert("Error al crear el usuario");
       }
-      createUser(newUser)
-        .then(res => {
-          res ? alert("Usuario creado") : alert("Error al crear el usuario");
-        })
     },
   });
 
@@ -43,65 +48,65 @@ export function CrearUsuario() {
       <div className="formulario-header">
         <h1 className="header-text">Crear Usuario</h1>
       </div>
-        <Form className='formulario-usuario' onSubmit={formik.handleSubmit}>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridName">
-              <Form.Label>Nombres de usuario</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite los nombres"
-                name="nombres"
-                value={formik.values.nombres}
-                onChange={formik.handleChange}
-              />
-              <div className="error-message">{formik.errors.nombres}</div>
-            </Form.Group>
+      <Form className='formulario-usuario' onSubmit={formik.handleSubmit}>
+        <Row className="mb-3">
+          <Form.Group as={Col} controlId="formGridName">
+            <Form.Label>Nombres de usuario</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite los nombres"
+              name="nombres"
+              value={formik.values.nombres}
+              onChange={formik.handleChange}
+            />
+            <div className="error-message">{formik.errors.nombres}</div>
+          </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridLastname">
-              <Form.Label>Apellidos de usuario</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite los apellidos"
-                name="apellidos"
-                value={formik.values.apellidos}
-                onChange={formik.handleChange}
-              />
-              <div className="error-message">{formik.errors.apellidos}</div>
-            </Form.Group>
-          </Row>
+          <Form.Group as={Col} controlId="formGridLastname">
+            <Form.Label>Apellidos de usuario</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite los apellidos"
+              name="apellidos"
+              value={formik.values.apellidos}
+              onChange={formik.handleChange}
+            />
+            <div className="error-message">{formik.errors.apellidos}</div>
+          </Form.Group>
+        </Row>
 
-          <Row className="mb-3">
-            <Form.Group className="mb-3" controlId="formGridPassword">
-              <Form.Label>Cedula</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite la cedula"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-              />
-              <div className="error-message">{formik.errors.password}</div>
-            </Form.Group>
+        <Row className="mb-3">
+          <Form.Group className="mb-3" controlId="formGridCedula">
+            <Form.Label>Cédula</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite la cédula"
+              name="cedula"
+              value={formik.values.cedula}
+              onChange={formik.handleChange}
+            />
+            <div className="error-message">{formik.errors.cedula}</div>
+          </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Rol</Form.Label>
-              <Form.Select
-                name="rol"
-                value={formik.values.rol}
-                onChange={formik.handleChange}
-              >
-                <option>Seleccione rol de usuario</option>
-                <option>Administrador</option>
-                <option>Mesero</option>
-              </Form.Select>
-              <div className="error-message">{formik.errors.rol}</div>
-            </Form.Group>
-          </Row>
+          <Form.Group as={Col} controlId="formGridState">
+            <Form.Label>Rol</Form.Label>
+            <Form.Select
+              name="rol"
+              value={formik.values.rol}
+              onChange={formik.handleChange}
+            >
+              <option>Seleccione rol de usuario</option>
+              <option>Administrador</option>
+              <option>Mesero</option>
+            </Form.Select>
+            <div className="error-message">{formik.errors.rol}</div>
+          </Form.Group>
+        </Row>
 
-          <Button variant="primary" type="submit" className='button-submit'>
-            Crear Usuario
-          </Button>
-        </Form>
+        <Button variant="primary" type="submit" className='button-submit'>
+          Crear Usuario
+        </Button>
+      </Form>
     </div>
   );
 }
