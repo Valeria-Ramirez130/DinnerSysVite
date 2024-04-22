@@ -1,59 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, InputGroup, FormControl, Button, Container } from 'react-bootstrap';
+import { getProducts, deleteProduct } from '../../../../API/Productos';
 import './ListadoProductos.css';
+import Alert from '../../../../components/Alert/Alert'; // Importa el componente de Alert
 
 export function ListadoProductos() {
+  const [registros, setRegistros] = useState([]);
   const [filtros, setFiltros] = useState({
     id: '',
     nombre: '',
-    categoria: '',
-    precio: ''
+    descripcion: '',
+    categoria: ''
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
 
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: 'Producto 1', descripcion: 'Descripción 1', categoria: 'Categoría 1', precio: '10' },
-    { id: 2, nombre: 'Producto 2', descripcion: 'Descripción 2', categoria: 'Categoría 2', precio: '20' },
-    { id: 3, nombre: 'Producto 3', descripcion: 'Descripción 3', categoria: 'Categoría 3', precio: '30' },
-    { id: 4, nombre: 'Producto 4', descripcion: 'Descripción 4', categoria: 'Categoría 4', precio: '40' },
-    { id: 5, nombre: 'Producto 5', descripcion: 'Descripción 5', categoria: 'Categoría 5', precio: '50' },
-    // Agrega más productos según tus necesidades
-  ]);
-
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [mostrarFormularioEdicion, setMostrarFormularioEdicion] = useState(false);
-
-  const productosFiltrados = productos.filter(producto =>
-    producto.id.toString().includes(filtros.id) &&
-    producto.nombre.toLowerCase().includes(filtros.nombre.toLowerCase()) &&
-    producto.categoria.toLowerCase().includes(filtros.categoria.toLowerCase()) &&
-    producto.precio.toString().includes(filtros.precio)
-  );
-
-  const agregarProducto = () => {
-    const nuevoProducto = {
-      id: productos.length + 1,
-      nombre: `Producto ${productos.length + 1}`,
-      descripcion: `Descripción ${productos.length + 1}`,
-      categoria: `Categoría ${productos.length + 1}`,
-      precio: (productos.length + 1) * 10
+  useEffect(() => {
+    const fetchData = async () => {
+      const realProducts = await getProducts();
+      if (realProducts) {
+        setRegistros(realProducts);
+      }
     };
-    setProductos([...productos, nuevoProducto]);
-    setProductoSeleccionado(null);
+    fetchData();
+  }, []);
+
+  const handleClickEliminar = async (id) => {
+    setRegistroSeleccionado(id); // Guardar el ID del producto seleccionado
+    setShowAlert(true); // Mostrar la alerta
   };
 
-  const eliminarProducto = (producto) => {
-    if (producto) {
-      const nuevosProductos = productos.map(p =>
-        p.id === producto.id ? { ...p, eliminado: true } : p
-      );
-      setProductos(nuevosProductos.filter(p => !p.eliminado)); // Eliminar realmente el producto
-      setProductoSeleccionado(null);
-    }
+  const confirmarEliminar = () => {
+    deleteProduct(registroSeleccionado)
+      .then(res => {
+        if (res) {
+          setRegistros(registros.filter(registro => registro.ProductoId !== registroSeleccionado));
+        } else {
+          setAlertMessage("Error al eliminar el producto");
+        }
+      })
+      .catch(error => {
+        console.error("Error al llamar a deleteProduct:", error);
+        setAlertMessage("Error al eliminar el producto");
+      });
+    setShowAlert(false); // Ocultar la alerta después de eliminar
   };
+  
+  const handleCloseAlert = () => setShowAlert(false);
 
-  const seleccionarProducto = (producto) => {
-    setProductoSeleccionado(producto);
-  };
+  const registrosFiltrados = registros.filter(registro =>
+    !registro.Inactivo &&
+    registro.ProductoId.toString().includes(filtros.id) &&
+    registro.Nombre.toLowerCase().includes(filtros.nombre.toLowerCase()) &&
+    registro.Descripcion.toLowerCase().includes(filtros.descripcion.toLowerCase()) &&
+    registro.Categoria.toLowerCase().includes(filtros.categoria.toLowerCase())
+  );
 
   return (
     <div className="listado-productos-container">
@@ -73,14 +75,14 @@ export function ListadoProductos() {
             onChange={(e) => setFiltros({ ...filtros, nombre: e.target.value })}
           />
           <FormControl
+            placeholder="Filtrar por descripción..."
+            value={filtros.descripcion}
+            onChange={(e) => setFiltros({ ...filtros, descripcion: e.target.value })}
+          />
+          <FormControl
             placeholder="Filtrar por categoría..."
             value={filtros.categoria}
             onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
-          />
-          <FormControl
-            placeholder="Filtrar por precio..."
-            value={filtros.precio}
-            onChange={(e) => setFiltros({ ...filtros, precio: e.target.value })}
           />
         </InputGroup>
 
@@ -97,23 +99,23 @@ export function ListadoProductos() {
               </tr>
             </thead>
             <tbody>
-              {productosFiltrados.map(producto => (
-                <tr key={producto.id}>
-                  <td>{producto.id}</td>
-                  <td>{producto.nombre}</td>
-                  <td>{producto.descripcion}</td>
-                  <td>{producto.categoria}</td>
-                  <td>{producto.precio}</td>
+              {registrosFiltrados.map(producto => (
+                <tr key={producto.ProductoId}>
+                  <td>{producto.ProductoId}</td>
+                  <td>{producto.Nombre}</td>
+                  <td>{producto.Descripcion}</td>
+                  <td>{producto.Categoria}</td>
+                  <td>{producto.Precio}</td>
                   <td>
                     <Button
-                      variant="primary"
-                      onClick={() => seleccionarProducto(producto)}
+                      className="listado-productos-button listado-productos-button-update"
+                      onClick={() => console.log("Actualizar producto:", producto)}
                     >
                       Actualizar
                     </Button>
                     <Button
-                      variant="danger"
-                      onClick={() => eliminarProducto(producto)}
+                      className="listado-productos-button listado-productos-button-delete"
+                      onClick={() => handleClickEliminar(producto.ProductoId)}
                     >
                       Eliminar
                     </Button>
@@ -124,6 +126,17 @@ export function ListadoProductos() {
           </Table>
         </div>
       </Container>
+    {/* Renderizar la alerta si showAlert es true */}
+    {showAlert && (
+        <div className="alert-overlay">
+          <Alert message={alertMessage} onClose={handleCloseAlert} />
+          <div className="confirmation-container">
+            <p>¿Está seguro que desea eliminar el producto?</p>
+            <Button variant="danger" onClick={confirmarEliminar}>Si</Button>
+            <Button variant="secondary" onClick={handleCloseAlert}>No</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

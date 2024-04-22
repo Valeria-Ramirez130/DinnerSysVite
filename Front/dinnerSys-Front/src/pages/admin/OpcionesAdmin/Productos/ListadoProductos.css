@@ -1,73 +1,128 @@
 .listado-productos-container {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    margin-bottom: 35px;
-  }
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-bottom: 35px;
+}
 
-  .listado-productos-header {
-    text-align: center;
-    margin-bottom: 20px;
-    background-color: #a85418 !important;
-    padding: 10px;
-    color: #fff;
-  }
+.listado-productos-header {
+  text-align: center;
+  background-color: #663300 !important; /* Cambiamos el color de fondo del encabezado */
+  padding: 10px;
+  color: #fff;
+  border-top-left-radius: 10px; /* Borde redondeado en la esquina superior izquierda */
+  border-top-right-radius: 10px; /* Borde redondeado en la esquina superior derecha */
+  margin-bottom: 20px; /* Ajustamos el margen inferior para que no se superponga con el contenido */
+}
 
+.listado-productos-input {
+  width: 100%;
+  padding: 10px;
+}
+
+.listado-productos-scroll-container {
+  max-height: 400px; /* Ajusta según sea necesario */
+  overflow-y: auto; /* Habilita el scroll vertical */
+}
+
+.listado-productos-table {
+  width: 100%;
+}
+
+.listado-productos-table th,
+.listado-productos-table td {
+  text-align: center;
+}
+
+.listado-productos-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.listado-productos-button {
+  width: 120px;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.listado-productos-button.listado-productos-button-update {
+  background-color: #007BFF !important;
+  color: #fff;
+}
+
+.listado-productos-button-delete {
+  background-color: #DC3545 !important;
+  color: #fff;
+}
+
+/* Media Query para dispositivos móviles */
+@media (max-width: 767px) {
   .listado-productos-input {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .listado-productos-scroll-container {
-    overflow-x: auto; 
-  }
-
-  .listado-productos-table {
-    width: 100%;
-  }
-
-  .listado-productos-table th,
-  .listado-productos-table td {
-    text-align: center;
-  }
-
-  .listado-productos-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
+    /* Estilos específicos para los inputs en dispositivos móviles */
   }
 
   .listado-productos-button {
-    width: 120px;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-right: 10px;
+    width: 100%;
+    margin-top: 10px;
+    margin-right: 0;
   }
+}
 
-  .listado-productos-button-update {
-    background-color: #007BFF !important;
-    color: #fff;
-  }
+/* Estilos para la alerta de eliminación */
+.alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Asegura que la alerta esté por encima de todo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .listado-productos-button-delete {
-    background-color: #DC3545 !important;
-    color: #fff;
-  }
+.confirmation-container {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center; /* Centra el contenido horizontalmente */
+}
 
+.confirmation-container p {
+  margin-bottom: 10px;
+}
 
-  @media (max-width: 767px) {
-    .listado-productos-input {
-    }
+/* Estilos para los botones Sí y No */
+.confirmation-container button {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 0 5px; /* Agrega margen entre los botones */
+}
 
-    .listado-productos-button {
-      width: 100%;
-      margin-top: 10px;
-      margin-right: 0;
-    }
-  }
+.confirmation-container button.yes {
+  background-color: #DC3545; /* Cambia el color del botón "Sí" a rojo */
+  color: #fff;
+  border: none;
+}
+
+.confirmation-container button.no {
+  background-color: #007bff; /* Mantiene el color del botón "No" en azul */
+  color: #fff;
+  border: none;
+}
+
+.confirmation-container button.yes:hover,
+.confirmation-container button.no:hover {
+  opacity: 0.8; /* Cambia la opacidad al pasar el cursor sobre los botones */
+}
