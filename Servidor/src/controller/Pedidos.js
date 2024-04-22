@@ -4,73 +4,69 @@ import { pool } from "../conexion/conexion.js";
 //Funcion para traer todos los pedidos
 export const getPedidos = async (req, res) => {
     console.log("\nFuncion getPedidos():");
-    const { isMesero } = req.body;
     try {
-        if (isMesero) {
 
-        } else {
-            const pedido = await pool.query('SELECT ' +
-                'Pe.pedidoId, ' +
-                'Pe.FechaPedido, ' +
-                'M.MesaId as N_Mesa, ' +
-                'U.Nombres as Mesero, ' +
-                'Pr.ProductoId, ' +
-                'Pr.Nombre AS NombreProducto, ' +
-                'Pr.Precio as PrecioUnitario, ' +
-                'DPP.Cantidad, ' +
-                '(Pr.Precio * DPP.Cantidad) as PrecioTotal ' +
-                'FROM Pedidos Pe ' +
-                'INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId ' +
-                'INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
-                'INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId ' +
-                'INNER JOIN mesas M ON M.MesaId = Pe.MesaId ');
-            if (pedido) {
-                castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
-                let precioTotal = 0;
-                let lstProductos = []; //Para agregar al objeto pedido
-                let lstPedido = [];
-                //Casteamos a float y obtenemos el precio total
-                let pedidosId = pedido.map(pedido => pedido.pedidoId)
-                let index = 0;
-                // console.log(pedidosId);
-                for (let i of pedido) {
-                    // console.log(precioTotal);
-                    precioTotal += i.PrecioTotal;
-                    lstProductos.push({//Agregamos todos los atributos del producto a nuestra lista
-                        Producto: i.NombreProducto,
-                        PrecioUnitario: i.PrecioUnitario,
-                        Cantidad: i.Cantidad,
-                        PrecioTotal: i.PrecioTotal
-                    });
+        const pedido = await pool.query('SELECT ' +
+            'Pe.pedidoId, ' +
+            'Pe.FechaPedido, ' +
+            'M.MesaId as N_Mesa, ' +
+            'U.Nombres as Mesero, ' +
+            'Pr.ProductoId, ' +
+            'Pr.Nombre AS NombreProducto, ' +
+            'Pr.Precio as PrecioUnitario, ' +
+            'DPP.Cantidad, ' +
+            '(Pr.Precio * DPP.Cantidad) as PrecioTotal ' +
+            'FROM Pedidos Pe ' +
+            'INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId ' +
+            'INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
+            'INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId ' +
+            'INNER JOIN mesas M ON M.MesaId = Pe.MesaId ');
+        if (pedido) {
+            castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
+            let precioTotal = 0;
+            let lstProductos = []; //Para agregar al objeto pedido
+            let lstPedido = [];
+            //Casteamos a float y obtenemos el precio total
+            let pedidosId = pedido.map(pedido => pedido.pedidoId)
+            let index = 0;
+            // console.log(pedidosId);
+            for (let i of pedido) {
+                // console.log(precioTotal);
+                precioTotal += i.PrecioTotal;
+                lstProductos.push({//Agregamos todos los atributos del producto a nuestra lista
+                    Producto: i.NombreProducto,
+                    PrecioUnitario: i.PrecioUnitario,
+                    Cantidad: i.Cantidad,
+                    PrecioTotal: i.PrecioTotal
+                });
 
-                    if (pedidosId[index] !== pedidosId[index + 1]) {
+                if (pedidosId[index] !== pedidosId[index + 1]) {
 
-                        const objPedido = {
-                            PedidoId: i.pedidoId,
-                            Fecha: i.FechaPedido,
-                            Mesa: i.N_Mesa,
-                            Mesero: i.Mesero,
-                            lstProductos: lstProductos,
-                            PrecioTotalPedido: precioTotal
-                        }
-                        lstPedido.push(objPedido)
-                        lstProductos = []
-                        precioTotal = 0;
+                    const objPedido = {
+                        PedidoId: i.pedidoId,
+                        Fecha: i.FechaPedido,
+                        Mesa: i.N_Mesa,
+                        Mesero: i.Mesero,
+                        lstProductos: lstProductos,
+                        PrecioTotalPedido: precioTotal
                     }
-                    index++;
+                    lstPedido.push(objPedido)
+                    lstProductos = []
+                    precioTotal = 0;
                 }
-
-                console.log(lstPedido);
-
-                res.status(200).json(lstPedido);
-            } else {
-                console.log("Error en el servidor o servidor desconectado");
-                res.statu(500).json({ Error: 'Error del servidor:  +,servidor desconectado' });
+                index++;
             }
+
+            console.log(lstPedido);
+
+            res.status(200).json(lstPedido);
+        } else {
+            console.log("Error en el servidor o servidor desconectado");
+            res.statu(500).json({ Error: 'Error del servidor o servidor desconectado' });
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json('Error del servidor: ', error);
+        res.status(500).json('Error del servidor o servidor desconectado: ', error);
     }
 }
 

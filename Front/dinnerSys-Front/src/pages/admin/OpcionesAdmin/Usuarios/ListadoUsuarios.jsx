@@ -66,12 +66,23 @@ export function ListadoUsuarios() {
   };
 
   const handleSubmitUpdate = () => {
-    const { id, ...updatedUserData } = formData;
-    console.log('Datos a actualizar:', updatedUserData);
+    event.preventDefault(); //Para evitar la recarga de la página
+    const { id } = formData;
+
+    //se crea un objeto con los nombre de las propiedades tal cual como las espera el backend
+    const updatedUserData = { 
+      Nombres: formData.nombres,
+      Apellidos: formData.apellidos,
+      TipoUsuario: formData.rol
+    }
+
+    console.log('Datos a actualizar:', {id, updatedUserData});
+
     updateUser(id, updatedUserData)
       .then(res => {
         console.log('Respuesta del backend:', res);
         if (res) {
+          alert("Usuario actualizado correctamente");
           getUsers().then(updatedUsers => {
             setRegistros(updatedUsers);
             setShowUpdateForm(false);
