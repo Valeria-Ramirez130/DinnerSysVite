@@ -104,7 +104,7 @@ export const updateUsuario = async (req, res) => {
     try {
         const { UsuarioId } = req.params;
         const { Nombres, Apellidos, TipoUsuario } = req.body;
-        if (Nombres || Apellidos || TipoUsuario) {
+        if (Nombres && Apellidos && TipoUsuario) {
             //El COALESCE() es para que si el campo viene vacio, no lo actualice
             const result = await pool.query('UPDATE usuarios SET ' +
                 'Nombres = COALESCE(?, Nombres), Apellidos = COALESCE(?, Apellidos), TipoUsuario = COALESCE(?,TipoUsuario) ' +
