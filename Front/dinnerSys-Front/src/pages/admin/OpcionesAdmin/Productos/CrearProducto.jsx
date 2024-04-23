@@ -19,8 +19,18 @@ export function CrearProducto() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createProduct(producto);
-      console.log('Producto creado exitosamente');
+      const response = await createProduct({
+        Nombre: producto.nombre,
+        Descripcion: producto.descripcion,
+        Categoria: producto.categoria,
+        Precio: producto.precio
+      });
+      if (response) {
+        console.log('Producto creado exitosamente');
+        window.location.reload(); // Refresca la página
+      } else {
+        console.error('Error al crear el producto: No se recibió una respuesta válida');
+      }
     } catch (error) {
       console.error('Error al crear el producto:', error);
     }

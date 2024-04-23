@@ -1,0 +1,25 @@
+.home-admin-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* Establece un ancho fijo para la tarjeta en computadoras */
+  height: auto; /* Altura automática según el contenido */
+  overflow: hidden; /* Evita que el contenido se desborde del contenedor */
+  background-color: white; /* Agrega un fondo blanco para la tarjeta */
+
+}
+
+.logo-image {
+  width: 100%; /* Establece que la imagen ocupe todo el ancho del contenedor */
+  height: auto; /* Altura automática según el ancho */
+  display: block; /* Asegura que la imagen se comporte correctamente */
+}
+
+/* Media query para dispositivos móviles */
+@media only screen and (max-width: 767px) {
+  .home-admin-container {
+    width: 90%; /* Reducir el ancho en dispositivos móviles */
+    max-width: 300px; /* Establecer un ancho máximo para mantener el tamaño de la tarjeta */
+  }
+}

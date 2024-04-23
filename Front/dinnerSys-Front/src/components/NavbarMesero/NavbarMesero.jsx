@@ -7,6 +7,11 @@ import './NavbarMesero.css';
 import { Link } from 'react-router-dom';
 
 export function NavbarMesero() {
+  const handleLogout = () => {
+    // Lógica para cerrar sesión, por ejemplo, eliminar token de autenticación, limpiar cookies, etc.
+    // Después de cerrar sesión, redirigir al usuario a la página de inicio de sesión.
+    window.location.href = "/"; // Redirige al usuario a la página de inicio de sesión
+  };
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -21,7 +26,7 @@ export function NavbarMesero() {
           </Nav>
           <Nav>
             <Nav.Link className="nav-perfil" href="#deets">Perfil</Nav.Link>
-            <Nav.Link className="nav-loguot" href="#deets">Cerrar Sesión</Nav.Link>
+            <Nav.Link className="nav-loguot" onClick={handleLogout}>Cerrar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
