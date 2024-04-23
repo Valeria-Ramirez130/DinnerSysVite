@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useFormik } from 'formik';
@@ -8,41 +9,50 @@ import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
+import { VerifyLogginUser } from '../../API/Usuarios'; // Importar VerifyLogginUser
 
 const Login = () => {
   const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .matches(/^[a-zA-Z]+$/, 'Ingrese solo letras')
-      .required('Campo requerido'),
-    password: Yup.string()
-      .matches(/^[0-9]+$/, 'Ingrese solo números') // Aquí agregamos la validación para solo números
-      .required('Campo requerido'),
+    username: Yup.string().required('Campo requerido'),
+    cedula: Yup.string().required('Campo requerido'),
   });
 
-  const onSubmit = (values, { setErrors }) => {
-    // Validation of the form using Yup schema
-    validationSchema
-      .validate(values, { abortEarly: false })
-      .then(() => {
-        console.log('Formulario enviado:', values);
-        localStorage.setItem("User", JSON.stringify({ id: 3 }));
+  const onSubmit = async (values, { setErrors }) => {
+    try {
+      const userData = await VerifyLogginUser(values.username, values.cedula); // Autenticar al usuario usando la cédula
+
+      if (userData) {
+        // Simulación de autenticación exitosa
+        localStorage.setItem("User", JSON.stringify({ id: userData.id }));
         setIsAuthenticated(true);
-      })
-      .catch((errors) => {
-        const mappedErrors = {};
-        errors.inner.forEach((error) => {
-          mappedErrors[error.path] = error.message;
-        });
-        setErrors(mappedErrors);
-      });
+
+        // Redirigir según el rol del usuario
+        const userRole = userData.rol.toLowerCase(); // Convertir el rol a minúsculas
+        console.log('Rol del usuario:', userRole);
+        if (userRole === "administrador") {
+          navigate("/admin");
+        } else if (userRole === "mesero") {
+          navigate("/mesero");
+        } else {
+          console.error("Rol de usuario desconocido:", userRole);
+        }
+      } else {
+        setError("Credenciales inválidas");
+      }
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      setError("Error al iniciar sesión");
+    }
   };
 
   const formik = useFormik({
     initialValues: {
       username: '',
-      password: '',
+      cedula: '',
     },
     validationSchema,
     onSubmit,
@@ -75,27 +85,29 @@ const Login = () => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Contraseña</Form.Label>
+            <Form.Label>Cedula</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <LockIcon />
               </InputGroup.Text>
               <FormControl
                 type="password"
-                placeholder="Contraseña"
-                name="password"
-                value={formik.values.password}
+                placeholder="Cedula"
+                name="cedula"
+                value={formik.values.cedula}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
             </InputGroup>
             <div className="error-message">
-              {formik.touched.password && formik.errors.password}
+              {formik.touched.cedula && formik.errors.cedula}
             </div>
           </Form.Group>
 
+          {error && <div className="error-message">{error}</div>}
+
           <Button variant="primary" type="submit" className="btn-primary">
-            Iniciar Sesion
+            Iniciar Sesión
           </Button>
         </Form>
       </div>

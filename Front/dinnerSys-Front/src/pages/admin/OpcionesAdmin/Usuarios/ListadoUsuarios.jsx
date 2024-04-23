@@ -1,5 +1,3 @@
-// En ListadoUsuarios.jsx
-
 import React, { useEffect, useState } from 'react';
 import { Table, InputGroup, FormControl, Button, Container, Form } from 'react-bootstrap';
 import './ListadoUsuarios.css';
@@ -82,7 +80,6 @@ export function ListadoUsuarios() {
       .then(res => {
         console.log('Respuesta del backend:', res);
         if (res) {
-          alert("Usuario actualizado correctamente");
           getUsers().then(updatedUsers => {
             setRegistros(updatedUsers);
             setShowUpdateForm(false);
@@ -102,6 +99,11 @@ export function ListadoUsuarios() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFiltros({ ...filtros, [name]: value });
+  };
+
   const registrosFiltrados = registros.filter(registro =>
     !registro.eliminado &&
     registro.usuarioId.toString().includes(filtros.id) &&
@@ -117,7 +119,30 @@ export function ListadoUsuarios() {
       </div>
       <Container>
         <InputGroup className="mb-3">
-          {/* Código de filtro omitido para mantener la brevedad */}
+          <FormControl
+            placeholder="Filtrar por ID..."
+            name="id"
+            value={filtros.id}
+            onChange={handleFilterChange}
+          />
+          <FormControl
+            placeholder="Filtrar por nombres..."
+            name="nombres"
+            value={filtros.nombres}
+            onChange={handleFilterChange}
+          />
+          <FormControl
+            placeholder="Filtrar por apellidos..."
+            name="apellidos"
+            value={filtros.apellidos}
+            onChange={handleFilterChange}
+          />
+          <FormControl
+            placeholder="Filtrar por rol..."
+            name="rol"
+            value={filtros.rol}
+            onChange={handleFilterChange}
+          />
         </InputGroup>
 
         <div className="listado-usuarios-scroll-container">
@@ -186,6 +211,10 @@ export function ListadoUsuarios() {
             </Form.Group>
             <Button variant="primary" type="submit">
               Actualizar
+            </Button>
+            {/* Botón de cerrar */}
+            <Button variant="danger" onClick={() => setShowUpdateForm(false)}>
+              Cerrar
             </Button>
           </Form>
         </div>

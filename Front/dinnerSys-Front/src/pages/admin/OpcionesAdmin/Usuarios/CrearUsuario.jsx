@@ -31,10 +31,8 @@ export function CrearUsuario() {
           TipoUsuario: formValues.rol
         };
         const response = await createUser(newUser);
-        if (response.status === 200) {
-          alert("Usuario creado correctamente");
-        } else {
-          alert("Error al crear el usuario");
+        if (response.status !== 200) {
+          window.location.reload(); 
         }
       } catch (error) {
         console.error("Error al crear usuario:", error);

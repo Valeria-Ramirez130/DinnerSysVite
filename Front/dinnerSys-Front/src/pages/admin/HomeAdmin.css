@@ -1,0 +1,31 @@
+.home-admin-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px; 
+    height: auto; 
+    overflow: hidden; 
+    background-color: white; 
+  
+  }
+  
+  .logo-image {
+    width: 100%; 
+    height: auto; 
+    display: block; 
+  }
+  
+ 
+  @media only screen and (max-width: 767px) {
+    .home-admin-container {
+      width: 90%;
+      max-width: 300px;
+    }
+  
+    .logo-image {
+      height: 100%; /* Ajusta la altura al 100% del contenedor */
+      width: auto; /* Mantén el ancho original */
+      object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor manteniendo la proporción */
+    }
+  }
