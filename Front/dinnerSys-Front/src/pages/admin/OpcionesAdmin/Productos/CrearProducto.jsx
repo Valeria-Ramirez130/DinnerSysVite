@@ -35,7 +35,7 @@ export function CrearProducto() {
       console.error('Error al crear el producto:', error);
     }
   };
-
+  
   return (
     <div className="contenedor-principal">
       <div className="formulario-header">

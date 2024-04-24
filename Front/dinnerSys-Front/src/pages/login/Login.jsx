@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useFormik } from 'formik';
@@ -9,44 +8,31 @@ import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
-import { VerifyLogginUser } from '../../API/Usuarios';
 
 const Login = () => {
   const { setIsAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setIsAuthenticated(false);
-  }, []);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Campo requerido'),
     cedula: Yup.string().required('Campo requerido'),
   });
 
-  const onSubmit = async (values, { setErrors }) => {
-    try {
-      const userData = await VerifyLogginUser(values.username, values.cedula);
-      if (userData) {
-        localStorage.setItem("User", JSON.stringify(userData));
+  const onSubmit = (values, { setErrors }) => {
+    // Validation of the form using Yup schema
+    validationSchema
+      .validate(values, { abortEarly: false })
+      .then(() => {
+        console.log('Formulario enviado:', values);
+        localStorage.setItem("User", JSON.stringify({ id: 3 }));
         setIsAuthenticated(true);
-        const userRole = userData.rol.toLowerCase();
-        console.log('Rol del usuario:', userRole);
-        if (userRole === "administrador") {
-          navigate("/admin");
-        } else if (userRole === "mesero") {
-          navigate("/mesero");
-        } else {
-          console.error("Rol de usuario desconocido:", userRole);
-        }
-      } else {
-        setError("Credenciales inválidas");
-      }
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      setError("Error al iniciar sesión");
-    }
+      })
+      .catch((errors) => {
+        const mappedErrors = {};
+        errors.inner.forEach((error) => {
+          mappedErrors[error.path] = error.message;
+        });
+        setErrors(mappedErrors);
+      });
   };
 
   const formik = useFormik({
