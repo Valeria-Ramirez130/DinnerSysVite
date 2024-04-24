@@ -68,13 +68,13 @@ export function ListadoUsuarios() {
     const { id } = formData;
 
     //se crea un objeto con los nombre de las propiedades tal cual como las espera el backend
-    const updatedUserData = { 
+    const updatedUserData = {
       Nombres: formData.nombres,
       Apellidos: formData.apellidos,
       TipoUsuario: formData.rol
     }
 
-    console.log('Datos a actualizar:', {id, updatedUserData});
+    console.log('Datos a actualizar:', { id, updatedUserData });
 
     updateUser(id, updatedUserData)
       .then(res => {

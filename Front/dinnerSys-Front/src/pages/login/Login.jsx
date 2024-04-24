@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useFormik } from 'formik';
@@ -9,44 +8,31 @@ import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
-import { VerifyLogginUser } from '../../API/Usuarios'; // Importar VerifyLogginUser
 
 const Login = () => {
   const { setIsAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Campo requerido'),
     cedula: Yup.string().required('Campo requerido'),
   });
 
-  const onSubmit = async (values, { setErrors }) => {
-    try {
-      const userData = await VerifyLogginUser(values.username, values.cedula); // Autenticar al usuario usando la cédula
-
-      if (userData) {
-        // Simulación de autenticación exitosa
-        localStorage.setItem("User", JSON.stringify({ id: userData.id }));
+  const onSubmit = (values, { setErrors }) => {
+    // Validation of the form using Yup schema
+    validationSchema
+      .validate(values, { abortEarly: false })
+      .then(() => {
+        console.log('Formulario enviado:', values);
+        localStorage.setItem("User", JSON.stringify({ id: 3 }));
         setIsAuthenticated(true);
-
-        // Redirigir según el rol del usuario
-        const userRole = userData.rol.toLowerCase(); // Convertir el rol a minúsculas
-        console.log('Rol del usuario:', userRole);
-        if (userRole === "administrador") {
-          navigate("/admin");
-        } else if (userRole === "mesero") {
-          navigate("/mesero");
-        } else {
-          console.error("Rol de usuario desconocido:", userRole);
-        }
-      } else {
-        setError("Credenciales inválidas");
-      }
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      setError("Error al iniciar sesión");
-    }
+      })
+      .catch((errors) => {
+        const mappedErrors = {};
+        errors.inner.forEach((error) => {
+          mappedErrors[error.path] = error.message;
+        });
+        setErrors(mappedErrors);
+      });
   };
 
   const formik = useFormik({
