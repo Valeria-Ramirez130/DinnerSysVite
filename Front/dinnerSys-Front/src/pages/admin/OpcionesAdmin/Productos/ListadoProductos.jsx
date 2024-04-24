@@ -216,12 +216,6 @@ export function ListadoProductos() {
             <Button variant="danger" onClick={() => setShowUpdateForm(false)}>
               Cerrar
             </Button>
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 29a65fa4b71c4902e6a0f994715f13ccfd88b0e9
           </Form>
         </div>
       )}

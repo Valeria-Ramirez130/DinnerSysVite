@@ -1,5 +1,4 @@
 .home-admin-container {
-<<<<<<< HEAD
   width: 90%; /* Reducir el ancho en dispositivos móviles */
   max-width: 300px; /* Establecer un ancho máximo para mantener el tamaño de la tarjeta */
   margin: 50px auto 0; /* Agregar un margen superior y centrar horizontalmente */
@@ -11,35 +10,21 @@
   height: auto; /* Altura automática según el ancho */
   display: block; /* Asegura que la imagen se comporte correctamente */
 }
-=======
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px; 
-    height: auto; 
-    overflow: hidden; 
-    background-color: white; 
-  
+
+
+/* Media query para dispositivos móviles */
+@media only screen and (max-width: 767px) {
+  .home-admin-container {
+    width: 90%; /* Reducir el ancho en dispositivos móviles */
+    max-width: 300px; /* Establecer un ancho máximo para mantener el tamaño de la tarjeta */
+    position: relative; /* Cambiar la posición a relativa para que la imagen fluya dentro del contenedor */
+    top: unset; /* Eliminar la posición superior */
+    transform: unset; /* Eliminar la transformación */
+    margin-top: 50px; /* Agregar un margen superior para separar la imagen de la barra de navegación */
+    text-align: center; /* Centrar el contenido horizontalmente */
   }
-  
+
   .logo-image {
-    width: 100%; 
-    height: auto; 
-    display: block; 
+    margin: 0 auto; /* Centrar la imagen dentro del contenedor */
   }
-  
- 
-  @media only screen and (max-width: 767px) {
-    .home-admin-container {
-      width: 90%;
-      max-width: 300px;
-    }
-  
-    .logo-image {
-      height: 100%; /* Ajusta la altura al 100% del contenedor */
-      width: auto; /* Mantén el ancho original */
-      object-fit: cover; /* Recorta la imagen para que se ajuste al contenedor manteniendo la proporción */
-    }
-  }
->>>>>>> 29a65fa4b71c4902e6a0f994715f13ccfd88b0e9
+}
