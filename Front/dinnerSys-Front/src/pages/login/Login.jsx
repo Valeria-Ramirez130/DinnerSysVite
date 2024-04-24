@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
@@ -9,12 +9,16 @@ import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
-import { VerifyLogginUser } from '../../API/Usuarios'; // Importar VerifyLogginUser
+import { VerifyLogginUser } from '../../API/Usuarios';
 
 const Login = () => {
   const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setIsAuthenticated(false);
+  }, []);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Campo requerido'),
@@ -23,15 +27,11 @@ const Login = () => {
 
   const onSubmit = async (values, { setErrors }) => {
     try {
-      const userData = await VerifyLogginUser(values.username, values.cedula); // Autenticar al usuario usando la cédula
-
+      const userData = await VerifyLogginUser(values.username, values.cedula);
       if (userData) {
-        // Simulación de autenticación exitosa
-        localStorage.setItem("User", JSON.stringify({ id: userData.id }));
+        localStorage.setItem("User", JSON.stringify(userData));
         setIsAuthenticated(true);
-
-        // Redirigir según el rol del usuario
-        const userRole = userData.rol.toLowerCase(); // Convertir el rol a minúsculas
+        const userRole = userData.rol.toLowerCase();
         console.log('Rol del usuario:', userRole);
         if (userRole === "administrador") {
           navigate("/admin");
