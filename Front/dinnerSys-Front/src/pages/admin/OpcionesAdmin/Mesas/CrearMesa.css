@@ -2,46 +2,62 @@
 
 /* Bloque principal */
 .crear-mesas {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    margin-bottom: 35px;
-  }
-  
-  /* Elemento de encabezado */
-  .crear-mesas__header {
-    text-align: center;
-    background-color: #663300;
-    padding: 10px;
-  }
-  
-  /* Modificador de encabezado */
-  .crear-mesas__title {
-    color: #fff;
-  }
-  
-  /* Contenedor de contenido */
-  .crear-mesas__content {
-    padding: 20px;
-  }
-  
-  /* Elemento de botones */
-  .crear-mesas__buttons {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  /* Modificador de botones */
-  .crear-mesas__submit {
-    width: 100%;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-bottom: 35px;
+}
+
+/* Elemento de encabezado */
+.crear-mesas__header {
+  text-align: center;
+  background-color: #663300;
+  padding: 10px;
+}
+
+/* Modificador de encabezado */
+.crear-mesas__title {
+  color: #fff;
+}
+
+/* Contenedor de contenido */
+.crear-mesas__content {
+  padding: 20px;
+}
+
+/* Elemento de botones */
+.crear-mesas__buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Modificar el botón de menos */
+.crear-mesas__buttons button:nth-child(1) {
+  background-color: #DC3545 !important;
+  border-color: transparent !important; /* Elimina el borde */
+  margin-right: 10px; /* Añade un margen a la derecha del botón */
+  width: 100px; /* Ajusta el ancho del botón */
+}
+
+/* Modificar el botón de más */
+.crear-mesas__buttons button:nth-child(2) {
+  background-color: #21b55f !important;
+  border-color: transparent !important; /* Elimina el borde */
+  margin-left: 10px; /* Añade un margen a la izquierda del botón */
+  width: 100px; /* Ajusta el ancho del botón */
+}
+
+
+/* Modificador de botones */
+.crear-mesas__submit {
+  width: 100%;
   /* Hace que el botón ocupe el 100% del ancho de su contenedor padre */
   margin-top: 20px;
   /* Agrega espacio en la parte superior del botón */
   background-color: #a85418 !important;
   border-color: transparent !important;
-  }
-  
+}

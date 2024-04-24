@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import './CrearMesa.css';
+import { createTable } from '../../../../API/Mesas'; // Importa la función createTable del archivo mesas.js
 
 export function CrearMesa() {
   const [cantidad, setCantidad] = useState(1);
+  const [mensaje, setMensaje] = useState('');
+  const [mensajeColor, setMensajeColor] = useState('');
 
   const incrementarCantidad = () => {
     setCantidad(cantidad + 1);
@@ -15,9 +18,27 @@ export function CrearMesa() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`Creando ${cantidad} mesas...`);
+    let isAnyError = false;
+    for (let i = 0; i < cantidad; i++) {
+      const isCreated = await createTable(); // Llama a la función createTable
+      if (!isCreated) {
+        isAnyError = true;
+        break;
+      }
+    }
+    if (isAnyError) {
+      setMensaje('Error al crear mesas');
+      setMensajeColor('#DC3545'); // Color rojo
+    } else {
+      setMensaje('Mesas creadas correctamente');
+      setMensajeColor('#21b55f'); // Color verde
+      // Recarga la página después de 1 segundo
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
 
   return (
@@ -46,6 +67,11 @@ export function CrearMesa() {
           <Button variant="primary" type="submit" className="crear-mesas__submit">
             Crear Mesas
           </Button>
+          {mensaje && (
+            <div style={{ color: mensajeColor, marginTop: '10px' }}>
+              {mensaje}
+            </div>
+          )}
         </Form>
       </div>
     </div>
