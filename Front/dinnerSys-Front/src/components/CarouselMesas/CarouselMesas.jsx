@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import mesaRedonda from '../../img/mesaRedonda.svg';
 import './CarouselMesas.css';
 import PedidosMesero from '../../pages/mesero/OpcionesMesero/PedidosMesero/PedidosMesero'; // Importa PedidosMesero desde la misma carpeta
+import { getTables } from '../../API/Mesas';
 
 const CarouselMesas = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [showForm, setShowForm] = useState(false);
+
+  const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+    getTables().then((res) => setTables(res)).catch((error) => alert("Error al traer las mesas"))
+    }, []);
 
   const settings = {
     dots: true,
@@ -17,12 +24,6 @@ const CarouselMesas = () => {
     slidesToShow: 3,
     slidesToScroll: 1,
   };
-
-  const tables = [
-    { id: 1, number: '1' },
-    { id: 2, number: '2' },
-    { id: 3, number: '3' },
-  ];
 
   const handleTableClick = (tableId) => {
     if (showForm && selectedTable === tableId) {
@@ -40,20 +41,20 @@ const CarouselMesas = () => {
         <Slider {...settings}>
           {tables.map((table) => (
             <div
-              key={table.id}
+              key={table.MesaId}
               className="table-card"
               style={{
-                border: selectedTable === table.id ? '2px solid red' : '1px solid #ddd',
-                backgroundColor: selectedTable === table.id ? 'lightgreen' : 'transparent',
+                border: selectedTable === table.MesaId ? '2px solid red' : '1px solid #ddd',
+                backgroundColor: selectedTable === table.MesaId ? 'lightgreen' : 'transparent',
               }}
-              onClick={() => handleTableClick(table.id)}
+              onClick={() => handleTableClick(table.MesaId)}
             >
               <div className="circle-container">
                 <div
                   className="circle"
-                  style={{ backgroundColor: selectedTable === table.id ? 'red' : 'green' }}
+                  style={{ backgroundColor: selectedTable === table.MesaId ? 'red' : 'green' }}
                 >
-                  {table.id}
+                  {table.MesaId}
                 </div>
                 <img
                   src={mesaRedonda}
