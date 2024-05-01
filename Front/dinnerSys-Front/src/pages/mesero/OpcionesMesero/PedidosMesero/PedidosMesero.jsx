@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, InputGroup, FormControl, Button, Container, Alert } from 'react-bootstrap';
 import './PedidosMesero.css'; // Archivo CSS para estilos
+import { getProducts } from '../../../../API/Productos'; // Importamos la función getProducts
 
 function PedidosMesero({ mesa }) {
   const [filtros, setFiltros] = useState({
@@ -9,45 +10,34 @@ function PedidosMesero({ mesa }) {
     precio: ''
   });
 
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: 'Producto 1', descripcion: 'Descripción 1', categoria: 'Categoría 1', precio: 10 },
-    { id: 2, nombre: 'Producto 2', descripcion: 'Descripción 2', categoria: 'Categoría 2', precio: 20 },
-    { id: 3, nombre: 'Producto 3', descripcion: 'Descripción 3', categoria: 'Categoría 3', precio: 30 },
-    { id: 4, nombre: 'Producto 4', descripcion: 'Descripción 4', categoria: 'Categoría 4', precio: 40 },
-    { id: 5, nombre: 'Producto 5', descripcion: 'Descripción 5', categoria: 'Categoría 5', precio: 50 },
-    // Agrega más productos según tus necesidades
-  ]);
+  const [productosDisponibles, setProductosDisponibles] = useState([]);
+  const [productosEnPedido, setProductosEnPedido] = useState([]);
+  const [errorMensaje, setErrorMensaje] = useState('');
 
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-
-  const productosFiltrados = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(filtros.nombre.toLowerCase()) &&
-    producto.categoria.toLowerCase().includes(filtros.categoria.toLowerCase()) &&
-    producto.precio.toString().includes(filtros.precio)
-  );
-
-  const agregarProducto = () => {
-    const nuevoProducto = {
-      id: productos.length + 1,
-      nombre: `Producto ${productos.length + 1}`,
-      descripcion: `Descripción ${productos.length + 1}`,
-      categoria: `Categoría ${productos.length + 1}`,
-      precio: (productos.length + 1) * 10
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const productosData = await getProducts(); // Obtenemos los productos utilizando la función getProducts
+        setProductosDisponibles(productosData);
+      } catch (error) {
+        setErrorMensaje('Error al obtener los productos.');
+      }
     };
-    setProductos([...productos, nuevoProducto]);
-    setProductoSeleccionado(null);
+    fetchData();
+  }, []);
+
+  const agregarProducto = (producto) => {
+    // Generamos un identificador único para el producto en el pedido
+    const productoConID = { ...producto, id: Date.now() };
+    setProductosEnPedido([...productosEnPedido, productoConID]);
   };
 
-  const eliminarProducto = (producto) => {
-    if (producto) {
-      const nuevosProductos = productos.filter(p => p.id !== producto.id);
-      setProductos(nuevosProductos);
-      setProductoSeleccionado(null);
-    }
+  const eliminarProducto = (id) => {
+    setProductosEnPedido(productosEnPedido.filter(producto => producto.id !== id));
   };
 
   const seleccionarProducto = (producto) => {
-    setProductoSeleccionado(producto);
+    agregarProducto(producto);
   };
 
   const crearPedido = () => {
@@ -55,35 +45,23 @@ function PedidosMesero({ mesa }) {
     console.log("Pedido creado");
   };
 
-  // Datos para la tabla de pedidos
-  const [pedidos, setPedidos] = useState([
-    { id: 1, nombre: 'Plato 1', descripcion: 'Descripción del Plato 1', categoria: 'Entrada', valor: '$10.99' },
-    { id: 2, nombre: 'Plato 2', descripcion: 'Descripción del Plato 2', categoria: 'Plato Principal', valor: '$15.99' },
-    { id: 3, nombre: 'Plato 3', descripcion: 'Descripción del Plato 3', categoria: 'Postre', valor: '$7.99' },
-  ]);
-
-  const [pedidoAModificar, setPedidoAModificar] = useState(null);
-  const [errorMensaje, setErrorMensaje] = useState('');
-
   const handleQuitar = (id) => {
-    if (pedidoAModificar === null) {
-      setErrorMensaje('Por favor, selecciona un pedido para modificar antes de quitarlo.');
-      return;
-    }
-
-    const updatedPedidos = pedidos.filter((pedido) => pedido.id !== id);
-    setPedidos(updatedPedidos);
-    setErrorMensaje('');
-  };
-
-  const handleModificar = (id) => {
-    setPedidoAModificar(id);
-    setErrorMensaje('');
+    eliminarProducto(id);
   };
 
   const handleGenerarPedido = () => {
-    // Lógica para generar un nuevo pedido
+    // Lógica para generar el recibo del pedido
   };
+
+  const handleFiltrar = (e, campo) => {
+    setFiltros({ ...filtros, [campo]: e.target.value });
+  };
+
+  const productosFiltrados = productosDisponibles.filter(producto =>
+    producto.Nombre.toLowerCase().includes(filtros.nombre.toLowerCase()) &&
+    producto.Categoria.toLowerCase().includes(filtros.categoria.toLowerCase()) &&
+    producto.Precio.toString().includes(filtros.precio)
+  );
 
   return (
     <div className="pedidos-mesero-container">
@@ -98,17 +76,17 @@ function PedidosMesero({ mesa }) {
           <FormControl
             placeholder="Filtrar por nombre..."
             value={filtros.nombre}
-            onChange={(e) => setFiltros({ ...filtros, nombre: e.target.value })}
+            onChange={(e) => handleFiltrar(e, 'nombre')}
           />
           <FormControl
             placeholder="Filtrar por categoría..."
             value={filtros.categoria}
-            onChange={(e) => setFiltros({ ...filtros, categoria: e.target.value })}
+            onChange={(e) => handleFiltrar(e, 'categoria')}
           />
           <FormControl
             placeholder="Filtrar por precio..."
             value={filtros.precio}
-            onChange={(e) => setFiltros({ ...filtros, precio: e.target.value })}
+            onChange={(e) => handleFiltrar(e, 'precio')}
           />
         </InputGroup>
 
@@ -125,11 +103,11 @@ function PedidosMesero({ mesa }) {
             </thead>
             <tbody>
               {productosFiltrados.map(producto => (
-                <tr key={producto.id}>
-                  <td>{producto.nombre}</td>
-                  <td>{producto.descripcion}</td>
-                  <td>{producto.categoria}</td>
-                  <td>{producto.precio}</td>
+                <tr key={producto.ProductoId}>
+                  <td>{producto.Nombre}</td>
+                  <td>{producto.Descripcion}</td>
+                  <td>{producto.Categoria}</td>
+                  <td>{producto.Precio}</td>
                   <td>
                     <Button
                       variant="primary"
@@ -168,17 +146,17 @@ function PedidosMesero({ mesa }) {
               </tr>
             </thead>
             <tbody>
-              {pedidos.map((pedido, index) => (
-                <tr key={index}>
-                  <td>{pedido.nombre}</td>
-                  <td>{pedido.descripcion}</td>
-                  <td>{pedido.categoria}</td>
-                  <td>{pedido.valor}</td>
+              {productosEnPedido.map((producto) => (
+                <tr key={producto.id}>
+                  <td>{producto.Nombre}</td>
+                  <td>{producto.Descripcion}</td>
+                  <td>{producto.Categoria}</td>
+                  <td>{producto.Precio}</td>
                   <td>
                     <Button
                       variant="danger"
                       className="listado-productos-button listado-productos-button-update btn-quitar"
-                      onClick={() => handleQuitar(pedido.id)}
+                      onClick={() => handleQuitar(producto.id)}
                     >
                       Quitar
                     </Button>
@@ -191,15 +169,8 @@ function PedidosMesero({ mesa }) {
 
         <div className="btn-container">
           <Button
-            variant="primary"
-            className="btn btn-primary btn-sm btn-modificar"
-            onClick={() => handleModificar(1)}
-          >
-            Modificar
-          </Button>
-          <Button
             variant="success"
-            className="btn btn-success btn-sm btn-generar"
+            className="listado-productos-button listado-productos-button-update btn-crear btn-modificar btn-generar" // <-- Agregamos la clase btn-generar aquí
             onClick={handleGenerarPedido}
           >
             Generar Recibo
