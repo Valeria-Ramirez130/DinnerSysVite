@@ -96,3 +96,16 @@
 .btn-modificar {
   margin-right: 10px; /* Agrega un margen derecho al botón Modificar */
 }
+
+.pedidos-mesero-container .btn-generar {
+  width: 150px; /* Ajusta el ancho según sea necesario */
+}
+
+.listado-productos-scroll-container {
+  overflow-y: auto;
+  max-height: 300px; /* ajusta la altura máxima según sea necesario */
+}
+
+.listado-productos-table-container {
+  width: 100%;
+}
