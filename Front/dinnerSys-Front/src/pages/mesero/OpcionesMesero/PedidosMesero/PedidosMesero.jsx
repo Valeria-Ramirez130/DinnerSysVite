@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, InputGroup, FormControl, Button, Container, Alert } from 'react-bootstrap';
-import './PedidosMesero.css'; // Archivo CSS para estilos
-import { getProducts } from '../../../../API/Productos'; // Importamos la función getProducts
+import './PedidosMesero.css';
+import { getProducts } from '../../../../API/Productos';
+import { createOrder } from '../../../../API/Pedidos';
+import { freeTable } from '../../../../API/Mesas'; // Importamos la función freeTable
 
-function PedidosMesero({ mesa }) {
+function PedidosMesero({ mesa, pedido }) {
+  console.log(pedido && pedido,mesa)
+
   const [filtros, setFiltros] = useState({
     nombre: '',
     categoria: '',
@@ -17,7 +21,7 @@ function PedidosMesero({ mesa }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productosData = await getProducts(); // Obtenemos los productos utilizando la función getProducts
+        const productosData = await getProducts();
         setProductosDisponibles(productosData);
       } catch (error) {
         setErrorMensaje('Error al obtener los productos.');
@@ -27,7 +31,6 @@ function PedidosMesero({ mesa }) {
   }, []);
 
   const agregarProducto = (producto) => {
-    // Generamos un identificador único para el producto en el pedido
     const productoConID = { ...producto, id: Date.now() };
     setProductosEnPedido([...productosEnPedido, productoConID]);
   };
@@ -40,9 +43,32 @@ function PedidosMesero({ mesa }) {
     agregarProducto(producto);
   };
 
-  const crearPedido = () => {
-    // Lógica para crear el pedido
-    console.log("Pedido creado");
+  const crearPedido = async () => {
+    productosEnPedido.map(p=>{console.log(p)})
+    try {
+      const newOrder = {
+        MeseroId: 1,
+        MesaId: mesa,
+        lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: 1 }))
+      };
+      const isCreated = await createOrder(newOrder);
+      if (isCreated) {
+        console.log("Pedido creado correctamente");
+        window.location.reload();
+        setProductosEnPedido([]);
+        // Liberar la mesa después de crear el pedido
+        //await freeTable(mesa);  QUITAR
+        //console.log("Mesa liberada"); QUITAR
+      } else {
+        setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setErrorMensaje('Ya existe un pedido activo para esta mesa. Por favor, selecciona otra mesa.');
+      } else {
+        setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
+      }
+    }
   };
 
   const handleQuitar = (id) => {
@@ -170,8 +196,10 @@ function PedidosMesero({ mesa }) {
         <div className="btn-container">
           <Button
             variant="success"
-            className="listado-productos-button listado-productos-button-update btn-crear btn-modificar btn-generar" // <-- Agregamos la clase btn-generar aquí
-            onClick={handleGenerarPedido}
+            className="listado-productos-button listado-productos-button-update btn-crear btn-modificar btn-generar"
+            onClick={async () => {
+              await freeTable(mesa,pedido[0].PedidoId); // Llama a la función freeTable para liberar la mesa
+            }}
           >
             Generar Recibo
           </Button>

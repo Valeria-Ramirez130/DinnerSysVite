@@ -51,6 +51,16 @@ export const createOrder = async (newOrder) => {
     }
 };
 
+export const getOrderXTableId = async (MesaId) =>{
+    try{
+        const pedido = await axios.get(`${BACK_URL}/pedidos/getPedidoXMesaId/${MesaId}`);
+        return pedido.status === 200 ? pedido.data : null;
+    } catch (error){
+        console.log(error);
+        return null;
+    }
+};
+
 //Update Order
 export const updateOrder = async (id, upOrder) => { 
     /* Object Structure:

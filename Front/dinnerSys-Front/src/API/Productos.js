@@ -26,7 +26,7 @@ export const getProducts = async () => {
 //Create new Product
 export const createProduct = async (newProduct) => { 
     try {
-        const isCreate = await axios.post(`${BACK_URL}/productos/createProducto`, newProduct);
+        const isCreate = await axios.post(`${BACK_URL}/productos/createProducto, newProduct`);
         return isCreate.status === 200 ? true : false;
     } catch (error) {
         console.log(error);
@@ -37,7 +37,7 @@ export const createProduct = async (newProduct) => {
 //Update Product
 export const updateProduct = async (id, upProduct) => { 
     try {
-        const isUpdate = await axios.put(`${BACK_URL}/productos/updateProducto/${id}`, upProduct);
+        const isUpdate = await axios.put(`${BACK_URL}/productos/updateProducto/${id}, upProduct`);
         return isUpdate.status === 200 ? true : false;
     } catch (error) {
         console.log(error);

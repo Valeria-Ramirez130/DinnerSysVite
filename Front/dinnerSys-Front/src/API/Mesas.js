@@ -24,9 +24,9 @@ export const createTable = async () => {
 };
 
 //Free Table
-export const freeTable = async (id) => {
+export const freeTable = async (MesaId,PedidoId) => {
     try {
-        const isFree = await axios.put(`${BACK_URL}/mesas/liberarMesa/${id}`);
+        const isFree = await axios.put(`${BACK_URL}/mesas/liberarMesa/${MesaId}/${PedidoId}`);
         return isFree.status === 200 ? true : false;
     } catch (error) {
         console.log(error);
