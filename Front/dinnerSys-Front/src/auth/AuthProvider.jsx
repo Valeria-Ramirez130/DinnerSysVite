@@ -8,7 +8,10 @@ const AuthContext = createContext({
     Nombre: "",
     setNombre: () => { },
     Rol: "",
-    setRol: () => { }
+    setRol: () => { },
+    Apellido: "",
+    setApellido: () => {}
+
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -34,7 +37,7 @@ export function AuthProvider({ children }) {
                         return DataUsuario.id;
                         break;
                     }case "UserRol":{
-                        return DataUsuario.rol;
+                        return DataUsuario.Rol;
                         break;
                     }case "UserNombre":{
                         return DataUsuario.Nombre;
@@ -49,7 +52,8 @@ export function AuthProvider({ children }) {
     const [UserId, setUserId] = useState(ObtenerDatos("UserId"));
     const [Rol, setRol] = useState(ObtenerDatos("UserRol"));
     const [Nombre, setNombre] = useState(ObtenerDatos("UserNombre"));
-
+    console.log(Nombre)
+    console.log(Rol)
     return (
         <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, UserId, setUserId, Rol, setRol, Nombre, setNombre }}>
             {children}

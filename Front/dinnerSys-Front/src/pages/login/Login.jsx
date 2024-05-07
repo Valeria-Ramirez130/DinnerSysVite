@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useFormik } from 'formik';
@@ -9,17 +9,12 @@ import './Login.css';
 import { UserCircleIcon } from '../../iconos/UserCircleIcon';
 import UserIcon from '../../iconos/UserIcon';
 import LockIcon from '../../iconos/LockIcon';
-import { VerifyLogginUser } from '../../API/Usuarios'; // Importar VerifyLogginUser
+import { VerifyLogginUser } from '../../API/Usuarios';
 
 const Login = () => {
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, setRol, Rol } = useAuth(); 
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Limpiar el estado de autenticación al cargar la página
-    setIsAuthenticated(false);
-  }, []);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Campo requerido'),
@@ -28,16 +23,19 @@ const Login = () => {
 
   const onSubmit = async (values, { setErrors }) => {
     try {
-      const userData = await VerifyLogginUser(values.username, values.cedula); // Autenticar al usuario usando la cédula
-
+      const userData = await VerifyLogginUser(values.username, values.cedula);
+      console.log(userData)
       if (userData) {
-        // Simulación de autenticación exitosa
-        localStorage.setItem("User", JSON.stringify({ id: userData.id }));
+        localStorage.setItem("User", JSON.stringify({
+          id: userData.id,
+          Nombre: userData.Nombre,
+          Rol: userData.rol,
+          Apellido: userData.Apellido
+        }));
         setIsAuthenticated(true);
 
-        // Redirigir según el rol del usuario
-        const userRole = userData.rol.toLowerCase(); // Convertir el rol a minúsculas
-        console.log('Rol del usuario:', userRole);
+        const userRole = userData.rol.toLowerCase();
+        setRol(userRole);
         if (userRole === "administrador") {
           navigate("/admin");
         } else if (userRole === "mesero") {
@@ -62,6 +60,13 @@ const Login = () => {
     validationSchema,
     onSubmit,
   });
+
+
+  if (Rol === 'administrador') {
+    return <Navigate to="/admin" />;
+  } else if (Rol === 'mesero') {
+    return <Navigate to="/mesero" />;
+  } else{
 
   return (
     <div className='user-form'>
@@ -118,6 +123,7 @@ const Login = () => {
       </div>
     </div>
   );
+}
 };
 
 export default Login;
