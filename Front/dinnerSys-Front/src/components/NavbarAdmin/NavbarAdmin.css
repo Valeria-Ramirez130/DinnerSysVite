@@ -58,3 +58,7 @@ border-width: 2px;
 border-style: solid;
 border-radius: 4px;
 }
+.centered-modal-title {
+  text-align: center;
+  width: 100%;
+}

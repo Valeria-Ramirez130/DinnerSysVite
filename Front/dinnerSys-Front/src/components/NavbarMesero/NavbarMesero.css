@@ -74,4 +74,8 @@
     color: #f8f9fa !important;
     text-decoration: none;
   }
+  .centered-modal-title {
+    text-align: center;
+    width: 100%;
+  }
   
