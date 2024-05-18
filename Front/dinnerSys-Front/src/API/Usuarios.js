@@ -1,5 +1,3 @@
-// En Usuarios.js
-
 import { BACK_URL } from '../Constants.js';
 import axios from 'axios';
 
