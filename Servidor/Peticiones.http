@@ -62,7 +62,7 @@ GET http://localhost:3003/pedidos/getPedidos
 ### Obtener los pedido de una mesa mandando el id de la mesa
 GET http://localhost:3003/pedidos/getPedidosXMesaId/20
 
-### Obtener todos los datos de un pedido: n°mesa, mesero, fecha, producto, precio unitario, cantidad, precio total
+### Obtener todos los datos de un pedido: nÂ°mesa, mesero, fecha, producto, precio unitario, cantidad, precio total
 GET http://localhost:3003/pedidos/getTotalPedido/2
 
 ### Crear un Pedido
@@ -159,3 +159,8 @@ Content-Type: application/json
 
 ### Eliminar Productos
 DELETE http://localhost:3003/productos/deleteProducto/4
+
+
+
+#### Obetener PedidoXMesaId
+GET http://localhost:3003/pedidos/getPedidoXMesaId/2

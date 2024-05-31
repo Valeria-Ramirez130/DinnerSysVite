@@ -24,7 +24,7 @@ export const verificarCredenciales = async (req, res) => {
                 console.log("Usuario encontrado, todo correcto");
                 res.status(200).json(response);
             } else {
-                res.status(404).json({ Error: 'Contraseña incorrecta' });
+                res.status(404).json({ Error: 'ContraseÃ±a incorrecta' });
             }
         } else {
             res.status(404).json({ Error: 'Usuario no encontrado' });

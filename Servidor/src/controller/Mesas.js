@@ -38,18 +38,21 @@ export const createMesa = async (req, res) => {
 
 //Funcion para liberar una mesa, para enviarle a cantidad de clientes = 0, es decir, sigue a cargo de un mesero, pero no tiene clientes
 
-export const liberarMesa = async (req, res) => {
+export const liberarMesaYFinPedido = async (req, res) => {
     console.log("\n\nFuncion liberarMesa():");
     try {
-        const { MesaId } = req.params;
-        if (MesaId) {
+        const { MesaId,PedidoId } = req.params;
+
+        console.log(MesaId,PedidoId)
+        if (MesaId && PedidoId) {
             const [isMesaOcupada] = await pool.query('SELECT M.Estado FROM Mesas M WHERE M.MesaId = ?', [MesaId]);
             //Los corchetes es para que no retorne un objeto si no un array y al devolver solo un objeto, se puede desestructurar
             if (isMesaOcupada && isMesaOcupada.Estado === 1){
                 const isUpdate = await pool.query('UPDATE Mesas SET Estado = 0 WHERE MesaId = ?', [MesaId]);                
-                if (isUpdate.affectedRows === 1) {
-                    console.log("Mesa liberada correctamente");
-                    res.status(201).json({ Exito: 'Mesa liberada correctamente' });
+                const isPedidoFinalizado = await pool.query('UPDATE Pedidos SET Finalizado = 1 WHERE PedidoId = ?',[PedidoId]);
+                if (isUpdate.affectedRows === 1 && isPedidoFinalizado.affectedRows === 1) {
+                    console.log("Mesa liberada correctamente y pedido finalizado");
+                    res.status(201).json({ Exito: 'Mesa liberada correctamente y pedido finalizado' });
                 } else {
                     console.log("No se pudo liberar la mesa");
                     res.status(400).json({ Error: 'No se pudo liberar la mesa' });
