@@ -24,17 +24,14 @@ export const createTable = async () => {
 };
 
 //Free Table
-export const freeTable = async (MesaId, PedidoId) => {
-  try {
-    const response = await axios.put(`${BACK_URL}/mesas/liberarMesa/${MesaId}/${PedidoId}`);
-    return response.status === 201; // Cambiamos a 201 porque es lo que devuelve el servidor en caso de éxito
-  } catch (error) {
-    console.log(error);
-    if (error.response && error.response.status === 409) {
-      throw new Error('Conflict: La mesa no puede ser liberada.');
+export const freeTable = async (MesaId,PedidoId) => {
+    try {
+        const isFree = await axios.put(`${BACK_URL}/mesas/liberarMesa/${MesaId}/${PedidoId}`);
+        return isFree.status === 200 ? true : false;
+    } catch (error) {
+        console.log(error);
+        return null;
     }
-    throw new Error('Error al liberar la mesa.');
-  }
 };
 
 //Delete Table

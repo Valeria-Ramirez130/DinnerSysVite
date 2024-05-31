@@ -3,14 +3,17 @@ import { Table, InputGroup, FormControl, Button, Container, Alert } from 'react-
 import './PedidosMesero.css';
 import { getProducts } from '../../../../API/Productos';
 import { createOrder } from '../../../../API/Pedidos';
-import { freeTable } from '../../../../API/Mesas';
+import { freeTable } from '../../../../API/Mesas'; // Importamos la función freeTable
 
 function PedidosMesero({ mesa, pedido }) {
+  console.log(pedido && pedido,mesa)
+
   const [filtros, setFiltros] = useState({
     nombre: '',
     categoria: '',
     precio: ''
   });
+
   const [productosDisponibles, setProductosDisponibles] = useState([]);
   const [productosEnPedido, setProductosEnPedido] = useState([]);
   const [errorMensaje, setErrorMensaje] = useState('');
@@ -41,6 +44,7 @@ function PedidosMesero({ mesa, pedido }) {
   };
 
   const crearPedido = async () => {
+    productosEnPedido.map(p=>{console.log(p)})
     try {
       const newOrder = {
         MeseroId: 1,
@@ -52,6 +56,9 @@ function PedidosMesero({ mesa, pedido }) {
         console.log("Pedido creado correctamente");
         window.location.reload();
         setProductosEnPedido([]);
+        // Liberar la mesa después de crear el pedido
+        //await freeTable(mesa);  QUITAR
+        //console.log("Mesa liberada"); QUITAR
       } else {
         setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
       }
@@ -66,6 +73,10 @@ function PedidosMesero({ mesa, pedido }) {
 
   const handleQuitar = (id) => {
     eliminarProducto(id);
+  };
+
+  const handleGenerarPedido = () => {
+    // Lógica para generar el recibo del pedido
   };
 
   const handleFiltrar = (e, campo) => {
@@ -187,12 +198,7 @@ function PedidosMesero({ mesa, pedido }) {
             variant="success"
             className="listado-productos-button listado-productos-button-update btn-crear btn-modificar btn-generar"
             onClick={async () => {
-              try {
-                await freeTable(mesa, pedido[0].PedidoId);
-                console.log("Mesa liberada y recibo generado");
-              } catch (error) {
-                setErrorMensaje(error.message);
-              }
+              await freeTable(mesa,pedido[0].PedidoId); // Llama a la función freeTable para liberar la mesa
             }}
           >
             Generar Recibo
