@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS Pedidos (
     pedidoId INT PRIMARY KEY AUTO_INCREMENT,
     Comentario TEXT DEFAULT NULL,
     FechaPedido DATETIME DEFAULT NOW() NOT NULL,
+    Finalizado BOOLEAN DEFAULT 0 NOT NULL,
     MeseroId INT, /* MeseroId puede ser NULL por si se elimina entonces para que no se pierda la info */
     MesaId INT NOT NULL,
     FOREIGN KEY (MeseroId) REFERENCES Usuarios(UsuarioId) ON DELETE SET NULL,
@@ -84,7 +85,9 @@ INSERT INTO Usuarios (Nombres, Apellidos,  Cedula, TipoUsuario) VALUES
 ('John David', 'Doe', '319457302', 'Mesero'),
 ('Laura Cristina', 'Lopez Acosta', '583024841', 'Mesero'),
 ('Sofia', 'Castillo', '315285014', 'Mesero'),
-('Andres Steven', 'Vivas', '1340589420' ,'Mesero');
+('Andres Steven', 'Vivas', '1340589420' ,'Mesero'),
+('Esteban','Perdomo', '1110282257', 'Administrador'),
+('Juan','Leiva','11111111111','Mesero');
 
 /* Inserción tabla Productos */
 INSERT INTO Productos (Nombre, Descripcion, Precio, Categoria) VALUES 
@@ -102,20 +105,15 @@ INSERT INTO Productos (Nombre, Descripcion, Precio, Categoria) VALUES
 
 /* Inserción tabla Mesas con estado 1, o sea ocupadas*/
 INSERT INTO Mesas (MesaId, Estado) VALUES 
-(1, 1),
-(2, 1),
-(3, 1);
-
-/* Inserción tabla Mesas con estado 0, o sea desocupadas*/
-INSERT INTO Mesas (MesaId) VALUES 
-(4),(5),(6),(7),(8),(9),(10),
-(11),(12),(13),(14),(15),(16),(17),(18),(19),(20);
+(1, 0),
+(2, 0),
+(3, 0);
 
 /* Inserción tabla Pedidos */
-INSERT INTO Pedidos (MeseroId, MesaId) VALUES
-(6, 1),
-(5, 2),
-(4, 3);
+INSERT INTO Pedidos (MeseroId, MesaId, Finalizado) VALUES
+(6, 1, 1),
+(5, 2, 1),
+(4, 3, 1);
 
 /* Inserción tabla DetallePedidoProducto */
 INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES
