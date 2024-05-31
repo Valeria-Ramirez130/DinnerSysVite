@@ -19,8 +19,8 @@ export function NavbarMesero() {
   const handleProfileClick = () => {
     const loggedInUser = localStorage.getItem("User");
     if (loggedInUser) {
-      const { Nombre, rol, Apellido } = JSON.parse(loggedInUser);
-      setUserData({ Nombre, rol, Apellido });
+      const { Nombre, Rol, Apellido } = JSON.parse(loggedInUser);
+      setUserData({ Nombre, Rol, Apellido });
       setShowProfileModal(true);
     }
   };
@@ -65,7 +65,7 @@ export function NavbarMesero() {
               <Form.Control type="text" value={userData.Apellido} readOnly />
               <Form.Group className="mb-3" controlId="formRol">
                 <Form.Label>Rol</Form.Label>
-                <Form.Control type="text" value={userData.rol} readOnly />
+                <Form.Control type="text" value={userData.Rol} readOnly />
               </Form.Group>
             </Form>
           )}
