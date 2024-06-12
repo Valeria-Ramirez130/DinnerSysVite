@@ -49,10 +49,19 @@ function PedidosMesero({ mesa, pedido }) {
   }, [pedido, mesa]);
 
   const agregarProducto = (producto) => {
-    const productoConID = { ...producto, id: Date.now(), cantidad: 1 };
-    const nuevosProductosEnPedido = [...productosEnPedido, productoConID];
-    setProductosEnPedido(nuevosProductosEnPedido);
-    localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
+    const productoExistente = productosEnPedido.find(p => p.ProductoId === producto.ProductoId);
+    if (productoExistente) {
+      const nuevosProductosEnPedido = productosEnPedido.map(p =>
+        p.ProductoId === producto.ProductoId ? { ...p, cantidad: p.cantidad + 1 } : p
+      );
+      setProductosEnPedido(nuevosProductosEnPedido);
+      localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
+    } else {
+      const productoConID = { ...producto, id: Date.now(), cantidad: 1 };
+      const nuevosProductosEnPedido = [...productosEnPedido, productoConID];
+      setProductosEnPedido(nuevosProductosEnPedido);
+      localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
+    }
   };
 
   const eliminarProducto = (id) => {
@@ -119,146 +128,141 @@ function PedidosMesero({ mesa, pedido }) {
   const calcularTotal = () => {
     return productosEnPedido.reduce((total, producto) => total + (producto.Precio * producto.cantidad), 0);
   };
-
   return (
     <div className="pedidos-mesero-container">
-      <div className="listado-productos-header">
-        <h1>Crear Pedido</h1>
-      </div>
-      <div className="listado-productos-header">
-        <h2>Pedido Mesa: {mesa}</h2>
-      </div>
-      <Container>
-        <InputGroup className="listado-productos-input">
-          <FormControl
-            placeholder="Filtrar por nombre..."
-            value={filtros.nombre}
-            onChange={(e) => handleFiltrar(e, 'nombre')}
-          />
-          <FormControl
-            placeholder="Filtrar por categoría..."
-            value={filtros.categoria}
-            onChange={(e) => handleFiltrar(e, 'categoria')}
-          />
-          <FormControl
-            placeholder="Filtrar por precio..."
-            value={filtros.precio}
-            onChange={(e) => handleFiltrar(e, 'precio')}
-          />
-        </InputGroup>
-
-        <div className="listado-productos-scroll-container">
-          <Table striped bordered hover className="listado-productos-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Pedido</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productosFiltrados.map(producto => (
-                <tr key={producto.ProductoId}>
-                  <td>{producto.Nombre}</td>
-                  <td>{producto.Descripcion}</td>
-                  <td>{producto.Categoria}</td>
-                  <td>{producto.Precio}</td>
-                  <td>
-                    <Button
-                      variant="primary"
-                      className="listado-productos-button listado-productos-button-update"
-                      onClick={() => agregarProducto(producto)}
-                    >
-                      Añadir
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-
-        <div className="btn-container-crearpedido">
-          <Button
-            variant="success"
-            className="listado-productos-button listado-productos-button-update btn-crear"
-            onClick={crearPedido}
-          >
-            Crear Pedido
-          </Button>
-        </div>
-      </Container>
-      <Container>
-        <div className="listado-productos-scroll-container">
-          <Table striped bordered hover className="listado-productos-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Categoría</th>
-                <th>Valor</th>
-                <th>Cantidad</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productosEnPedido.map((producto) => (
-                <tr key={producto.id}>
-                  <td>{producto.Nombre}</td>
-                  <td>{producto.Descripcion}</td>
-                  <td>{producto.Categoria}</td>
-                  <td>{producto.Precio}</td>
-                  <td>
-                    <FormControl
-                      type="number"
-                      value={producto.cantidad}
-                      min="1"
-                      onChange={(e) => actualizarCantidadProducto(producto.id, parseInt(e.target.value))}
-                    />
-                  </td>
-                  <td>
-                    <Button
-                      variant="danger"
-                      className="listado-productos-button listado-productos-button-update btn-quitar"
-                      onClick={() => handleQuitar(producto.id)}
-                    >
-                      Quitar
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-
-        <div className="total-container">
-          <h3>Total: ${calcularTotal().toLocaleString('es-ES', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2  // Máximo 2 decimales
-          })}</h3>
-        </div>
-
-
-
-        <div className="btn-container">
-          <Button
-            variant="primary"
-            className="listado-productos-button listado-productos-button-update btn-generar"
-            onClick={liberarMesa}
-          >
-            Liberar Mesa
-          </Button>
-        </div>
-
-        {errorMensaje && (
-          <Alert variant="danger" className="text-center mt-3">
-            {errorMensaje}
-          </Alert>
-        )}
-      </Container>
+    <div className="listado-productos-header">
+      <h1>Crear Pedido</h1>
     </div>
+    <div className="listado-productos-header">
+      <h2>Pedido Mesa: {mesa}</h2>
+    </div>
+    <Container>
+      <InputGroup className="listado-productos-input">
+        <FormControl
+          placeholder="Filtrar por nombre..."
+          value={filtros.nombre}
+          onChange={(e) => handleFiltrar(e, 'nombre')}
+        />
+        <FormControl
+          placeholder="Filtrar por categoría..."
+          value={filtros.categoria}
+          onChange={(e) => handleFiltrar(e, 'categoria')}
+        />
+        <FormControl
+          placeholder="Filtrar por precio..."
+          value={filtros.precio}
+          onChange={(e) => handleFiltrar(e, 'precio')}
+        />
+      </InputGroup>
+
+      <div className="listado-productos-scroll-container">
+        <Table striped bordered hover className="listado-productos-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Pedido</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productosFiltrados.map(producto => (
+              <tr key={producto.ProductoId}>
+                <td>{producto.Nombre}</td>
+                <td>{producto.Descripcion}</td>
+                <td>{producto.Categoria}</td>
+                <td>{producto.Precio}</td>
+                <td>
+                  <Button
+                    variant="primary"
+                    className="listado-productos-button listado-productos-button-update"
+                    onClick={() => agregarProducto(producto)}
+                  >
+                    Añadir
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      <div className="btn-container-crearpedido">
+        <Button
+          variant="success"
+          className="listado-productos-button listado-productos-button-update btn-crear"
+          onClick={crearPedido}
+        >
+          Crear Pedido
+        </Button>
+      </div>
+    </Container>
+    <Container>
+      <div className="listado-productos-scroll-container">
+        <Table striped bordered hover className="listado-productos-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Categoría</th>
+              <th>Valor</th>
+              <th>Cantidad</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productosEnPedido.map((producto) => (
+              <tr key={producto.id}>
+                <td>{producto.Nombre}</td>
+                <td>{producto.Descripcion}</td>
+                <td>{producto.Categoria}</td>
+                <td>{producto.Precio}</td>
+                <td>
+                  <FormControl
+                    type="number"
+                    value={producto.cantidad}
+                    min="1"
+                    onChange={(e) => actualizarCantidadProducto(producto.id, parseInt(e.target.value))}
+                  />
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    className="listado-productos-button listado-productos-button-update btn-quitar"
+                    onClick={() => handleQuitar(producto.id)}
+                  >
+                    Quitar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      <div className="total-container">
+        <h3>Total: ${calcularTotal().toLocaleString('es-ES', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2  // Máximo 2 decimales
+        })}</h3>
+      </div>
+      <div className="btn-container-liberar">
+        <Button
+          variant="danger"
+          className="listado-productos-button listado-productos-button-update btn-liberar"
+          onClick={liberarMesa}
+        >
+          Liberar Mesa
+        </Button>
+      </div>
+      {errorMensaje && (
+        <Alert variant="danger" className="mt-3">
+          {errorMensaje}
+        </Alert>
+      )}
+    </Container>
+  </div>
   );
 }
 
