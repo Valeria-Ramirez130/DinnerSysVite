@@ -212,7 +212,6 @@ export function ListadoProductos() {
             <Button variant="primary" type="submit">
               Actualizar
             </Button>
-            {/* Botón de cerrar */}
             <Button variant="danger" onClick={() => setShowUpdateForm(false)}>
               Cerrar
             </Button>
