@@ -89,7 +89,7 @@ INSERT INTO Usuarios (Nombres, Apellidos,  Cedula, TipoUsuario) VALUES
 ('Esteban','Perdomo', '1110282257', 'Administrador'),
 ('Juan','Leiva','11111111111','Mesero'),
 ('Valeria','Ramirez','1111544946','Mesero'),
-('Valeria','Ramirez','1111544123','Administrador'),
+('Valeria','Ramirez','1111544123','Administrador');
 
 /* Inserción tabla Productos */
 INSERT INTO Productos (Nombre, Descripcion, Precio, Categoria) VALUES 

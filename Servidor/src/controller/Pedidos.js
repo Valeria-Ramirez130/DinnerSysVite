@@ -20,7 +20,7 @@ export const getPedidos = async (req, res) => {
             'INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId ' +
             'INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
             'INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId ' +
-            'INNER JOIN mesas M ON M.MesaId = Pe.MesaId ');
+            'INNER JOIN mesas M ON M.MesaId = Pe.MesaId ORDER BY Pe.FechaPedido DESC, Pe.MeseroId');
         if (pedido) {
             castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
             let precioTotal = 0;
