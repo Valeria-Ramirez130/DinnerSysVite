@@ -6,16 +6,22 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   margin-bottom: 35px;
+  position: relative;
 }
 
 .listado-productos-header {
   text-align: center;
-  background-color: #663300 !important; /* Cambiamos el color de fondo del encabezado */
+  background-color: #663300 !important;
   padding: 10px;
   color: #fff;
-  border-top-left-radius: 10px; /* Borde redondeado en la esquina superior izquierda */
-  border-top-right-radius: 10px; /* Borde redondeado en la esquina superior derecha */
-  margin-bottom: 20px; /* Ajustamos el margen inferior para que no se superponga con el contenido */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: calc(100% + 20px); /* Calculamos el ancho para que ocupe los bordes */
+  margin-left: -10px; /* Ajustamos el margen izquierdo */
+  margin-top: -10px; /* Ajustamos el margen superior */
+  margin-right: -10px; /* Ajustamos el margen derecho */
+  position: relative;
+  z-index: 1;
 }
 
 .listado-productos-input {
@@ -24,8 +30,8 @@
 }
 
 .listado-productos-scroll-container {
-  max-height: 400px; /* Ajusta según sea necesario */
-  overflow-y: auto; /* Habilita el scroll vertical */
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .listado-productos-table {
@@ -35,13 +41,6 @@
 .listado-productos-table th,
 .listado-productos-table td {
   text-align: center;
-}
-
-.listado-productos-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
 }
 
 .listado-productos-button {
@@ -63,7 +62,6 @@
   color: #fff;
 }
 
-/* Media Query para dispositivos móviles */
 @media (max-width: 767px) {
   .listado-productos-input {
     /* Estilos específicos para los inputs en dispositivos móviles */
@@ -76,7 +74,6 @@
   }
 }
 
-/* Estilos para la alerta de eliminación */
 .alert-overlay {
   position: fixed;
   top: 0;
@@ -84,7 +81,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000; /* Asegura que la alerta esté por encima de todo */
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,36 +92,35 @@
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  text-align: center; /* Centra el contenido horizontalmente */
+  text-align: center;
 }
 
 .confirmation-container p {
   margin-bottom: 10px;
 }
 
-/* Estilos para los botones Sí y No */
 .confirmation-container button {
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 4px;
-  margin: 0 5px; /* Agrega margen entre los botones */
+  margin: 0 5px;
 }
 
 .confirmation-container button.yes {
-  background-color: #DC3545; /* Cambia el color del botón "Sí" a rojo */
+  background-color: #DC3545;
   color: #fff;
   border: none;
 }
 
 .confirmation-container button.no {
-  background-color: #007bff; /* Mantiene el color del botón "No" en azul */
+  background-color: #007bff;
   color: #fff;
   border: none;
 }
 
 .confirmation-container button.yes:hover,
 .confirmation-container button.no:hover {
-  opacity: 0.8; /* Cambia la opacidad al pasar el cursor sobre los botones */
+  opacity: 0.8;
 }
 
 .update-form-overlay {
@@ -132,8 +128,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1001; /* Asegura que el formulario esté por encima de la alerta */
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  z-index: 1001;
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
 }
