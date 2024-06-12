@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Table, InputGroup, FormControl, Button, Container, Alert } from 'react-bootstrap';
 import './PedidosMesero.css';
 import { getProducts } from '../../../../API/Productos';
-import { createOrder } from '../../../../API/Pedidos';
-import { freeTable } from '../../../../API/Mesas'; // Importamos la función freeTable
+import { createOrder, getOrderXTableId } from '../../../../API/Pedidos';
+import { freeTable } from '../../../../API/Mesas';
+import { useAuth } from '../../../../auth/AuthProvider'; // Ajusta la ruta según la estructura de tu proyecto
 
 function PedidosMesero({ mesa, pedido }) {
-  console.log(pedido && pedido,mesa)
+  const { UserId } = useAuth(); // Obteniendo UserId del contexto de autenticación
 
   const [filtros, setFiltros] = useState({
     nombre: '',
@@ -30,35 +31,55 @@ function PedidosMesero({ mesa, pedido }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const productosGuardados = JSON.parse(localStorage.getItem(`productosEnPedidoMesa${mesa}`)) || [];
+    setProductosEnPedido(productosGuardados);
+  }, [mesa]);
+
+  useEffect(() => {
+    if (pedido && pedido.length > 0 && pedido[0].productos) {
+      const productosExistentes = pedido[0].productos.map(p => ({
+        ...p,
+        id: Date.now() + Math.random(), // Generar un ID único para cada producto
+        cantidad: p.cantidad || 1
+      }));
+      setProductosEnPedido(productosExistentes);
+      localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(productosExistentes));
+    }
+  }, [pedido, mesa]);
+
   const agregarProducto = (producto) => {
-    const productoConID = { ...producto, id: Date.now() };
-    setProductosEnPedido([...productosEnPedido, productoConID]);
+    const productoConID = { ...producto, id: Date.now(), cantidad: 1 };
+    const nuevosProductosEnPedido = [...productosEnPedido, productoConID];
+    setProductosEnPedido(nuevosProductosEnPedido);
+    localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
   };
 
   const eliminarProducto = (id) => {
-    setProductosEnPedido(productosEnPedido.filter(producto => producto.id !== id));
+    const nuevosProductosEnPedido = productosEnPedido.filter(producto => producto.id !== id);
+    setProductosEnPedido(nuevosProductosEnPedido);
+    localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
   };
 
-  const seleccionarProducto = (producto) => {
-    agregarProducto(producto);
+  const actualizarCantidadProducto = (id, cantidad) => {
+    const nuevosProductosEnPedido = productosEnPedido.map(producto =>
+      producto.id === id ? { ...producto, cantidad: cantidad } : producto
+    );
+    setProductosEnPedido(nuevosProductosEnPedido);
+    localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
   };
 
   const crearPedido = async () => {
-    productosEnPedido.map(p=>{console.log(p)})
     try {
       const newOrder = {
-        MeseroId: 1,
+        MeseroId: UserId, // Usando UserId del contexto de autenticación
         MesaId: mesa,
-        lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: 1 }))
+        lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: producto.cantidad }))
       };
       const isCreated = await createOrder(newOrder);
       if (isCreated) {
         console.log("Pedido creado correctamente");
-        window.location.reload();
-        setProductosEnPedido([]);
-        // Liberar la mesa después de crear el pedido
-        //await freeTable(mesa);  QUITAR
-        //console.log("Mesa liberada"); QUITAR
+        setErrorMensaje('');
       } else {
         setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
       }
@@ -88,6 +109,16 @@ function PedidosMesero({ mesa, pedido }) {
     producto.Categoria.toLowerCase().includes(filtros.categoria.toLowerCase()) &&
     producto.Precio.toString().includes(filtros.precio)
   );
+
+  const liberarMesa = async () => {
+    await freeTable(mesa, pedido[0].PedidoId);
+    localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
+    setProductosEnPedido([]);
+  };
+
+  const calcularTotal = () => {
+    return productosEnPedido.reduce((total, producto) => total + (producto.Precio * producto.cantidad), 0);
+  };
 
   return (
     <div className="pedidos-mesero-container">
@@ -138,7 +169,7 @@ function PedidosMesero({ mesa, pedido }) {
                     <Button
                       variant="primary"
                       className="listado-productos-button listado-productos-button-update"
-                      onClick={() => seleccionarProducto(producto)}
+                      onClick={() => agregarProducto(producto)}
                     >
                       Añadir
                     </Button>
@@ -168,6 +199,7 @@ function PedidosMesero({ mesa, pedido }) {
                 <th>Descripción</th>
                 <th>Categoría</th>
                 <th>Valor</th>
+                <th>Cantidad</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -178,6 +210,14 @@ function PedidosMesero({ mesa, pedido }) {
                   <td>{producto.Descripcion}</td>
                   <td>{producto.Categoria}</td>
                   <td>{producto.Precio}</td>
+                  <td>
+                    <FormControl
+                      type="number"
+                      value={producto.cantidad}
+                      min="1"
+                      onChange={(e) => actualizarCantidadProducto(producto.id, parseInt(e.target.value))}
+                    />
+                  </td>
                   <td>
                     <Button
                       variant="danger"
@@ -193,15 +233,22 @@ function PedidosMesero({ mesa, pedido }) {
           </Table>
         </div>
 
+        <div className="total-container">
+          <h3>Total: ${calcularTotal().toLocaleString('es-ES', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2  // Máximo 2 decimales
+          })}</h3>
+        </div>
+
+
+
         <div className="btn-container">
           <Button
-            variant="success"
-            className="listado-productos-button listado-productos-button-update btn-crear btn-modificar btn-generar"
-            onClick={async () => {
-              await freeTable(mesa,pedido[0].PedidoId); // Llama a la función freeTable para liberar la mesa
-            }}
+            variant="primary"
+            className="listado-productos-button listado-productos-button-update btn-generar"
+            onClick={liberarMesa}
           >
-            Generar Recibo
+            Liberar Mesa
           </Button>
         </div>
 
