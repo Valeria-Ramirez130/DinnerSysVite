@@ -110,3 +110,7 @@
 .listado-productos-table-container {
   width: 100%;
 }
+
+.btn-liberar {
+  font-weight: bold;
+}
