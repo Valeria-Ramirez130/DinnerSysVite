@@ -111,6 +111,7 @@
   width: 100%;
 }
 
+<<<<<<< HEAD
 .btn-container-liberar {
   display: flex;
   justify-content: center; /* Centrar en el eje principal (horizontalmente) */
@@ -120,3 +121,8 @@
 .btn-liberar {
   font-weight: bold;
 }
+=======
+.btn-liberar {
+  font-weight: bold;
+}
+>>>>>>> d8f15d16adde697e7cabe622692e4ca74b39a1ef
