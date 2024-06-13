@@ -110,3 +110,13 @@
 .listado-productos-table-container {
   width: 100%;
 }
+
+.btn-container-liberar {
+  display: flex;
+  justify-content: center; /* Centrar en el eje principal (horizontalmente) */
+  margin-bottom: 25px; /* Margen inferior de 25px */
+}
+
+.btn-liberar {
+  font-weight: bold;
+}
