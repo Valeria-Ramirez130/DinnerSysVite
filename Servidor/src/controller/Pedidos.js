@@ -70,10 +70,11 @@ export const getPedidos = async (req, res) => {
     }
 }
 
-//Funcion para traer los pedidos que tiene una mesa
-export const getPedidoXMesaId = async (req, res) => {
-    console.log("\nFuncion getPedidosXMesaId():");
-    const {MesaId} = req.params;
+//Funcion para traer el pedido activa que tiene una mesa
+export const getPedidoActivoXMesaId = async (req, res) => {
+    console.log("\nFuncion getPedidoActivoXMesaId():");
+    const { MesaId } = req.params;
+    console.log("MesaId: " + MesaId);
     try {
 
         const pedido = await pool.query('SELECT ' +
@@ -83,6 +84,8 @@ export const getPedidoXMesaId = async (req, res) => {
             'U.Nombres as Mesero, ' +
             'Pr.ProductoId, ' +
             'Pr.Nombre AS NombreProducto, ' +
+            'Pr.Descripcion, ' +
+            'C.NombreCategoria, '+
             'Pr.Precio as PrecioUnitario, ' +
             'DPP.Cantidad, ' +
             '(Pr.Precio * DPP.Cantidad) as PrecioTotal ' +
@@ -90,7 +93,12 @@ export const getPedidoXMesaId = async (req, res) => {
             'INNER JOIN detallepedidoproducto DPP ON DPP.PedidoId = Pe.pedidoId ' +
             'INNER JOIN productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
             'INNER JOIN usuarios U ON U.usuarioId = Pe.MeseroId ' +
-            'INNER JOIN mesas M ON M.MesaId = Pe.MesaId WHERE M.MesaId = ? AND DATE(Pe.FechaPedido) = CURDATE() AND Pe.Finalizado = 0',[MesaId]);
+            'INNER JOIN mesas M ON M.MesaId = Pe.MesaId ' +
+            'INNER JOIN categorias C ON C.CategoriaId = Pr.Categoria ' +
+            'WHERE M.MesaId = ? AND Pe.Finalizado = 0 ', [MesaId]);
+
+        //Esta consulta me trae el pedido activo que tiene una mesa
+
         if (pedido) {
             castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
             let precioTotal = 0;
@@ -104,8 +112,11 @@ export const getPedidoXMesaId = async (req, res) => {
                 // console.log(precioTotal);
                 precioTotal += i.PrecioTotal;
                 lstProductos.push({//Agregamos todos los atributos del producto a nuestra lista
-                    Producto: i.NombreProducto,
-                    PrecioUnitario: i.PrecioUnitario,
+                    ProductoId: i.ProductoId,
+                    Nombre: i.NombreProducto,
+                    Descripcion: i.Descripcion,
+                    Categoria: i.NombreCategoria,
+                    Precio: i.PrecioUnitario,
                     Cantidad: i.Cantidad,
                     PrecioTotal: i.PrecioTotal
                 });
@@ -204,6 +215,7 @@ export const getTotalPedido = async (req, res) => {
 export const createPedido = async (req, res) => {
     console.log("\nFuncion createPedido():");
     let { MeseroId, MesaId, lstProductos } = req.body;
+    console.log("Datos recibidos: ", MeseroId, MesaId, lstProductos);
     try {
         if (MeseroId && MesaId && lstProductos) {
             //Preguntamos si la mesa no está ocupada ya con anterioridad
@@ -300,6 +312,7 @@ export const updatePedido = async (req, res) => {
         const { lstProductos } = req.body;
         //Ejemplo de estructura de la lstProductos: 
         //lstProductos = [{ProductoId: 1, Cantidad: 2}, {ProductoId: 2, Cantidad: 3}]
+        //lstOriginal = [{ProductoId: 1, Cantidad: 2}, {ProductoId: 3, Cantidad: 4}]
         if (PedidoId) {
             if (lstProductos) {
                 const lstOriginal = await pool.query('SELECT ProductoId, Cantidad FROM DetallePedidoProducto WHERE PedidoId = ?', [PedidoId]);
@@ -307,8 +320,10 @@ export const updatePedido = async (req, res) => {
                     let cantidadInserciones = 0;
                     console.log("lstProductos que recibo: ", lstProductos);
                     console.log("lstOriginal de los productos que estaban en ese pedido:", lstOriginal);
+                    //lista original = lista de producto de la base de datos
+                    //lista que llega = lista del req.body
                     //Obtenemos los productos que están en la lista original, pero no en la que llega (esta lista es para eliminar)
-                    const lstIdEliminado = lstOriginal.filter(pr => !lstProductos.some(pr2 => pr2.ProductoId === pr.ProductoId));
+                    const lstIdEliminado = lstOriginal.filter(pr => {console.log(pr); !lstProductos.some(pr2 => pr2.ProductoId === pr.ProductoId)});
                     //Obtenemos los productos que no estan en la lista original, pero si en la que llega (esta lista es para agregar)
                     const lstIdAgregado = lstProductos.filter(pr => !lstOriginal.some(pr2 => pr2.ProductoId === pr.ProductoId));
                     //Obtenemos los productos que estan presente en la lista original y en la que me llega (esta lista es para actualizar)
@@ -364,7 +379,7 @@ export const updatePedido = async (req, res) => {
                     res.status(404).json({ Error: 'No hay productos asociados a este pedido' });
                 }
             } else {
-                res.status(400).json({ Error: 'No se recibieron los datos necesarios' });
+                res.status(400).json({ Error: 'No se recibieron los datos necesarios de los productos' });
             }
         } else {
             res.status(400).json({ Error: 'No se recibió el ID del pedido' });

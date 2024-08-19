@@ -60,7 +60,7 @@ DELETE http://localhost:3003/mesas/deleteMesa/18
 GET http://localhost:3003/pedidos/getPedidos
 
 ### Obtener los pedido de una mesa mandando el id de la mesa
-GET http://localhost:3003/pedidos/getPedidosXMesaId/20
+GET http://localhost:3003/pedidos/getPedidoXMesaId/1
 
 ### Obtener todos los datos de un pedido: nÂ°mesa, mesero, fecha, producto, precio unitario, cantidad, precio total
 GET http://localhost:3003/pedidos/getTotalPedido/2
