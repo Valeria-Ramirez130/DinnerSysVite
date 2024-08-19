@@ -38,7 +38,7 @@ export const CarouselMesas = () => {
       setSelectedTable(tableId);
       if (Estado === 1) {
         // Verificar si ya hay un pedido para esta mesa
-        if (!pedidosPorMesa[tableId]) {
+        
           // Si no hay pedido, obtenerlo y almacenarlo
           getOrderXTableId(tableId)
             .then((res) => {
@@ -47,7 +47,7 @@ export const CarouselMesas = () => {
               }
             })
             .catch((error) => console.error("Error al obtener el pedido:", error));
-        }
+        
       }
     }
   };
@@ -86,7 +86,7 @@ export const CarouselMesas = () => {
       {/* Mostrar el formulario solo si showForm es true */}
       {showForm && selectedTable && (
         <div className="form-container">
-          {console.log(pedidosPorMesa[selectedTable])}
+          {/* {console.log(pedidosPorMesa[selectedTable])} */}
           <PedidosMesero
             mesa={selectedTable}
             pedido={pedidosPorMesa[selectedTable] ? pedidosPorMesa[selectedTable] : []}

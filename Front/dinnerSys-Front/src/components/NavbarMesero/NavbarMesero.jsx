@@ -9,20 +9,16 @@ import { useAuth } from '../../auth/AuthProvider';
 export function NavbarMesero() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const { setIsAuthenticated } = useAuth(); 
+  const { setIsAuthenticated, Nombre, Apellido, Rol } = useAuth(); 
+  console.log(Rol);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    window.location.href = "/";
   };
 
   const handleProfileClick = () => {
-    const loggedInUser = localStorage.getItem("User");
-    if (loggedInUser) {
-      const { Nombre, Rol, Apellido } = JSON.parse(loggedInUser);
       setUserData({ Nombre, Rol, Apellido });
       setShowProfileModal(true);
-    }
   };
 
   const handleCloseProfileModal = () => {

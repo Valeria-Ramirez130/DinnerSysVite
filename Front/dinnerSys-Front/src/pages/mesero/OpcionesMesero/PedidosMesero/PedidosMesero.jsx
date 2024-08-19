@@ -7,7 +7,10 @@ import { freeTable } from '../../../../API/Mesas';
 import { useAuth } from '../../../../auth/AuthProvider';
 
 function PedidosMesero({ mesa, pedido }) {
-  const { UserId } = useAuth();
+  const { UserId, Nombre } = useAuth();
+
+  // console.log(UserId, Nombre);
+  console.log(pedido);
 
   const [filtros, setFiltros] = useState({
     nombre: '',
@@ -38,14 +41,16 @@ function PedidosMesero({ mesa, pedido }) {
   }, [mesa]);
 
   useEffect(() => {
-    if (pedido && pedido.length > 0 && pedido[0].productos) {
-      const productosExistentes = pedido[0].productos.map(p => ({
+    if (pedido && pedido.length > 0 && pedido[0].lstProductos) {
+      const productosExistentes = pedido[0].lstProductos.map(p => ({
         ...p,
         id: Date.now() + Math.random(),
-        cantidad: p.cantidad || 1
+        cantidad: p.Cantidad || 1
       }));
+
       setProductosEnPedido(productosExistentes);
       localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(productosExistentes));
+
     }
   }, [pedido, mesa]);
 
@@ -64,6 +69,26 @@ function PedidosMesero({ mesa, pedido }) {
       localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
     }
   };
+
+  const actualizarPedido = async () => {
+
+    const pedidoActualizado = {
+      MeseroId: UserId,
+      MesaId: mesa,
+      lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: producto.cantidad }))
+    };
+
+    try {
+      const isUpdate = await updateOrder(pedido[0].PedidoId, pedidoActualizado);
+      if (!isUpdate) {
+        setErrorActualizarPedido(true); // Mostrar error específico para la actualización
+      } else {
+        setErrorActualizarPedido(false); // Restablecer el estado de error de actualización
+      }
+    } catch (error) {
+      setErrorActualizarPedido(true); // Mostrar error específico para la actualización
+    }
+  }
 
   const eliminarProducto = async (id) => {
     const nuevosProductosEnPedido = productosEnPedido.filter(producto => producto.id !== id);
@@ -109,8 +134,8 @@ function PedidosMesero({ mesa, pedido }) {
       const isCreated = await createOrder(newOrder);
       if (isCreated) {
         console.log("Pedido creado correctamente");
+        //Aqui una alerta de pedido creado
         setErrorMensaje('');
-        window.location.reload();
       } else {
         setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
       }
@@ -207,16 +232,19 @@ function PedidosMesero({ mesa, pedido }) {
             </tbody>
           </Table>
         </div>
+        <div className='py-3' />
 
         <div className="btn-container-crearpedido">
           <Button
             variant="success"
             className="listado-productos-button listado-productos-button-update btn-crear"
-            onClick={crearPedido}
+            onClick={() => { (pedido && pedido.length > 0) ? actualizarPedido() : crearPedido() }}
           >
-            Crear Pedido
+            {(pedido && pedido.length > 0) ? "Actualizar Pedido" : "Crear Pedido"}
           </Button>
         </div>
+        <div className='py-3' />
+
       </Container>
       <Container>
         <div className="listado-productos-scroll-container">

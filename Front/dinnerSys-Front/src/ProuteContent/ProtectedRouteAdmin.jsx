@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 
-const ProtectedRouteAdmin = ({ redirectTo = '/' }) => {
+export const ProtectedRouteAdmin = ({ redirectTo = '/' }) => {
    
     const { isAuthenticated, Rol } = useAuth();
     if (isAuthenticated && Rol === "administrador") {
@@ -12,5 +12,3 @@ const ProtectedRouteAdmin = ({ redirectTo = '/' }) => {
         return <Navigate to={redirectTo} />;
     }
 }
-
-export default ProtectedRouteAdmin;

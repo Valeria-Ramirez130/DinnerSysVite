@@ -7,20 +7,15 @@ import { useAuth } from '../../auth/AuthProvider';
 export function NavbarAdmin() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, Nombre, Apellido, Rol } = useAuth();
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    window.location.href = "/";
   };
 
   const handleProfileClick = () => {
-    const loggedInUser = localStorage.getItem("User");
-    if (loggedInUser) {
-      const { Nombre, Rol, Apellido } = JSON.parse(loggedInUser);
-      setUserData({ Nombre, Rol, Apellido });
+      setUserData({ Nombre, Apellido, Rol });
       setShowProfileModal(true);
-    }
   };
 
   const handleCloseProfileModal = () => {

@@ -12,7 +12,7 @@ import LockIcon from '../../iconos/LockIcon';
 import { VerifyLogginUser } from '../../API/Usuarios';
 
 const Login = () => {
-  const { setIsAuthenticated, setRol, Rol } = useAuth(); 
+  const { setIsAuthenticated, Rol } = useAuth(); 
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
@@ -24,18 +24,14 @@ const Login = () => {
   const onSubmit = async (values, { setErrors }) => {
     try {
       const userData = await VerifyLogginUser(values.username, values.cedula);
-      console.log(userData)
+      
+      console.log(userData);
+
       if (userData) {
-        localStorage.setItem("User", JSON.stringify({
-          id: userData.id,
-          Nombre: userData.Nombre,
-          Rol: userData.rol,
-          Apellido: userData.Apellido
-        }));
+        localStorage.setItem("User", JSON.stringify(userData));
         setIsAuthenticated(true);
 
         const userRole = userData.rol.toLowerCase();
-        setRol(userRole);
         if (userRole === "administrador") {
           navigate("/admin");
         } else if (userRole === "mesero") {

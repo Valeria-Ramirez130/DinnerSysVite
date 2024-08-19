@@ -39,12 +39,11 @@
 }
 
 .listado-productos-button {
-  width: 120px;
+  width: fit-content;
   border: none;
   padding: 8px;
   cursor: pointer;
   font-weight: bold;
-  margin-right: 10px;
 }
 
 .listado-productos-button-update {
@@ -88,9 +87,9 @@
 }
 
 .btn-container-crearpedido {
+  text-wrap: nowrap !important;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; /* Agrega margen en la parte inferior del contenedor de botones */
 }
 
 .btn-modificar {
@@ -110,8 +109,6 @@
 .listado-productos-table-container {
   width: 100%;
 }
-
-<<<<<<< HEAD
 .btn-container-liberar {
   display: flex;
   justify-content: center; /* Centrar en el eje principal (horizontalmente) */
@@ -121,8 +118,3 @@
 .btn-liberar {
   font-weight: bold;
 }
-=======
-.btn-liberar {
-  font-weight: bold;
-}
->>>>>>> d8f15d16adde697e7cabe622692e4ca74b39a1ef

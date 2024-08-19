@@ -1,4 +1,4 @@
-import ProtectedRouteMesero from "../ProuteContent/ProtectedRouteMesero";
+import {ProtectedRouteMesero} from "../ProuteContent/ProtectedRouteMesero";
 import CarouselMesas from "../components/CarouselMesas/CarouselMesas";
 import { NavbarMesero } from "../components/NavbarMesero";
 
@@ -7,7 +7,7 @@ import { NavbarMesero } from "../components/NavbarMesero";
 export const routesmesero = [
     {
       path: "/",
-      element: <><ProtectedRouteMesero /></>,
+      element: <ProtectedRouteMesero />,
       children: [
         {
           path: "/mesero",
