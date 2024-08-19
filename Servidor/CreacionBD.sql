@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS DinnerSys;
 CREATE DATABASE IF NOT EXISTS DinnerSys;
-
+USE DinnerSys;
 /* Tabla Usuarios 
 Este tendrá un campo llamado inactivo, por si se borra simplemente actualizamos el campo
 inactivo a 1 o sea, true */
@@ -22,17 +22,26 @@ CREATE TABLE IF NOT EXISTS DatosAcceso(
     FOREIGN KEY (usuarioId) REFERENCES Usuarios(usuarioId) ON DELETE CASCADE
 );
 
+/* Tabla Categoria
+Esta tabla es para manipular las categorias de los productos su primary key será el nombre de la categoria 
+*/
+CREATE TABLE IF NOT EXISTS Categorias(
+    CategoriaId INT AUTO_INCREMENT PRIMARY KEY,
+    NombreCategoria varchar(30) NOT NULL
+);
+
 /* Tabla Productos 
 Esta tabla contará también con un campo llamado inactivo, 
 por si se borra simplemente actualizamos el campo a 1, o sea, true
 */
 CREATE TABLE IF NOT EXISTS Productos(
     ProductoId INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre varchar(50) NOT NULL,
-    Descripcion varchar(50) NOT NULL,
-    Categoria varchar(30) NOT NULL,
+    Nombre varchar(140) NOT NULL,
+    Descripcion varchar(200) NOT NULL,
+    Categoria INT NULL,
     Precio INT NOT NULL,
-    Inactivo BOOLEAN DEFAULT 0
+    Inactivo BOOLEAN DEFAULT 0,
+    FOREIGN KEY (Categoria) REFERENCES Categorias(CategoriaId) ON DELETE SET NULL
 );
 
 /* Tabla Mesas */
@@ -43,10 +52,10 @@ CREATE TABLE IF NOT EXISTS Mesas(
 
 /* Tabla Pedidos */
 CREATE TABLE IF NOT EXISTS Pedidos (
-    pedidoId INT PRIMARY KEY AUTO_INCREMENT,
+    PedidoId INT PRIMARY KEY AUTO_INCREMENT,
     Comentario TEXT DEFAULT NULL,
     FechaPedido DATETIME DEFAULT NOW() NOT NULL,
-    Finalizado BOOLEAN DEFAULT 0 NOT NULL,
+    Finalizado BOOLEAN DEFAULT 0,
     MeseroId INT, /* MeseroId puede ser NULL por si se elimina entonces para que no se pierda la info */
     MesaId INT NOT NULL,
     FOREIGN KEY (MeseroId) REFERENCES Usuarios(UsuarioId) ON DELETE SET NULL,
@@ -76,6 +85,14 @@ END$$
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE TRIGGER ActualizarDatosAcceso AFTER UPDATE ON Usuarios
+FOR EACH ROW
+BEGIN
+    UPDATE DatosAcceso SET Usuario = CONCAT(REPLACE(NEW.Nombres, ' ','')), Contrasena = NEW.Cedula WHERE usuarioId = NEW.usuarioId;
+END$$
+DELIMITER ;
+
 /* INSERCIONES DE PRUEBA */
 /* Inserción tabla Usuarios */
 INSERT INTO Usuarios (Nombres, Apellidos,  Cedula, TipoUsuario) VALUES 
@@ -84,38 +101,55 @@ INSERT INTO Usuarios (Nombres, Apellidos,  Cedula, TipoUsuario) VALUES
 ('Juan Jose', 'Marin', '1202957603', 'Mesero'),
 ('John David', 'Doe', '319457302', 'Mesero'),
 ('Laura Cristina', 'Lopez Acosta', '583024841', 'Mesero'),
-('Sofia', 'Castillo', '315285014', 'Mesero'),
-('Andres Steven', 'Vivas', '1340589420' ,'Mesero'),
-('Esteban','Perdomo', '1110282257', 'Administrador'),
-('Juan','Leiva','11111111111','Mesero'),
-('Valeria','Ramirez','1111544946','Mesero'),
-('Valeria','Ramirez','1111544123','Administrador');
+('Sofia', 'Castillo', '315315', 'Mesero'),
+('User', 'Test', '12345', 'Mesero'),
+('Cocina', '','000000000', 'Cocina'),
+('Andres Steven', 'Vivas', '1340589420' ,'Mesero');
+
+/* Inserción tabla Categorias */
+INSERT INTO Categorias (NombreCategoria) VALUES 
+('Sin asignar'),
+('Comidas'),
+('Postres'),
+('Bebidas');
 
 /* Inserción tabla Productos */
 INSERT INTO Productos (Nombre, Descripcion, Precio, Categoria) VALUES 
-('Arroz Paisa', 'Arroz paisa para 3 personas', 32000, 'Comida'),
-('Hamburguesa', 'Hamburguesa de carne', 10000, 'Comida'),
-('Papas Fritas', 'Papas fritas con queso', 5000, 'Comida'),
-('Coca Cola', 'Coca Cola 500ml', 3000, 'Bebida'),
-('Jugo de Naranja', 'Jugo de naranja 500ml', 3000, 'Bebida'),
-('Cerveza', 'Cerveza 500ml', 5000, 'Bebida'),
-('Agua', 'Agua 500ml', 2000, 'Bebida'),
-('Ensalada', 'Ensalada de frutas', 5000, 'Comida'),
-('Sandwich', 'Sandwich de pollo', 5000, 'Comida'),
-('Cafe', 'Cafe 500ml', 2000, 'Bebida'),
-('Te', 'Te 500ml', 2000, 'Bebida');
+('Arroz Paisa', 'Arroz paisa para 3 personas', 32000, 2),
+('Sandwich de pollo', 'Sandwich de pollo', 5000, 2),
+('Hamburguesa', 'Hamburguesa de carne', 10000, 2),
+('Papas Fritas', 'Papas fritas con queso', 5000, 2),
+('Bandeja frijoles con chuleta de cerdo', 'Bandeja frijoles con chuleta de cerdo individual', 13000, 2),
+('Salchipapa sencilla personal', 'Salchipapa con salchicha, papa y todas las salsas personal', 8000, 2),
+('Tiramisú', 'Tiramisú individual', 8000, 3),
+('Brownie', 'Brownie individual', 8000, 3),
+('Helado', 'Helado de 3 sabores', 10000, 3),
+('Gelatina', 'Gelatina individual', 8000, 3),
+('Ensalada de frutas', 'Ensalada de frutas individual', 10000, 3),
+('Jugo de Naranja', 'Jugo de naranja 500ml', 3000, 4),
+('Agua', 'Agua 500ml', 2000, 4),
+('Cafe', 'Cafe 500ml', 2000, 4),
+('Te', 'Te 500ml', 2000, 4),
+('Coca Cola', 'Coca Cola 500ml', 3500, 4),
+('Pepsi', 'Pepsi 500ml', 3200, 4),
+('Cerveza Aguila', 'Cerveza Aguila Light 500ml', 5000, 4);
 
 /* Inserción tabla Mesas con estado 1, o sea ocupadas*/
 INSERT INTO Mesas (MesaId, Estado) VALUES 
-(1, 0),
-(2, 0),
-(3, 0);
+(1, 1),
+(2, 1),
+(3, 1);
+
+/* Inserción tabla Mesas con estado 0, o sea desocupadas*/
+INSERT INTO Mesas (MesaId) VALUES 
+(4),(5),(6),(7),(8),(9),(10),
+(11),(12),(13),(14),(15),(16),(17),(18),(19),(20);
 
 /* Inserción tabla Pedidos */
-INSERT INTO Pedidos (MeseroId, MesaId, Finalizado) VALUES
-(6, 1, 1),
-(5, 2, 1),
-(4, 3, 1);
+INSERT INTO Pedidos (MeseroId, MesaId) VALUES
+(6, 1),
+(5, 2),
+(4, 3);
 
 /* Inserción tabla DetallePedidoProducto */
 INSERT INTO DetallePedidoProducto (PedidoId, ProductoId, Cantidad) VALUES
