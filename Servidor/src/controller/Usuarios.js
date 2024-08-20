@@ -13,7 +13,7 @@ export const verificarCredenciales = async (req, res) => {
             'INNER JOIN usuarios U ON U.usuarioId = D.usuarioId WHERE D.Usuario = ? AND D.Contrasena = ?', [usuario, clave]);
         //Lo hacemos [response] para que retorne un objeto y no un arreglo
         if (response) {
-            if (response.Contrasena === clave) {
+            
                 response = {
                     id: response.usuarioId,
                     Nombre: response.Nombres,
@@ -23,11 +23,9 @@ export const verificarCredenciales = async (req, res) => {
                 console.log(response);
                 console.log("Usuario encontrado, todo correcto");
                 return res.status(200).json(response);
-            } else {
-                return res.status(404).json({ Error: 'ContraseÃ±a incorrecta' });
-            }
+  
         } else {
-            return res.status(404).json({ Error: 'Usuario no encontrado' });
+            return res.status(404).json({ Error: 'Usuario o clave incorrectas' });
         }
 
     } catch (error) {
