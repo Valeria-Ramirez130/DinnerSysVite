@@ -10,7 +10,7 @@ export const verificarCredenciales = async (req, res) => {
         const clave = req.body.clave;
 
         let [response] = await pool.query(' SELECT U.Nombres, U.Apellidos, D.usuarioId, D.Contrasena, U.TipoUsuario FROM DatosAcceso D \n' +
-            'INNER JOIN usuarios U ON U.usuarioId = D.usuarioId WHERE D.Usuario = ?', [usuario]);
+            'INNER JOIN usuarios U ON U.usuarioId = D.usuarioId WHERE D.Usuario = ? AND D.Contrasena = ?', [usuario, clave]);
         //Lo hacemos [response] para que retorne un objeto y no un arreglo
         if (response) {
             if (response.Contrasena === clave) {
