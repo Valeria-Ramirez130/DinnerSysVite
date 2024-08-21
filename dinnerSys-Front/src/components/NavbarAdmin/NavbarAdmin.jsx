@@ -34,6 +34,7 @@ export function NavbarAdmin() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/admin/usuarios" className="nav-perfil no-link-style">Usuarios</Nav.Link>
+              <Nav.Link href="/admin/categorias" className="nav-perfil no-link-style">Categorias</Nav.Link>
               <Nav.Link href="/admin/productos" className="nav-perfil no-link-style">Productos</Nav.Link>
               <Nav.Link href="/admin/ventas" className="nav-perfil no-link-style">Ventas</Nav.Link>
               <Nav.Link href="/admin/mesas" className="nav-perfil no-link-style">Mesas</Nav.Link>

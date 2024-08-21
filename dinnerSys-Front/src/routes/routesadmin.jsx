@@ -37,11 +37,20 @@ export const routesadmin = [
         ),
       },
       {
-        path: "/admin/productos",
+        path: "/admin/categorias",
         element: (
           <>
             <NavbarAdmin />
             <Categoria />
+          </>
+        ),
+      },
+
+      {
+        path: "/admin/productos",
+        element: (
+          <>
+            <NavbarAdmin />
             <CrearProducto />
             <ListadoProductos />
           </>
