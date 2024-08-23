@@ -11,6 +11,7 @@ import {
   ListadoVentas,
 } from "../pages/admin/OpcionesAdmin";
 import Categoria from "../pages/admin/OpcionesAdmin/Productos/Categoria/Categoria";
+import ListadoCategoria from "../pages/admin/OpcionesAdmin/Productos/Categoria/ListadoCategoria";
 
 export const routesadmin = [
   {
@@ -42,6 +43,7 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <Categoria />
+            <ListadoCategoria/>
           </>
         ),
       },
