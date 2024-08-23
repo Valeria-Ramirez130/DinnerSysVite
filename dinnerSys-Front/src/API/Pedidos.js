@@ -28,6 +28,17 @@ export const getOrders = async () => {
     }
 };
 
+//Get allá orders of the day
+export const getOrdersOfDay = async () => { 
+    try {
+        const lstPedidosDia = await axios.get(`${BACK_URL}/pedidos/getPedidosDia`);
+        return lstPedidosDia.status === 200 ? lstPedidosDia.data : null;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
 //Create new Order
 export const createOrder = async (newOrder) => { 
     /* Object Structure:
