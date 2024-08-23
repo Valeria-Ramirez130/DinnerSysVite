@@ -1,6 +1,7 @@
 import { ProtectedRouteCocina } from "../ProuteContent/ProtectedRouteCocina";
+import { NavbarCocina } from "../components";
 import Cocina from "../pages/cocina/Cocina";
-import { NavbarAdmin } from "../components/NavbarAdmin/NavbarAdmin";
+
 
 export const routescocina = [
   {
@@ -11,7 +12,7 @@ export const routescocina = [
         path: "/cocina",
         element: (
           <>
-            <NavbarAdmin />
+            <NavbarCocina />
             <Cocina /> 
           </>
         ),

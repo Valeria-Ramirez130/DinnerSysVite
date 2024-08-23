@@ -1,0 +1,30 @@
+.contenedor-principal-cocina {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos en el cross axis (eje transversal) */
+ /* Asegura que el contenedor ocupe toda la altura de la ventana */
+}
+
+.header-cocina {
+    width: 90%;
+    padding: 10px;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: #663300 !important;
+    color: #fff;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.contenedor-pedidos-cocina {
+    width: 90%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.tabla-cocina{
+    width: 90%;
+    margin: 0px auto;
+}
