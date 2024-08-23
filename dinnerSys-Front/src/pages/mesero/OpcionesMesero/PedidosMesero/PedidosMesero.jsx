@@ -163,10 +163,15 @@ function PedidosMesero({ mesa, pedido }) {
   );
 
   const liberarMesa = async () => {
-    await freeTable(mesa, pedido[0].PedidoId);
-    localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
-    setProductosEnPedido([]);
-    window.location.reload();
+    await freeTable(mesa, pedido[0].PedidoId).then(() => {
+      console.log("Mesa liberada correctamente");
+      localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
+      alert(`Mesa ${mesa} liberada correctamente`);
+      setProductosEnPedido([]);
+    }).catch(() => {
+      alert("No fue posible liberar la mesa");
+      console.log("Error al liberar mesa");
+    });
   };
 
   const calcularTotal = () => {
