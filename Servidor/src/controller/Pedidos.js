@@ -70,6 +70,83 @@ export const getPedidos = async (req, res) => {
     }
 }
 
+
+//Funcion para traer los pedidos del día
+export const getPedidosDelDia = async (req, res) => {
+    console.log("\nFuncion getPedidosDelDia():");
+    try {
+
+        const pedido = await pool.query('SELECT ' +
+            'Pe.PedidoId, ' +
+            'Pe.Finalizado, ' +
+            'Pe.FechaPedido, ' +
+            'M.MesaId as N_Mesa, ' +
+            'U.Nombres as Mesero, ' +
+            'Pr.ProductoId, ' +
+            'Pr.Nombre AS NombreProducto, ' +
+            'Pr.Precio as PrecioUnitario, ' +
+            'DPP.Cantidad, ' +
+            '(Pr.Precio * DPP.Cantidad) as PrecioTotal ' +
+            'FROM Pedidos Pe ' +
+            'INNER JOIN DetallePedidoProducto DPP ON DPP.PedidoId = Pe.PedidoId ' +
+            'INNER JOIN Productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
+            'LEFT JOIN Usuarios U ON U.usuarioId = Pe.MeseroId ' +
+            'INNER JOIN Mesas M ON M.MesaId = Pe.MesaId ' +
+            'WHERE DATE(Pe.FechaPedido) = CURDATE() ' +
+            'ORDER BY Pe.FechaPedido DESC');
+        if (pedido) {
+            castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
+            let precioTotal = 0;
+            let lstProductos = []; //Para agregar al objeto pedido
+            let lstPedido = [];
+            //Casteamos a float y obtenemos el precio total
+            let pedidosId = pedido.map(pedido => pedido.PedidoId)
+            let index = 0;
+            // console.log(pedidosId);
+            for (let i of pedido) { //Recorremos la lista de tooodos los pedidos
+                // console.log(precioTotal);
+                precioTotal += i.PrecioTotal;
+                lstProductos.push({//Agregamos todos los atributos del producto a nuestra lista
+                    Producto: i.NombreProducto,
+                    PrecioUnitario: i.PrecioUnitario,
+                    Cantidad: i.Cantidad,
+                    PrecioTotal: i.PrecioTotal
+                });
+
+                if (pedidosId[index] !== pedidosId[index + 1]) {
+                    //Preguntamos si el index en la siguiente iteración es diferente al actual
+                    //En caso de ser asi, creamos el objeto pedido con sus productos y lo agregamos a la lista
+                    //Y reiniciamos las variables de precioTotal del pedido en general y la lista de productos
+
+                    const objPedido = {
+                        PedidoId: i.PedidoId,
+                        Fecha: new Date(i.FechaPedido).toLocaleString(), // DD/MM/YYYY, HH:MM:SS AM/PM
+                        Mesa: i.N_Mesa,
+                        Mesero: i.Mesero,
+                        lstProductos: lstProductos,
+                        PrecioTotalPedido: precioTotal,
+                        Finalizado: i.Finalizado
+                    }
+                    lstPedido.push(objPedido)
+                    lstProductos = []
+                    precioTotal = 0;
+                }
+                index++;
+            }
+
+            console.log(lstPedido);
+
+            res.status(200).json(lstPedido);
+        } else {
+            console.log("Error en el servidor o servidor desconectado");
+            res.statu(500).json({ Error: 'Error del servidor o servidor desconectado' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Error del servidor o servidor desconectado: ', error);
+    }
+}
+
 //Funcion para traer el pedido activa que tiene una mesa
 export const getPedidoActivoXMesaId = async (req, res) => {
     console.log("\nFuncion getPedidoActivoXMesaId():");
