@@ -96,6 +96,7 @@ export function CrearUsuario() {
               <option>Seleccione rol de usuario</option>
               <option>Administrador</option>
               <option>Mesero</option>
+              <option>Cocina</option> {/* Nueva opción agregada */}
             </Form.Select>
             <div className="error-message">{formik.errors.rol}</div>
           </Form.Group>

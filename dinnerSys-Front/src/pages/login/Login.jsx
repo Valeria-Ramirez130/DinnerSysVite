@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
@@ -25,17 +25,19 @@ const Login = () => {
     try {
       const userData = await VerifyLogginUser(values.username, values.cedula);
       
-      console.log(userData);
-
+      console.log(userData); // Verifica los datos devueltos
+      
       if (userData) {
         localStorage.setItem("User", JSON.stringify(userData));
         setIsAuthenticated(true);
 
-        const userRole = userData.rol.toLowerCase();
+        const userRole = userData.rol.toLowerCase(); // Asegúrate de que el rol sea en minúsculas
         if (userRole === "administrador") {
           navigate("/admin");
         } else if (userRole === "mesero") {
           navigate("/mesero");
+        } else if (userRole === "cocina") {
+          navigate("/cocina");
         } else {
           console.error("Rol de usuario desconocido:", userRole);
         }
@@ -57,12 +59,14 @@ const Login = () => {
     onSubmit,
   });
 
-
+  // Redirección condicional según el rol
   if (Rol === 'administrador') {
     return <Navigate to="/admin" />;
   } else if (Rol === 'mesero') {
     return <Navigate to="/mesero" />;
-  } else{
+  } else if (Rol === 'cocina') {
+    return <Navigate to="/cocina" />;
+  }
 
   return (
     <div className='user-form'>
@@ -91,14 +95,14 @@ const Login = () => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Cedula</Form.Label>
+            <Form.Label>Cédula</Form.Label>
             <InputGroup>
               <InputGroup.Text>
                 <LockIcon />
               </InputGroup.Text>
               <FormControl
                 type="password"
-                placeholder="Cedula"
+                placeholder="Cédula"
                 name="cedula"
                 value={formik.values.cedula}
                 onChange={formik.handleChange}
@@ -119,7 +123,6 @@ const Login = () => {
       </div>
     </div>
   );
-}
 };
 
 export default Login;

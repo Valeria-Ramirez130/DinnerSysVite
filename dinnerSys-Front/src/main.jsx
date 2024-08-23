@@ -7,7 +7,8 @@ import { routesglobal } from '../src/routes/routesglobal.jsx'
 import { routesadmin } from './routes/routesadmin.jsx'
 import { routesmesero } from '../src/routes/routesmesero.jsx'
 import { AuthProvider } from './auth/AuthProvider.jsx';
-let routes = [].concat(routesglobal, routesadmin, routesmesero);
+import { routescocina } from './routes/routescocina.jsx';
+let routes = [].concat(routesglobal, routesadmin, routesmesero,routescocina);
 routes = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
