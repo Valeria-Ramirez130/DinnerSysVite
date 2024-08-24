@@ -74,7 +74,7 @@ export default function ListadoCategoria() {
     <>
       <Container className="listado-categorias-container my-5">
         <div className="listado-categorias-header">
-          <h1>Listado Usuarios</h1>
+          <h1>Listado Categoria</h1>
         </div>
         <Row className="justify-content-md-center">
           <Col md={8}>

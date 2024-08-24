@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Container, Spinner, Alert } from 'react-bootstrap';
-import { getOrders } from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
+import {getOrdersOfDay} from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
 import './Cocina.css';
 
 export function Cocina() {
@@ -11,7 +11,7 @@ export function Cocina() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const result = await getOrders();
+        const result = await getOrdersOfDay();
         if (result) {
           setOrders(result);
         } else {
