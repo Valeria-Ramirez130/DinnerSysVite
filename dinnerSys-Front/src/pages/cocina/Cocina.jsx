@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Spinner, Alert, Button } from 'react-bootstrap';
+import { Table, Container, Spinner, Alert } from 'react-bootstrap';
 import { getOrdersOfDay } from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
 import './Cocina.css';
 
@@ -28,11 +28,6 @@ export function Cocina() {
     fetchOrders();
   }, []);
 
-  // Función para marcar un pedido como entregado
-  const handleOrderDelivered = (orderId) => {
-    setOrders(orders.filter(order => order.PedidoId !== orderId));
-  };
-
   return (
     <Container className="contenedor-principal-cocina">
       <div className="header-cocina">
@@ -53,7 +48,6 @@ export function Cocina() {
                   <th>Mesa</th>
                   <th>Mesero</th>
                   <th>Productos</th>
-                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -68,11 +62,6 @@ export function Cocina() {
                         </li>
                       ))}
                     </ul>
-                  </td>
-                  <td>
-                    <Button variant="success" onClick={() => handleOrderDelivered(order.PedidoId)}>
-                      Entregado
-                    </Button>
                   </td>
                 </tr>
               </tbody>

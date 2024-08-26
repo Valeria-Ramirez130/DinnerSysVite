@@ -73,28 +73,27 @@ export const getOrderXTableId = async (MesaId) =>{
 };
 
 //Update Order
-export const updateOrder = async (id, upOrder) => { 
-    /* Object Structure:
-        {
-            MeseroId: x,
-            MesaId: x,
-            lstProductos: [
-                {
-                    ProductoId: x,
-                    Cantidad: x
-                }
-            ]
-        }
-    */
+export const updateOrder = async (pedidoId, data) => {
+    console.log("\n\nFuncion updateOrder():");
     try {
-        const isUpdate = await axios.put(`${BACK_URL}/pedidos/updatePedido/${id}`, upOrder);
-        return isUpdate.status === 200 ? true : false;
+        const { EstadoFinalizado } = data;
+        if (pedidoId && EstadoFinalizado !== undefined) {
+            const isUpdate = await pool.query('UPDATE Pedidos SET Finalizado = ? WHERE PedidoId = ?', [EstadoFinalizado, pedidoId]);
+            if (isUpdate.affectedRows === 1) {
+                console.log("Pedido actualizado correctamente");
+                return { success: true };
+            } else {
+                console.log("No se pudo actualizar el pedido");
+                return { success: false };
+            }
+        } else {
+            return { success: false, message: 'Datos incompletos' };
+        }
     } catch (error) {
-        console.log(error);
-        return null;
+        console.error('Error en la actualización del pedido:', error);
+        return { success: false, message: 'Error del servidor' };
     }
-};
-
+}
 //Delete order
 export const deleteOrder = async (id) => { 
     try {

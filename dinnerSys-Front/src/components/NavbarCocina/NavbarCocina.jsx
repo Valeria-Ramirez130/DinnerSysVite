@@ -1,4 +1,3 @@
-// NavbarMesero.js
 import { useState } from 'react';
 import { Container, Nav, Navbar, Modal, Form, Button } from 'react-bootstrap';
 import logoprincipal from '../../img/logoprincipal.svg';
@@ -10,15 +9,14 @@ export function NavbarCocina() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const { setIsAuthenticated, Nombre, Apellido, Rol } = useAuth(); 
-  console.log(Rol);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
 
   const handleProfileClick = () => {
-      setUserData({ Nombre, Rol, Apellido });
-      setShowProfileModal(true);
+    setUserData({ Nombre, Rol, Apellido });
+    setShowProfileModal(true);
   };
 
   const handleCloseProfileModal = () => {
@@ -35,7 +33,7 @@ export function NavbarCocina() {
           <Navbar.Brand className="navbar-brand" as={Link} to="/cocina">DinnerSys</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav>
+            <Nav className="ml-auto">
               <Nav.Link className="nav-perfil" onClick={handleProfileClick}>Perfil</Nav.Link>
               <Nav.Link className="nav-loguot" onClick={handleLogout}>Cerrar Sesión</Nav.Link>
             </Nav>
@@ -67,4 +65,3 @@ export function NavbarCocina() {
     </>
   );
 }
-
