@@ -92,7 +92,7 @@ export const getPedidosDelDia = async (req, res) => {
             'INNER JOIN Productos Pr ON Pr.ProductoId = DPP.ProductoId ' +
             'LEFT JOIN Usuarios U ON U.usuarioId = Pe.MeseroId ' +
             'INNER JOIN Mesas M ON M.MesaId = Pe.MesaId ' +
-            'WHERE DATE(Pe.FechaPedido) = CURDATE() ' +
+            'WHERE DATE(Pe.FechaPedido) = CURDATE() AND Pe.Finalizado = 0 ' +
             'ORDER BY Pe.FechaPedido DESC');
         if (pedido) {
             castearPropiedadAFloatYRetornaSuma(pedido, 'PrecioTotal');
