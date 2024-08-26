@@ -56,7 +56,7 @@ export const CarouselMesas = () => {
     <div className="container-principal">
       <div className="carousel-container">
         <Slider {...settings}>
-          {tables.map((table) => (
+          {tables && tables.map((table) => (
             <div
               key={table.MesaId}
               className="table-card"

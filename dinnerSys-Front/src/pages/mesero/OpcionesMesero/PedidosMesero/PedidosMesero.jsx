@@ -163,16 +163,25 @@ function PedidosMesero({ mesa, pedido }) {
   );
 
   const liberarMesa = async () => {
-    await freeTable(mesa, pedido[0].PedidoId).then(() => {
+    try {
+      await freeTable(mesa, pedido[0].PedidoId);
       console.log("Mesa liberada correctamente");
+  
+      // Aquí eliminamos el pedido de la mesa en el lado del cliente
       localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
-      alert(`Mesa ${mesa} liberada correctamente`);
       setProductosEnPedido([]);
-    }).catch(() => {
+  
+      // También eliminamos el pedido en la cocina al liberar la mesa
+      alert(`Mesa ${mesa} liberada correctamente`);
+      
+      // Aquí puedes manejar la actualización de la cocina (notificar al componente cocina)
+      // Si Cocina y PedidosMesero están en un componente superior común, podrías pasar esta actualización al estado global de la aplicación
+    } catch (error) {
       alert("No fue posible liberar la mesa");
-      console.log("Error al liberar mesa");
-    });
+      console.log("Error al liberar mesa", error);
+    }
   };
+  
 
   const calcularTotal = () => {
     return productosEnPedido.reduce((total, producto) => total + (producto.Precio * producto.cantidad), 0);

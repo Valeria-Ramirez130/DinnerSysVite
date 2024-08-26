@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Spinner, Alert } from 'react-bootstrap';
-import {getOrdersOfDay} from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
+import { Table, Container, Spinner, Alert, Button } from 'react-bootstrap';
+import { getOrdersOfDay } from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
 import './Cocina.css';
 
 export function Cocina() {
@@ -28,6 +28,11 @@ export function Cocina() {
     fetchOrders();
   }, []);
 
+  // Función para marcar un pedido como entregado
+  const handleOrderDelivered = (orderId) => {
+    setOrders(orders.filter(order => order.PedidoId !== orderId));
+  };
+
   return (
     <Container className="contenedor-principal-cocina">
       <div className="header-cocina">
@@ -40,41 +45,39 @@ export function Cocina() {
       ) : error ? (
         <Alert variant="danger">{error}</Alert>
       ) : orders.length > 0 ? (
-        <div className='contenedor-pedidos-cocina'>
-          <div className='tabla-cocina'>
-        <Table striped bordered hover responsive className="mt-4" >
-          <thead>
-            <tr>
-              <th>ID Pedido</th>
-              <th>Fecha</th>
-              <th>Mesa</th>
-              <th>Mesero</th>
-              <th>Productos</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.PedidoId}>
-                <td>{order.PedidoId}</td>
-                <td>{new Date(order.Fecha).toLocaleString()}</td>
-                <td>{order.Mesa}</td>
-                <td>{order.Mesero}</td>
-                <td>
-                  <ul>
-                    {order.lstProductos.map((product, index) => (
-                      <li key={index}>
-                        {product.Cantidad}x {product.Producto} - ${product.PrecioUnitario}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td>${order.PrecioTotalPedido.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        </div>
+        <div className="contenedor-pedidos-cocina">
+          {orders.map((order) => (
+            <Table striped bordered hover responsive className="mt-4" key={order.PedidoId}>
+              <thead>
+                <tr>
+                  <th>Mesa</th>
+                  <th>Mesero</th>
+                  <th>Productos</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{order.Mesa}</td>
+                  <td>{order.Mesero}</td>
+                  <td>
+                    <ul>
+                      {order.lstProductos.map((product, index) => (
+                        <li key={index}>
+                          {product.Cantidad}x {product.Producto} - ${product.PrecioUnitario.toFixed(2)}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td>
+                    <Button variant="success" onClick={() => handleOrderDelivered(order.PedidoId)}>
+                      Entregado
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          ))}
         </div>
       ) : (
         <Alert variant="info">No hay pedidos para mostrar.</Alert>
