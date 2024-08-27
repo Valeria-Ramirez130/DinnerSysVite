@@ -92,12 +92,12 @@ export const updateProducto = async (req, res) => {
     console.log("\n\nFuncion updateProducto():");
     try {
         const { ProductoId } = req.params;
-        const { Nombre, Descripcion, Precio, NombreCategoria } = req.body;
+        const { Nombre, Descripcion, Precio, Categoria } = req.body;
         //{ str, str, number, str }
         // Verificar que precio sea mayor a 100
         if (Precio > 99) {
             // Verificar que la categoria exista
-            const [isCategoria] = await pool.query('SELECT CategoriaId FROM Categorias WHERE NombreCategoria = ?', [NombreCategoria]);
+            const [isCategoria] = await pool.query('SELECT CategoriaId FROM Categorias WHERE NombreCategoria = ?', [Categoria]);
             if (isCategoria) {
                 //El COALESCE() es para que si el campo viene vacio, no lo actualice
                 const isUpdate = await pool.query('UPDATE Productos SET Nombre = COALESCE(?, Nombre), Descripcion = COALESCE(?, Descripcion), ' +

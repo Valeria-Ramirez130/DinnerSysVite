@@ -80,16 +80,24 @@ export const createUsuario = async (req, res) => {
     try {
         const { Cedula, Nombres, Apellidos, TipoUsuario } = req.body;
         if (Cedula && Nombres && Apellidos && TipoUsuario) {
-            await pool.query('INSERT INTO usuarios (Cedula, Nombres, Apellidos, TipoUsuario) VALUES (?,?,?,?)',
+            const isInsert = await pool.query('INSERT INTO usuarios (Cedula, Nombres, Apellidos, TipoUsuario) VALUES (?,?,?,?)',
                 [Cedula, Nombres, Apellidos, TipoUsuario]);
-            console.log("Usuario creado correctamente");
-            return res.status(200).json('Usuario creado');
+            if(isInsert.affectedRows === 1){
+                console.log("Usuario creado correctamente");
+                return res.status(201).json('Usuario creado');
+            }else{
+                console.log("No fue posible crear el usuario");
+                return res.status(400).json({ Error: 'No fue posible crear el usuario' });
+            }
         } else {
             console.log("Datos incompletos o ingresados erroneamente");
             return res.status(400).json({ Error: 'Datos incompletos o ingresados erroneamente' });
         }
     } catch (error) {
         console.log(error);
+        if(error.code === 'ER_DUP_ENTRY'){
+            return res.status(409).json({ Error: 'Ya hay un Usuario (activado o desactivado) con esta cedula registrado' });
+        }
         return res.status(500).json({ Error: 'Error del servidor' });
     }
 }
@@ -109,7 +117,7 @@ export const updateUsuario = async (req, res) => {
             console.log(result.affectedRows);//Para saber cuantas filas fueron afectadas, siempre debe decir 1
             if (result.affectedRows === 1) {
                 console.log("Usuario actualizado correctamente");
-                return res.status(200).json({ Message: 'Usuario actualizado correctamente' });
+                return res.status(201).json({ Message: 'Usuario actualizado correctamente' });
             } else {
                 console.log("No fue posible actualizar el usuario porque NO existe");
                 return res.status(400).json({ Error: `El usuario con el id ${UsuarioId} no existe` });
