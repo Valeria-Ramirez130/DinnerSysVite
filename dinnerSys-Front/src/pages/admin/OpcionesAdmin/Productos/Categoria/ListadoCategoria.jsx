@@ -3,7 +3,7 @@ import { getCategorias, eliminarCategoria } from '../../../../../API/Categorias'
 import { Container, Row, Col, ListGroup, Button, Spinner, Alert } from 'react-bootstrap';
 import './ListadoCategoria.css';
 
-export default function ListadoCategoria() {
+export default function ListadoCategoria({isCategoriaCreated}) {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +23,7 @@ export default function ListadoCategoria() {
     };
 
     fetchCategorias();
-  }, []);
+  }, [isCategoriaCreated]);
 
   const handleEliminar = async (id) => {
     setCategoriaSeleccionada(id);

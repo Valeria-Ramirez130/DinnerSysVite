@@ -1,6 +1,6 @@
 // En Usuarios.js
 
-import { BACK_URL } from '../Constants.js';
+import { BACK_URL } from '../utils/Constants.js';
 import axios from 'axios';
 
 //Verify Loggin
@@ -29,10 +29,10 @@ export const getUsers = async () => {
 export const createUser = async (newUser) => { 
     try {
         const isCreate = await axios.post(`${BACK_URL}/usuarios/createUsuario`, newUser);
-        return isCreate.status === 200 ? true : false;
+        return isCreate.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
-        return null;
+        return error.response.data;
     }
 };
 
@@ -40,10 +40,10 @@ export const createUser = async (newUser) => {
 export const updateUser = async (id, upUser) => { 
     try {
         const isUpdate = await axios.put(`${BACK_URL}/usuarios/updateUsuario/${id}`, upUser);
-        return isUpdate.status === 200 ? true : false;
+        return isUpdate.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
-        return null;
+        return error.response.data;
     }
 };
 

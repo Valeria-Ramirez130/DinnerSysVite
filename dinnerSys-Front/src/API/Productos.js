@@ -1,4 +1,4 @@
-import {BACK_URL} from '../Constants.js';
+import {BACK_URL} from '../utils/Constants.js';
 import axios from 'axios';
 
 /* Object Structure:
@@ -27,7 +27,7 @@ export const getProducts = async () => {
 export const createProduct = async (newProduct) => { 
     try {
         const isCreate = await axios.post(`${BACK_URL}/productos/createProducto`, newProduct);
-        return isCreate.status === 200 ? true : false;
+        return isCreate.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
         return null;
@@ -39,7 +39,7 @@ export const createProduct = async (newProduct) => {
 export const updateProduct = async (id, upProduct) => { 
     try {
         const isUpdate = await axios.put(`${BACK_URL}/productos/updateProducto/${id}`, upProduct);
-        return isUpdate.status === 200 ? true : false;
+        return isUpdate.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
         return null;
@@ -51,7 +51,7 @@ export const updateProduct = async (id, upProduct) => {
 export const deleteProduct = async (id) => { 
     try {
         const isDelete = await axios.delete(`${BACK_URL}/productos/deleteProducto/${id}`);
-        return isDelete.status === 200 ? true : false;
+        return isDelete.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
         return null;

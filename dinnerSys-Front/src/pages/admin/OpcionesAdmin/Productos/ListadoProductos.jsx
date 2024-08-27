@@ -4,7 +4,7 @@ import { getProducts, deleteProduct, updateProduct } from '../../../../API/Produ
 import './ListadoProductos.css';
 import Alert from '../../../../components/Alert/Alert';
 
-export function ListadoProductos() {
+export function ListadoProductos({ isProductCreated }) {
   const [registros, setRegistros] = useState([]);
   const [filtros, setFiltros] = useState({
     id: '',
@@ -25,14 +25,18 @@ export function ListadoProductos() {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const realProducts = await getProducts();
-      if (realProducts) {
-        setRegistros(realProducts);
-      }
-    };
-    fetchData();
-  }, []);
+    getProducts()
+      .then((data) => {
+        if (data) {
+          setRegistros(data)
+        }
+      })
+      .catch(error => {
+        console.error("Error al obtener los productos:", error);
+        setAlertMessage("Error al obtener los productos");
+        setShowAlert(true);
+      });
+  }, [isProductCreated]);
 
   const handleClickEliminar = async (id) => {
     setRegistroSeleccionado(id);
@@ -41,8 +45,10 @@ export function ListadoProductos() {
 
   const confirmarEliminar = () => {
     deleteProduct(registroSeleccionado)
-      .then(res => {
+      .then((res) => {
         if (res) {
+          console.log(registroSeleccionado);
+          alert("producto eliminado correctamente");
           setRegistros(registros.filter(registro => registro.ProductoId !== registroSeleccionado));
         } else {
           setAlertMessage("Error al eliminar el producto");
@@ -70,6 +76,7 @@ export function ListadoProductos() {
 
   const handleSubmitUpdate = () => {
     const { id, nombre, descripcion, categoria, precio } = formData;
+    console.log(formData);
     const updatedProductData = {
       Nombre: nombre,
       Descripcion: descripcion,
@@ -83,8 +90,10 @@ export function ListadoProductos() {
           getProducts().then(updatedProducts => {
             setRegistros(updatedProducts);
             setShowUpdateForm(false);
+            alert("Producto actualizado correctamente");
           });
         } else {
+          alert("Error al actualizar el producto");
           setAlertMessage("Error al actualizar el producto");
         }
       })
@@ -149,7 +158,7 @@ export function ListadoProductos() {
               </tr>
             </thead>
             <tbody>
-              {registrosFiltrados.map(producto => (
+              {registrosFiltrados && registrosFiltrados.map(producto => (
                 <tr key={producto.ProductoId}>
                   <td>{producto.ProductoId}</td>
                   <td>{producto.Nombre}</td>
@@ -188,7 +197,7 @@ export function ListadoProductos() {
       )}
       {showUpdateForm && (
         <div className="update-form-overlay">
-          <Form className="update-form" onSubmit={handleSubmitUpdate}>
+          <Form className="update-form" onSubmit={(ev) => { ev.preventDefault(); handleSubmitUpdate() }}>
             <Form.Group controlId="formId">
               <Form.Label>ID</Form.Label>
               <Form.Control type="text" name="id" value={formData.id} onChange={handleInputChange} disabled />

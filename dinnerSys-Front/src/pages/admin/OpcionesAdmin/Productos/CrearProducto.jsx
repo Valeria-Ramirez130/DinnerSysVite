@@ -4,8 +4,10 @@ import Form from "react-bootstrap/Form";
 import { createProduct } from "../../../../API/Productos";
 import { getCategorias } from "../../../../API/Categorias";
 import "./CrearProducto.css";
+import { ListadoProductos } from "./ListadoProductos";
 
 export function CrearProducto() {
+  const [isProductCreated, setIsProductCreated] = useState(false);
   const [producto, setProducto] = useState({
     nombre: "",
     descripcion: "",
@@ -41,92 +43,95 @@ export function CrearProducto() {
     setProducto({ ...producto, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await createProduct({
-        Nombre: producto.nombre,
-        Descripcion: producto.descripcion,
-        Categoria: producto.categoria,
-        Precio: producto.precio,
-      });
-      if (response) {
-        console.log("Producto creado exitosamente");
-        window.location.reload();
-      } else {
-        console.error(
-          "Error al crear el producto: No se recibió una respuesta válida"
-        );
-      }
-    } catch (error) {
-      console.error("Error al crear el producto:", error);
-    }
+    console.log(producto);
+
+    createProduct({
+      Nombre: producto.nombre,
+      Descripcion: producto.descripcion,
+      Categoria: producto.categoria,
+      Precio: producto.precio,
+    }).then((res) => {
+      alert("Producto creado");
+      console.log("Producto creado");
+      setIsProductCreated(!isProductCreated);
+    }).catch(() => {
+      alert("Error al crear el producto");
+      console.log("Error al crear el producto");
+
+    })
   };
 
   return (
-    <div className="contenedor-principal">
-      <div className="formulario-header">
-        <h1 className="header-text">Crear Producto</h1>
-      </div>
-      <Form className="formulario-productos" onSubmit={handleSubmit}>
-        <div className="mb-3 row">
-          <div className="col">
-            <Form.Group controlId="formNombre">
-              <Form.Label>Nombre de Producto</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite los nombres"
-                name="nombre"
-                value={producto.nombre}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </div>
-          <div className="col">
-            <Form.Group controlId="formDescripcion">
-              <Form.Label>Descripción de Producto</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Digite la descripción"
-                name="descripcion"
-                value={producto.descripcion}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </div>
+    <>
+      <div className="contenedor-principal">
+        <div className="formulario-header">
+          <h1 className="header-text">Crear Producto</h1>
         </div>
-        <Form.Group className="mb-3" controlId="formPrecio">
-          <Form.Label>Precio de Producto</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Digite el precio"
-            name="precio"
-            value={producto.precio}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formCategoria">
-          <Form.Label>Categoría</Form.Label>
-          <Form.Select
-            name="categoria"
-            value={producto.categoria}
-            onChange={handleChange}
-          >
-            <option value="">Seleccione una categoría</option>
-            {categorias.map((categoria) => (
-              <option
-                key={categoria.CategoriaId}
-                value={categoria.NombreCategoria}
-              >
-                {categoria.NombreCategoria}
-              </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-        <Button variant="primary" type="submit" className="button-submit">
-          Crear Producto
-        </Button>
-      </Form>
-    </div>
+        <Form className="formulario-productos" onSubmit={handleSubmit}>
+          <div className="mb-3 row">
+            <div className="col">
+              <Form.Group controlId="formNombre">
+                <Form.Label>Nombre de Producto</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Digite los nombres"
+                  name="nombre"
+                  value={producto.nombre}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </div>
+            <div className="col">
+              <Form.Group controlId="formDescripcion">
+                <Form.Label>Descripción de Producto</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Digite la descripción"
+                  name="descripcion"
+                  value={producto.descripcion}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </div>
+          </div>
+          <Form.Group className="mb-3" controlId="formPrecio">
+            <Form.Label>Precio de Producto</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite el precio"
+              name="precio"
+              value={producto.precio}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formCategoria">
+            <Form.Label>Categoría</Form.Label>
+            <Form.Select
+              name="categoria"
+              value={producto.categoria}
+              onChange={handleChange}
+            >
+              <option value="">Seleccione una categoría</option>
+              {categorias.map((categoria) => (
+                <option
+                  key={categoria.CategoriaId}
+                  value={categoria.NombreCategoria}
+                >
+                  {categoria.NombreCategoria}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Button variant="primary" type="submit" className="button-submit">
+            Crear Producto
+          </Button>
+        </Form>
+      </div>
+      <div>
+        <ListadoProductos isProductCreated={isProductCreated} />
+      </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 // Categorias.js
-import { BACK_URL } from "../Constants.js";
+import { BACK_URL } from "../utils/Constants.js";
 import axios from "axios";
 
 // getCategorias --> Función para obtener todas las categorías

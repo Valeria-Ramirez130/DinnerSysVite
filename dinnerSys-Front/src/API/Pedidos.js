@@ -1,4 +1,4 @@
-import { BACK_URL } from "../Constants";
+import { BACK_URL } from "../utils/Constants";
 import axios from 'axios';
 
 //Get all Orders

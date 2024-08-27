@@ -4,7 +4,7 @@ import './ListadoUsuarios.css';
 import { deleteUser, getUsers, updateUser } from '../../../../API/Usuarios';
 import Alert from '../../../../components/Alert/Alert';
 
-export function ListadoUsuarios() {
+export function ListadoUsuarios({isUserCreated}) {
   const [registros, setRegistros] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -28,7 +28,7 @@ export function ListadoUsuarios() {
       .then(res => {
         res ? setRegistros(res) : console.log("Error al obtener los usuarios");
       });
-  }, []);
+  }, [isUserCreated]);
 
   const handleCloseAlert = () => setShowAlert(false);
 
@@ -78,13 +78,14 @@ export function ListadoUsuarios() {
 
     updateUser(id, updatedUserData)
       .then(res => {
-        console.log('Respuesta del backend:', res);
-        if (res) {
+        if (res === true) {
+          alert("Usuario actualizado");
           getUsers().then(updatedUsers => {
             setRegistros(updatedUsers);
             setShowUpdateForm(false);
           });
         } else {
+          alert(res.Error)
           setAlertMessage("Error al actualizar el usuario");
         }
       })
@@ -151,7 +152,7 @@ export function ListadoUsuarios() {
               {/* Encabezados de tabla omitidos para mantener la brevedad */}
             </thead>
             <tbody>
-              {registrosFiltrados.map(registro => (
+              {registrosFiltrados && registrosFiltrados.map(registro => (
                 <tr key={registro.usuarioId}>
                   <td>{registro.usuarioId}</td>
                   <td>{registro.Nombres}</td>
@@ -207,6 +208,7 @@ export function ListadoUsuarios() {
               <Form.Control as="select" name="rol" value={formData.rol} onChange={handleInputChange}>
                 <option value="Mesero">Mesero</option>
                 <option value="Administrador">Administrador</option>
+                <option value="Cocina">Cocina</option>
               </Form.Control>
             </Form.Group>
             <Button variant="primary" type="submit">

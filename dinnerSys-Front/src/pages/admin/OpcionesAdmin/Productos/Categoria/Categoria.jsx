@@ -3,8 +3,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { nuevaCategoria } from "../../../../../API/Categorias"; // Asegúrate de que la ruta sea correcta
 import "./Categoria.css";
+import ListadoCategoria from "./ListadoCategoria";
 
 export default function Categoria() {
+  const [isCategoriaCreated, setIsCategoriaCreated] = useState(false);
   // Estado para manejar el valor del input y mensajes de error/success
   const [nombreCategoria, setNombreCategoria] = useState("");
   const [error, setError] = useState("");
@@ -20,47 +22,51 @@ export default function Categoria() {
     e.preventDefault();
     if (nombreCategoria.trim()) {
       const categoria = { Categoria: nombreCategoria.trim() };
-      try {
-        const result = await nuevaCategoria(categoria);
-        if (result) {
-          setSuccess("Categoría creada correctamente.");
-          setError("");
-          setNombreCategoria("");
-          window.location.reload(); // Recargar la página
-        } else {
-          setSuccess("");
+      nuevaCategoria(categoria)
+        .then((res) => {
+          if (res) {
+            alert("Categoria creada correctamente");
+            setIsCategoriaCreated(!isCategoriaCreated);
+            setSuccess("Categoría creada correctamente.");
+            setNombreCategoria("");
+          } else {
+            setError("Error al crear la categoría.");
+          }
+        })
+        .catch((error) => {
+          alert("Error al crear la categoria");
           setError("Error al crear la categoría.");
-        }
-      } catch (error) {
-        console.error("Error al crear la categoría:", error);
-        setSuccess("");
-        setError("Error al crear la categoría.");
-      }
+        });
     } else {
       setError("El nombre de la categoría no puede estar vacío.");
     }
   };
 
   return (
-    <div className="contenedor-principal">
-      <div className="formulario-header">
-        <h1 className="header-text">Crear Categoría</h1>
+    <>
+      <div className="contenedor-principal">
+        <div className="formulario-header">
+          <h1 className="header-text">Crear Categoría</h1>
+        </div>
+        <Form className="formulario-productos" onSubmit={handleSubmit}>
+          <Form.Group controlId="formNombre">
+            <Form.Label>Nombre de Categoría</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Digite categoría"
+              name="categoria"
+              value={nombreCategoria}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" className="button-submit">
+            Crear Categoría
+          </Button>
+        </Form>
       </div>
-      <Form className="formulario-productos" onSubmit={handleSubmit}>
-        <Form.Group controlId="formNombre">
-          <Form.Label>Nombre de Categoría</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Digite categoría"
-            name="categoria"
-            value={nombreCategoria}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" className="button-submit">
-          Crear Categoría
-        </Button>
-      </Form>
-    </div>
+      <div>
+        <ListadoCategoria isCategoriaCreated={isCategoriaCreated} />
+      </div>
+    </>
   );
 }

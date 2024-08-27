@@ -6,12 +6,11 @@ import {
   CrearProducto,
   CrearUsuario,
   ListadoMesas,
-  ListadoProductos,
-  ListadoUsuarios,
   ListadoVentas,
 } from "../pages/admin/OpcionesAdmin";
 import Categoria from "../pages/admin/OpcionesAdmin/Productos/Categoria/Categoria";
-import ListadoCategoria from "../pages/admin/OpcionesAdmin/Productos/Categoria/ListadoCategoria";
+
+
 
 export const routesadmin = [
   {
@@ -33,7 +32,6 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <CrearUsuario />
-            <ListadoUsuarios />
           </>
         ),
       },
@@ -43,7 +41,6 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <Categoria />
-            <ListadoCategoria/>
           </>
         ),
       },
@@ -54,7 +51,6 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <CrearProducto />
-            <ListadoProductos />
           </>
         ),
       },
