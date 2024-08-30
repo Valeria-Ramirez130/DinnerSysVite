@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { nuevaCategoria } from "../../../../../API/Categorias"; // Asegúrate de que la ruta sea correcta
 import "./Categoria.css";
 import ListadoCategoria from "./ListadoCategoria";
+import { alertaGeneral } from "../../../../../utils/alertasGlobales";
 
 export default function Categoria() {
   const [isCategoriaCreated, setIsCategoriaCreated] = useState(false);
@@ -25,16 +26,17 @@ export default function Categoria() {
       nuevaCategoria(categoria)
         .then((res) => {
           if (res) {
-            alert("Categoria creada correctamente");
+            alertaGeneral('Categoría creada correctamente');
             setIsCategoriaCreated(!isCategoriaCreated);
             setSuccess("Categoría creada correctamente.");
             setNombreCategoria("");
           } else {
+            alertaGeneral('Error al crear la categoría', true);
             setError("Error al crear la categoría.");
           }
         })
         .catch((error) => {
-          alert("Error al crear la categoria");
+          alertaGeneral('Error al crear la categoría', true);
           setError("Error al crear la categoría.");
         });
     } else {

@@ -9,23 +9,17 @@ export function Cocina() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const result = await getOrdersOfDay();
-        if (result) {
-          setOrders(result);
-        } else {
-          setError('No se pudieron cargar los pedidos');
-        }
-      } catch (error) {
+   getOrdersOfDay()
+      .then((result) => {
+        setOrders(result);
+      })
+      .catch((error) => { 
         setError('Error al cargar los pedidos');
         console.error(error);
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchOrders();
+      });
   }, []);
 
   return (

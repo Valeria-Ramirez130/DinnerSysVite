@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import './CrearUsuario.css';
 import { createUser } from '../../../../API/Usuarios'; // Se asume que esta función hace la solicitud POST al servidor
 import { ListadoUsuarios } from './ListadoUsuarios';
+import { alertaGeneral } from '../../../../utils/alertasGlobales';
 
 export function CrearUsuario() {
 
@@ -40,9 +41,9 @@ export function CrearUsuario() {
           console.log(res);
           if (res === true) {
             setIsUserCreated(!isUserCreated);
-            alert("Usuario Creado");
+            alertaGeneral('Usuario creado correctamente');
           }else{
-            alert(res.Error);
+            alertaGeneral(res.Error, true);
           }
         })
         .catch((error) => {

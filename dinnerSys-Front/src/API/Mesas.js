@@ -27,18 +27,7 @@ export const createTable = async () => {
 export const freeTable = async (MesaId,PedidoId) => {
     try {
         const isFree = await axios.put(`${BACK_URL}/mesas/liberarMesa/${MesaId}/${PedidoId}`);
-        return isFree.status === 200 ? true : false;
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-};
-
-//Delete Table
-export const deleteTable = async (id) => {
-    try {
-        const isDelete = await axios.delete(`${BACK_URL}/mesas/deleteMesa/${id}`);
-        return isDelete.status === 200 ? true : false;
+        return isFree.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
         return null;

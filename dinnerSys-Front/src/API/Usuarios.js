@@ -51,7 +51,7 @@ export const updateUser = async (id, upUser) => {
 export const deleteUser = async (id) => { 
     try {
         const isDelete = await axios.delete(`${BACK_URL}/usuarios/deleteUsuario/${id}`);
-        return isDelete.status === 200 ? true : false;
+        return isDelete.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
         return null;

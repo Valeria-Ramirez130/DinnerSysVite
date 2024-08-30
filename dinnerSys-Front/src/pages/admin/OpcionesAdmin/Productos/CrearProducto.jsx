@@ -30,15 +30,6 @@ export function CrearProducto() {
     cargarCategorias();
   }, []);
 
-  const actualizarCategorias = async () => {
-    try {
-      const data = await getCategorias();
-      setCategorias(data || []);
-    } catch (error) {
-      console.error("Error al obtener las categorías:", error);
-    }
-  };
-
   const handleChange = (e) => {
     setProducto({ ...producto, [e.target.name]: e.target.value });
   };

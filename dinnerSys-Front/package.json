@@ -13,7 +13,6 @@
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "card-react": "^1.2.7",
-    "express": "^4.19.2",
     "formik": "^2.4.6",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
@@ -23,6 +22,7 @@
     "react-slick": "^0.30.2",
     "react-ui-cards": "^2.0.0",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.12.4",
     "yup": "^1.4.0"
   },
   "devDependencies": {

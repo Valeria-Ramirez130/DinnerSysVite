@@ -3,6 +3,7 @@ import { Table, InputGroup, FormControl, Button, Container, Form } from 'react-b
 import './ListadoUsuarios.css';
 import { deleteUser, getUsers, updateUser } from '../../../../API/Usuarios';
 import Alert from '../../../../components/Alert/Alert';
+import { alertaGeneral, alertaToast } from '../../../../utils/alertasGlobales';
 
 export function ListadoUsuarios({isUserCreated}) {
   const [registros, setRegistros] = useState([]);
@@ -41,8 +42,10 @@ export function ListadoUsuarios({isUserCreated}) {
     deleteUser(registroSeleccionado)
       .then(res => {
         if (res) {
+          alertaToast({ titulo: 'Usuario eliminado correctamente' });
           setRegistros(registros.filter(registro => registro.usuarioId !== registroSeleccionado));
         } else {
+          alertaToast({ titulo: 'Error al eliminar el usuario', icon: 'error' });
           setAlertMessage("Error al eliminar el usuario");
         }
       })
@@ -79,13 +82,13 @@ export function ListadoUsuarios({isUserCreated}) {
     updateUser(id, updatedUserData)
       .then(res => {
         if (res === true) {
-          alert("Usuario actualizado");
+          alertaGeneral('Usuario actualizado correctamente');
           getUsers().then(updatedUsers => {
             setRegistros(updatedUsers);
             setShowUpdateForm(false);
           });
         } else {
-          alert(res.Error)
+          alertaGeneral(res.Error, true);
           setAlertMessage("Error al actualizar el usuario");
         }
       })

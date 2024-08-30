@@ -38,6 +38,15 @@ export const getOrdersOfDay = async () => {
     }
 };
 
+export const getOrderXTableId = async (MesaId) =>{
+    try{
+        const pedido = await axios.get(`${BACK_URL}/pedidos/getPedidoXMesaId/${MesaId}`);
+        return pedido.status === 200 ? pedido.data : null;
+    } catch (error){
+        console.log(error);
+        return error.response.Error;
+    }
+};
 
 //Create new Order
 export const createOrder = async (newOrder) => { 
@@ -55,22 +64,13 @@ export const createOrder = async (newOrder) => {
     */
     try {
         const isCreate = await axios.post(`${BACK_URL}/pedidos/createPedido`, newOrder);
-        return isCreate.status === 200 ? true : false;
+        return isCreate.status === 201;
     } catch (error) {
         console.log(error);
-        return null;
+        return error.response.data.Error;
     }
 };
 
-export const getOrderXTableId = async (MesaId) =>{
-    try{
-        const pedido = await axios.get(`${BACK_URL}/pedidos/getPedidoXMesaId/${MesaId}`);
-        return pedido.status === 200 ? pedido.data : null;
-    } catch (error){
-        console.log(error);
-        return null;
-    }
-};
 
 //Update Order
 export const updateOrder = async (id, upOrder) => { 
@@ -88,10 +88,10 @@ export const updateOrder = async (id, upOrder) => {
     */
     try {
         const isUpdate = await axios.put(`${BACK_URL}/pedidos/updatePedido/${id}`, upOrder);
-        return isUpdate.status === 200 ? true : false;
+        return isUpdate.status === 201 ? true : false;
     } catch (error) {
         console.log(error);
-        return null;
+        return error.response.Error;
     }
 };
 
@@ -102,6 +102,6 @@ export const deleteOrder = async (id) => {
         return isDelete.status === 200 ? true : false;
     } catch (error) {
         console.log(error);
-        return null;
+        return error.response.Error;
     }
 };

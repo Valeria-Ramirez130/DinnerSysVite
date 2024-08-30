@@ -55,7 +55,7 @@ export const eliminarCategoria = async (categoriaId) => {
     const response = await axios.delete(
       `${BACK_URL}/categorias/deleteCategoria/${categoriaId}`
     );
-    return response.status === 200 ? true : false;
+    return response.status === 201 ? true : false;
   } catch (error) {
     console.error(
       "Error al eliminar la categoría:",

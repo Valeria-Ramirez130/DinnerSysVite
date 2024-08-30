@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { getCategorias, eliminarCategoria } from '../../../../../API/Categorias';
 import { Container, Row, Col, ListGroup, Button, Spinner, Alert } from 'react-bootstrap';
 import './ListadoCategoria.css';
+import { alertaToast } from '../../../../../utils/alertasGlobales';
 
-export default function ListadoCategoria({isCategoriaCreated}) {
+export default function ListadoCategoria({ isCategoriaCreated }) {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,17 +13,19 @@ export default function ListadoCategoria({isCategoriaCreated}) {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
   useEffect(() => {
-    const fetchCategorias = async () => {
-      const data = await getCategorias();
-      if (data) {
-        setCategorias(data);
-      } else {
-        setError('Error al cargar las categorías');
-      }
-      setLoading(false);
-    };
-
-    fetchCategorias();
+    getCategorias()
+      .then(res => {
+        if (res) {
+          console.log(res)
+          setLoading(false);
+          setCategorias(res);
+        } else {
+          setError('Error al obtener las categorías');
+        }
+      })
+      .catch(error => {
+        setError('Error al obtener las categorías');
+      })
   }, [isCategoriaCreated]);
 
   const handleEliminar = async (id) => {
@@ -30,20 +33,23 @@ export default function ListadoCategoria({isCategoriaCreated}) {
     setShowAlert(true);
   };
 
-  const confirmarEliminar = async () => {
-    try {
-      const exito = await eliminarCategoria(categoriaSeleccionada);
-      if (exito) {
+  const confirmarEliminar = () => {
+
+    eliminarCategoria(categoriaSeleccionada).then((res) => {
+      if (res) {
         setCategorias(categorias.filter(categoria => categoria.CategoriaId !== categoriaSeleccionada));
+        alertaToast({ titulo: 'Categoría eliminada correctamente' });
         setAlertMessage('Categoría eliminada correctamente');
       } else {
+        alertaToast({ titulo: 'Error al eliminar la categoría', icon: 'error' });
         setAlertMessage('Error al eliminar la categoría');
       }
-    } catch (error) {
+    }).catch((error) => {
+      alertaToast({ titulo: 'Error al eliminar la categoría', icon: 'error' });
       setAlertMessage('Ocurrió un error inesperado');
-    } finally {
+    }).finally(() => {
       setShowAlert(false);
-    }
+    });
   };
 
   const handleCloseAlert = () => {

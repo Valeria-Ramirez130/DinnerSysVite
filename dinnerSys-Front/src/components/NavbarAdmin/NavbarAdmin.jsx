@@ -3,6 +3,7 @@ import { Container, Nav, Navbar, Modal, Form, Button } from 'react-bootstrap';
 import logoprincipal from '../../img/logoprincipal.svg';
 import './NavbarAdmin.css';
 import { useAuth } from '../../auth/AuthProvider';
+import { Link } from 'react-router-dom';
 
 export function NavbarAdmin() {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -33,11 +34,11 @@ export function NavbarAdmin() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/admin/usuarios" className="nav-perfil no-link-style">Usuarios</Nav.Link>
-              <Nav.Link href="/admin/categorias" className="nav-perfil no-link-style">Categorias</Nav.Link>
-              <Nav.Link href="/admin/productos" className="nav-perfil no-link-style">Productos</Nav.Link>
-              <Nav.Link href="/admin/ventas" className="nav-perfil no-link-style">Ventas</Nav.Link>
-              <Nav.Link href="/admin/mesas" className="nav-perfil no-link-style">Mesas</Nav.Link>
+              <Link to='/admin/usuarios' className="nav-perfil no-link-style">Usuarios</Link>
+              <Link to='/admin/categorias' className="nav-perfil no-link-style">Categorias</Link>
+              <Link to='/admin/productos' className="nav-perfil no-link-style">Productos</Link>
+              <Link to='/admin/ventas' className="nav-perfil no-link-style">Ventas</Link>
+              <Link to='/admin/mesas' className="nav-perfil no-link-style">Mesas</Link>
             </Nav>
             <Nav>
               <Nav.Link className="nav-perfil" onClick={handleProfileClick}>Perfil</Nav.Link>

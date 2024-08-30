@@ -73,14 +73,6 @@ export const routesadmin = [
           </>
         ),
       },
-      {
-        path: "/admin/categorias",
-        element: (
-          <>
-            <NavbarAdmin />
-          </>
-        ),
-      },
     ],
   },
 ];

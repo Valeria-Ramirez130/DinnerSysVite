@@ -5,8 +5,9 @@ import { getProducts } from '../../../../API/Productos';
 import { createOrder, getOrderXTableId, updateOrder } from '../../../../API/Pedidos';
 import { freeTable } from '../../../../API/Mesas';
 import { useAuth } from '../../../../auth/AuthProvider';
+import { alertaCargandoProceso, alertaGeneral } from '../../../../utils/alertasGlobales';
 
-function PedidosMesero({ mesa, pedido }) {
+function PedidosMesero({ mesa, pedido, onPedidoCreated }) {
   const { UserId, Nombre } = useAuth();
 
   // console.log(UserId, Nombre);
@@ -70,7 +71,7 @@ function PedidosMesero({ mesa, pedido }) {
     }
   };
 
-  const actualizarPedido = async () => {
+  const actualizarPedido = () => {
 
     const pedidoActualizado = {
       MeseroId: UserId,
@@ -78,16 +79,19 @@ function PedidosMesero({ mesa, pedido }) {
       lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: producto.cantidad }))
     };
 
-    try {
-      const isUpdate = await updateOrder(pedido[0].PedidoId, pedidoActualizado);
-      if (!isUpdate) {
-        setErrorActualizarPedido(true); // Mostrar error específico para la actualización
-      } else {
-        setErrorActualizarPedido(false); // Restablecer el estado de error de actualización
-      }
-    } catch (error) {
-      setErrorActualizarPedido(true); // Mostrar error específico para la actualización
-    }
+    updateOrder(pedido[0].PedidoId, pedidoActualizado)
+      .then((response) => {
+        if (response === true) {
+          alertaGeneral("Pedido actualizado correctamente");
+          setErrorMensaje('');
+          onPedidoCreated(!isPedidoCreated);
+          setIsPedidoCreated(!isPedidoCreated);
+        } else {
+          console.log(response)
+          alertaGeneral(response, true);
+          setErrorMensaje(response);
+        }
+      })
   }
 
   const eliminarProducto = async (id) => {
@@ -124,29 +128,34 @@ function PedidosMesero({ mesa, pedido }) {
     localStorage.setItem(`productosEnPedidoMesa${mesa}`, JSON.stringify(nuevosProductosEnPedido));
   };
 
+  const [isPedidoCreated, setIsPedidoCreated] = useState(false);
+
   const crearPedido = async () => {
-    try {
-      const newOrder = {
-        MeseroId: UserId,
-        MesaId: mesa,
-        lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: producto.cantidad }))
-      };
-      const isCreated = await createOrder(newOrder);
-      if (isCreated) {
-        console.log("Pedido creado correctamente");
-        //Aqui una alerta de pedido creado
-        setErrorMensaje('');
-      } else {
-        setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
+    const newOrder = {
+      MeseroId: UserId,
+      MesaId: mesa,
+      lstProductos: productosEnPedido.map(producto => ({ ProductoId: producto.ProductoId, Cantidad: producto.cantidad }))
+    };
+
+    alertaCargandoProceso({
+      titulo: 'Creando Pedido', messageHtml: 'Espere un momento por favor...',
+      funcionAsync: () => {
+        createOrder(newOrder)
+          .then((response) => {
+            if (response === true) {
+              onPedidoCreated(!isPedidoCreated);
+              setIsPedidoCreated(!isPedidoCreated);
+              alertaGeneral("Pedido creado correctamente");
+              setErrorMensaje('');
+            } else {
+              console.log(response)
+              alertaGeneral(response, true);
+              setErrorMensaje(response);
+            }
+          })
       }
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setErrorMensaje('Ya existe un pedido activo para esta mesa. Por favor, selecciona otra mesa.');
-      } else {
-        setErrorMensaje('Error al crear el pedido. Por favor, intenta de nuevo.');
-      }
-    }
-  };
+    });
+  }
 
   const handleQuitar = (id) => {
     eliminarProducto(id);
@@ -162,14 +171,18 @@ function PedidosMesero({ mesa, pedido }) {
     producto.Precio.toString().includes(filtros.precio)
   );
 
-  const liberarMesa = async () => {
-    await freeTable(mesa, pedido[0].PedidoId).then(() => {
-      console.log("Mesa liberada correctamente");
-      localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
-      alert(`Mesa ${mesa} liberada correctamente`);
-      setProductosEnPedido([]);
+  const liberarMesa = () => {
+    freeTable(mesa, pedido[0].PedidoId).then((res) => {
+      if (res) {
+        console.log("Mesa liberada correctamente");
+        localStorage.removeItem(`productosEnPedidoMesa${mesa}`);
+        alertaGeneral(`Mesa ${mesa} liberada correctamente`);
+        onPedidoCreated(!isPedidoCreated);
+        setIsPedidoCreated(!isPedidoCreated);
+        setProductosEnPedido([]);
+      }
     }).catch(() => {
-      alert("No fue posible liberar la mesa");
+      alertaGeneral("No fue posible liberar la mesa", true);
       console.log("Error al liberar mesa");
     });
   };
@@ -179,7 +192,7 @@ function PedidosMesero({ mesa, pedido }) {
   };
 
   return (
-    <div className="pedidos-mesero-container">
+    <div className="pedidos-mesero-container" >
       <div className="listado-productos-header">
         <h1>Crear Pedido</h1>
       </div>
@@ -310,7 +323,7 @@ function PedidosMesero({ mesa, pedido }) {
         </div>
         {errorMensaje && <Alert variant="danger" className="mt-3 text-center">{errorMensaje}</Alert>}
       </Container>
-    </div>
+    </div >
   );
 }
 
