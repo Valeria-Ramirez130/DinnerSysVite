@@ -140,7 +140,7 @@ export const deleteUsuario = async (req, res) => {
         const response = await pool.query('UPDATE usuarios SET Inactivo = 1 WHERE usuarioId = ? ', UsuarioId);
         if (response.affectedRows === 1) {//Tiene que ser siempre 1
             console.log("Usuario eliminado correctamente || ", response.affectedRows, "--> filas afectadas");
-            return res.status(200).json({ Message: 'Usuario eliminado correctamente' });
+            return res.status(201).json({ Message: 'Usuario eliminado correctamente' });
         } else {
             console.log("No fue posible eliminar el usuario");
             return res.status(400).json({ Error: 'No fue posible eliminar el usuario' });
