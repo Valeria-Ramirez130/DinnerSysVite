@@ -1,1 +1,1 @@
-export const BACK_URL = import.meta.env.VITE_BACK_URL;
+export const BACK_URL = "http://localhost:3003";
