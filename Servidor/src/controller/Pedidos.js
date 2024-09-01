@@ -400,7 +400,7 @@ export const updatePedido = async (req, res) => {
                     //lista original = lista de producto de la base de datos
                     //lista que llega = lista del req.body
                     //Obtenemos los productos que están en la lista original, pero no en la que llega (esta lista es para eliminar)
-                    const lstIdEliminado = lstOriginal.filter(pr => {console.log(pr); !lstProductos.some(pr2 => pr2.ProductoId === pr.ProductoId)});
+                    const lstIdEliminado = lstOriginal.filter(pr => !lstProductos.some(pr2 => pr2.ProductoId === pr.ProductoId));
                     //Obtenemos los productos que no estan en la lista original, pero si en la que llega (esta lista es para agregar)
                     const lstIdAgregado = lstProductos.filter(pr => !lstOriginal.some(pr2 => pr2.ProductoId === pr.ProductoId));
                     //Obtenemos los productos que estan presente en la lista original y en la que me llega (esta lista es para actualizar)
