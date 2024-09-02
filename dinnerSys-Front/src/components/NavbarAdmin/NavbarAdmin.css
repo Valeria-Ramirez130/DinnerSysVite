@@ -62,3 +62,42 @@ border-radius: 4px;
   text-align: center;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .navbar-collapse {
+    display: flex;
+    flex-direction: column; /* Alinea las opciones en una columna */
+    align-items: flex-start; /* Alinea las opciones al lado izquierdo */
+  }
+
+  .nav {
+    width: 100%;
+  }
+
+  
+  .nav .nav-loguot {
+     /* Espacio superior entre las opciones principales y las de perfil/cerrar sesión */
+  }
+
+  .nav .nav-perfil {
+    border-top: 1px solid #f8f9fa; /* Línea divisoria opcional */
+    padding-top: 10px;
+    margin-top: 25px;
+  }
+
+  .nav .nav-loguot {
+    border-top: none; /* Eliminar línea si no se desea */
+    padding-top: 0;
+  }
+
+  /* Ajustes opcionales para que los enlaces ocupen todo el ancho */
+  .nav-link, .nav-perfil, .nav-loguot {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    text-align: left; /* Alinea el texto a la izquierda */
+  }
+
+  /* Opcional: Puedes reducir el tamaño de la fuente en móviles */
+  .nav-link, .nav-perfil, .nav-loguot {
+    font-size: 16px; /* Ajusta el tamaño de la fuente según tu preferencia */
+  }
+}

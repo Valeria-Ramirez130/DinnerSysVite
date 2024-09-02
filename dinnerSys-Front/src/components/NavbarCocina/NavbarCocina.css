@@ -91,3 +91,23 @@
   justify-content: flex-end;
   /* Alinea el contenido al final del contenedor */
 }
+
+@media (max-width: 767px) {
+  /* Alinea el contenido de la barra de navegación a la izquierda en dispositivos móviles */
+  .navbar-nav {
+    margin-left: 0;
+    margin-right: auto;
+    /* Alinea el contenido al inicio del contenedor */
+  }
+
+  .navbar-collapse {
+    justify-content: flex-start;
+    /* Alinea el contenido al principio (lado izquierdo) */
+  }
+  
+  .nav-perfil,
+  .nav-loguot {
+    text-align: left;
+    padding-left: 15px; /* Añade algo de espacio para separar del borde */
+  }
+}

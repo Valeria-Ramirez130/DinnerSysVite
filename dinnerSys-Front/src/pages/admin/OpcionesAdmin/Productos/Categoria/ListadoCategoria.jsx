@@ -16,7 +16,7 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
     getCategorias()
       .then(res => {
         if (res) {
-          console.log(res)
+          console.log(res);
           setLoading(false);
           setCategorias(res);
         } else {
@@ -25,7 +25,7 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
       })
       .catch(error => {
         setError('Error al obtener las categorías');
-      })
+      });
   }, [isCategoriaCreated]);
 
   const handleEliminar = async (id) => {
@@ -34,7 +34,6 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
   };
 
   const confirmarEliminar = () => {
-
     eliminarCategoria(categoriaSeleccionada).then((res) => {
       if (res) {
         setCategorias(categorias.filter(categoria => categoria.CategoriaId !== categoriaSeleccionada));
@@ -77,52 +76,49 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
   }
 
   return (
-    <>
-      <Container className="listado-categorias-container my-5">
-        <div className="listado-categorias-header">
-          <h1>Listado Categoria</h1>
-        </div>
-        <Row className="justify-content-md-center">
-          <Col md={8}>
-            {categorias.length > 0 ? (
-              <ListGroup className="listado-categorias-lista">
-                {categorias.map((categoria) => (
-                  <ListGroup.Item
-                    key={categoria.CategoriaId}
-                    className="listado-categorias-item d-flex justify-content-between align-items-center"
+    <Container className="listado-categorias-container">
+      <div className="listado-categorias-header">
+        <h1>Listado Categoria</h1>
+      </div>
+      <Row className="categoria-justify-content-md-center">
+        <Col md={12}>
+          {categorias.length > 0 ? (
+            <ListGroup className="categoria-lista">
+              {categorias.map((categoria) => (
+                <ListGroup.Item
+                  key={categoria.CategoriaId}
+                  className="categoria-item d-flex justify-content-between align-items-center"
+                >
+                  <span className="categoria-nombre">{categoria.NombreCategoria}</span>
+                  <Button
+                    variant="danger"
+                    className="categoria-eliminar-boton"
+                    onClick={() => handleEliminar(categoria.CategoriaId)}
                   >
-                    <span className="listado-categorias-nombre">{categoria.NombreCategoria}</span>
-                    <Button
-                      variant="danger"
-                      className="listado-categorias-eliminar-boton"
-                      onClick={() => handleEliminar(categoria.CategoriaId)}
-                    >
-                      Eliminar
-                    </Button>
-                  </ListGroup.Item>
-
-
-                ))}
-
-                {showAlert && (
-                  <div className="alert-overlay">
-                    <Alert message={alertMessage} onClose={handleCloseAlert} />
-                    <div className="confirmation-container">
-                      <p>¿Estás seguro que deseas eliminar esta categoría?</p>
-                      <Button variant="danger" onClick={confirmarEliminar}>Si</Button>
-                      <Button variant="secondary" onClick={handleCloseAlert}>No</Button>
-                    </div>
+                    Eliminar
+                  </Button>
+                </ListGroup.Item>
+              ))}
+              {showAlert && (
+                <div className="categoria-alert-overlay">
+                  <Alert variant="info" className="categoria-alert-message">
+                    {alertMessage}
+                  </Alert>
+                  <div className="categoria-confirmation-container">
+                    <p>¿Estás seguro que deseas eliminar esta categoría?</p>
+                    <Button variant="danger" onClick={confirmarEliminar}>Sí</Button>
+                    <Button variant="secondary" onClick={handleCloseAlert}>No</Button>
                   </div>
-                )}
-              </ListGroup>
-            ) : (
-              <Alert variant="info" className="listado-categorias-alert text-center">
-                No hay categorías disponibles.
-              </Alert>
-            )}
-          </Col>
-        </Row>
-      </Container>
-    </>
+                </div>
+              )}
+            </ListGroup>
+          ) : (
+            <Alert variant="info" className="categoria-alert text-center">
+              No hay categorías disponibles.
+            </Alert>
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 }

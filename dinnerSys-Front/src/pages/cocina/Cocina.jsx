@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Spinner, Alert } from 'react-bootstrap';
+import { Table, Container, Spinner, Alert, Button } from 'react-bootstrap';
 import { getOrdersOfDay } from '../../API/Pedidos'; // Asegúrate de que la ruta sea correcta
 import './Cocina.css';
 
@@ -9,11 +9,11 @@ export function Cocina() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-   getOrdersOfDay()
+    getOrdersOfDay()
       .then((result) => {
         setOrders(result);
       })
-      .catch((error) => { 
+      .catch((error) => {
         setError('Error al cargar los pedidos');
         console.error(error);
       })
@@ -39,23 +39,27 @@ export function Cocina() {
             <Table striped bordered hover responsive className="mt-4" key={order.PedidoId}>
               <thead>
                 <tr>
-                  <th>Mesa</th>
-                  <th>Mesero</th>
-                  <th>Productos</th>
+                  <th className='titulos-columnas'>Mesa</th>
+                  <th className='titulos-columnas'>Mesero</th>
+                  <th className='titulos-columnas'>Productos</th>
+                  <th className='titulos-columnas'>Estado Pedido</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>{order.Mesa}</td>
-                  <td>{order.Mesero}</td>
-                  <td>
+                  <td className='contenido-pedido'>{order.Mesa}</td>
+                  <td className='contenido-pedido'>{order.Mesero}</td>
+                  <td className=''>
                     <ul>
                       {order.lstProductos.map((product, index) => (
-                        <li key={index}>
-                          {product.Cantidad}x {product.Producto} - ${product.PrecioUnitario.toFixed(2)}
+                        <li key={index} className='contenido-pedido-productos'>
+                          {product.Cantidad}x {product.Producto}
                         </li>
                       ))}
                     </ul>
+                  </td>
+                  <td>
+                  <Button variant="success" className="btn-lista">Listo</Button>
                   </td>
                 </tr>
               </tbody>

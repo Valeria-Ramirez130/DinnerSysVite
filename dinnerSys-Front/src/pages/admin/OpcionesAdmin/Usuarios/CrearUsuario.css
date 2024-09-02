@@ -1,6 +1,6 @@
 /* Establece que el contenedor principal ocupe el 100% del ancho de su contenedor padre */
 .contenedor-principal {
-  width: 80%;
+  width: 93%;
   margin: 0 auto;
   /* Centra el contenedor en la página */
   margin-top: 30px;

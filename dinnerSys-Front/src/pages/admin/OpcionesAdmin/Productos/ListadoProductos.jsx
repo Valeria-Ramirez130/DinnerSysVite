@@ -117,10 +117,12 @@ export function ListadoProductos({ isProductCreated }) {
   );
 
   return (
-    <div className="listado-productos-container">
-      <div className="listado-productos-header">
+    <>
+    <div className="listado-productos-header">
         <h1>Listado de Productos</h1>
       </div>
+    <div className="listado-productos-container">
+      
       <Container>
         <InputGroup className="mb-3">
           <FormControl
@@ -228,5 +230,6 @@ export function ListadoProductos({ isProductCreated }) {
         </div>
       )}
     </div>
+    </>
   );
 }
