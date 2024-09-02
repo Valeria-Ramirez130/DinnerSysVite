@@ -69,6 +69,10 @@
   
   /* Establece que el formulario ocupe el 100% del ancho en dispositivos móviles */
   @media (max-width: 767px) {
+    .contenedor-principal {
+      width: 90%;
+      
+    }
   
     /* Estiliza las filas del formulario para que sean columnas en dispositivos móviles */
     .formulario-productos .mb-3 {
