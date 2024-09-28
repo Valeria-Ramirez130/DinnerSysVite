@@ -118,7 +118,7 @@ export function ListadoProductos({ isProductCreated }) {
 
   return (
     <>
-    <div className="listado-productos-header">
+    <div className="listado-productos-header-lt">
         <h1>Listado de Productos</h1>
       </div>
     <div className="listado-productos-container">
