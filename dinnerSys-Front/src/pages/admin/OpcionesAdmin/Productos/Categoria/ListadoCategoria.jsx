@@ -16,39 +16,39 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
     getCategorias()
       .then(res => {
         if (res) {
-          console.log(res);
           setLoading(false);
           setCategorias(res);
         } else {
           setError('Error al obtener las categorías');
         }
       })
-      .catch(error => {
+      .catch(() => {
         setError('Error al obtener las categorías');
       });
   }, [isCategoriaCreated]);
 
-  const handleEliminar = async (id) => {
+  const handleEliminar = (id) => {
     setCategoriaSeleccionada(id);
+    setAlertMessage(''); // Limpia el mensaje de alerta previo
     setShowAlert(true);
   };
 
   const confirmarEliminar = () => {
-    eliminarCategoria(categoriaSeleccionada).then((res) => {
-      if (res) {
-        setCategorias(categorias.filter(categoria => categoria.CategoriaId !== categoriaSeleccionada));
-        alertaToast({ titulo: 'Categoría eliminada correctamente' });
-        setAlertMessage('Categoría eliminada correctamente');
-      } else {
+    eliminarCategoria(categoriaSeleccionada)
+      .then((res) => {
+        if (res) {
+          setCategorias(categorias.filter(categoria => categoria.CategoriaId !== categoriaSeleccionada));
+          alertaToast({ titulo: 'Categoría eliminada correctamente' });
+        } else {
+          alertaToast({ titulo: 'Error al eliminar la categoría', icon: 'error' });
+        }
+      })
+      .catch(() => {
         alertaToast({ titulo: 'Error al eliminar la categoría', icon: 'error' });
-        setAlertMessage('Error al eliminar la categoría');
-      }
-    }).catch((error) => {
-      alertaToast({ titulo: 'Error al eliminar la categoría', icon: 'error' });
-      setAlertMessage('Ocurrió un error inesperado');
-    }).finally(() => {
-      setShowAlert(false);
-    });
+      })
+      .finally(() => {
+        setShowAlert(false); // Cierra la confirmación de alerta
+      });
   };
 
   const handleCloseAlert = () => {
@@ -78,7 +78,7 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
   return (
     <Container className="listado-categorias-container">
       <div className="listado-categorias-header">
-        <h1>Listado Categoria</h1>
+        <h1>Listado de Categorías</h1>
       </div>
       <Row className="categoria-justify-content-md-center">
         <Col md={12}>
@@ -99,18 +99,18 @@ export default function ListadoCategoria({ isCategoriaCreated }) {
                   </Button>
                 </ListGroup.Item>
               ))}
-              {showAlert && (
-                <div className="categoria-alert-overlay">
-                  <Alert variant="info" className="categoria-alert-message">
-                    {alertMessage}
-                  </Alert>
-                  <div className="categoria-confirmation-container">
-                    <p>¿Estás seguro que deseas eliminar esta categoría?</p>
-                    <Button variant="danger" onClick={confirmarEliminar}>Sí</Button>
-                    <Button variant="secondary" onClick={handleCloseAlert}>No</Button>
-                  </div>
-                </div>
-              )}
+             {showAlert && (
+  <div className="categoria-alert-overlay">
+    <div className="categoria-confirmation-container">
+      <p>¿Estás seguro que deseas eliminar esta categoría?</p>
+      <div>
+        <Button variant="danger" onClick={confirmarEliminar}>Sí</Button>
+        <Button variant="secondary" onClick={handleCloseAlert}>No</Button>
+      </div>
+    </div>
+  </div>
+)}
+
             </ListGroup>
           ) : (
             <Alert variant="info" className="categoria-alert text-center">

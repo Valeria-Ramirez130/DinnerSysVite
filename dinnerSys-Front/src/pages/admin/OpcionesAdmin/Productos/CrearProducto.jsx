@@ -5,6 +5,7 @@ import { createProduct } from "../../../../API/Productos";
 import { getCategorias } from "../../../../API/Categorias";
 import "./CrearProducto.css";
 import { ListadoProductos } from "./ListadoProductos";
+import { alertaGeneral } from '../../../../utils/alertasGlobales'; // Asegúrate de importar la función correctamente
 
 export function CrearProducto() {
   const [isProductCreated, setIsProductCreated] = useState(false);
@@ -43,15 +44,16 @@ export function CrearProducto() {
       Descripcion: producto.descripcion,
       Categoria: producto.categoria,
       Precio: producto.precio,
-    }).then((res) => {
-      alert("Producto creado");
-      console.log("Producto creado");
-      setIsProductCreated(!isProductCreated);
-    }).catch(() => {
-      alert("Error al crear el producto");
-      console.log("Error al crear el producto");
-
     })
+      .then((res) => {
+        alertaGeneral("Producto creado correctamente");
+        console.log("Producto creado");
+        setIsProductCreated(!isProductCreated);
+      })
+      .catch(() => {
+        alertaGeneral("Error al crear el producto", true);
+        console.log("Error al crear el producto");
+      });
   };
 
   return (
