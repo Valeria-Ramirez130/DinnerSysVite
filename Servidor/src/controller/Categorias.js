@@ -81,7 +81,7 @@ export const deleteCategoria = async (req, res) => {
             const isDelete = await pool.query('DELETE FROM Categorias WHERE CategoriaId = ?', [categoriaId]);
             if(isDelete.affectedRows === 1){
                 console.log("Categoria eliminada correctamente");
-                res.status(200).json({ Message: "Categoria eliminada correctamente" });
+                res.status(201).json({ Message: "Categoria eliminada correctamente" });
             }else{
                 console.log("Error, no se pudo eliminar la categoria o la categoria no existe");
                 res.status(400).json({ Error: "Error, no se pudo eliminar la categoria o la categoria no existe" });
