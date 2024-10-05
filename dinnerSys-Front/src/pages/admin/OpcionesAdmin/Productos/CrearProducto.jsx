@@ -49,7 +49,15 @@ export function CrearProducto() {
         alertaGeneral("Producto creado correctamente");
         console.log("Producto creado");
         setIsProductCreated(!isProductCreated);
+
+        setProducto({
+          nombre: "",
+          descripcion: "",
+          precio: "",
+          categoria: "",
+        });
       })
+
       .catch(() => {
         alertaGeneral("Error al crear el producto", true);
         console.log("Error al crear el producto");
