@@ -5,7 +5,7 @@ import './ListadoProductos.css';
 import Alert from '../../../../components/Alert/Alert';
 import { alertaGeneral, alertaToast } from '../../../../utils/alertasGlobales'; // Importa las alertas
 
-export function ListadoProductos({ isProductCreated }) {
+export function ListadoProductos({ isProductCreated, categorias }) {
   const [registros, setRegistros] = useState([]);
   const [filtros, setFiltros] = useState({
     id: '',
@@ -210,7 +210,21 @@ export function ListadoProductos({ isProductCreated }) {
               </Form.Group>
               <Form.Group controlId="formCategoria">
                 <Form.Label>Categoría</Form.Label>
-                <Form.Control type="text" name="categoria" value={formData.categoria} onChange={handleInputChange} />
+                <Form.Select
+                  name="categoria"
+                  value={formData.categoria}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Seleccione una categoría</option>
+                  {categorias.map((categoria) => (
+                    <option
+                      key={categoria.CategoriaId}
+                      value={categoria.NombreCategoria}
+                    >
+                      {categoria.NombreCategoria}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
               <Form.Group controlId="formPrecio">
                 <Form.Label>Precio</Form.Label>

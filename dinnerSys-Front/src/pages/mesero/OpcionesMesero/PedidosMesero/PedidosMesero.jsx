@@ -306,15 +306,17 @@ function PedidosMesero({ mesa, pedido, onPedidoCreated }) {
             </tbody>
           </Table>
         </div>
-        <div className="text-center mt-3">
-          <Button
-            variant="primary"
-            className="btn-liberar"
-            onClick={liberarMesa}
-          >
-            Liberar Mesa
-          </Button>
-        </div>
+        {pedido && pedido.length > 0 && (
+          <div className="text-center mt-3">
+            <Button
+              variant="primary"
+              className="btn-liberar"
+              onClick={liberarMesa}
+            >
+              Liberar Mesa
+            </Button>
+          </div>
+        )}
         <div className="total-container">
           <h3>Total: ${calcularTotal().toLocaleString('es-ES', {
             minimumFractionDigits: 0,

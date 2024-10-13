@@ -131,7 +131,7 @@ export function CrearProducto() {
         </Form>
       </div>
       <div>
-        <ListadoProductos isProductCreated={isProductCreated} />
+        <ListadoProductos isProductCreated={isProductCreated} categorias={categorias && categorias} />
       </div>
     </>
   );

@@ -22,7 +22,7 @@
     "react-slick": "^0.30.2",
     "react-ui-cards": "^2.0.0",
     "slick-carousel": "^1.8.1",
-    "sweetalert2": "^11.14.1",
+    "sweetalert2": "^11.6.13",
     "yup": "^1.4.0"
   },
   "devDependencies": {
