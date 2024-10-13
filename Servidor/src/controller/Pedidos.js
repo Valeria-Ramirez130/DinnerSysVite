@@ -497,7 +497,7 @@ const verificarCantidadInserciones = (res, cantidadInserciones, lstProductos, ti
     // console.log(cantidadInserciones, lstProductos.length);
     if (cantidadInserciones === lstProductos.length) {//Debe ser IGUAL SIEMPRE al length de la lista
         console.log(`Pedido ${tipoPeticion} correctamente`);
-        res.status(200).json({ Message: `Pedido ${tipoPeticion} correctamente` });
+        res.status(201).json({ Message: `Pedido ${tipoPeticion} correctamente` });
     } else if (cantidadInserciones === 0) {
         console.log("No se insertaron productos al pedido");
         res.status(400).json({ Error: 'No se insertaron productos al pedido' });
