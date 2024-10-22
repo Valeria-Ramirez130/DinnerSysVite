@@ -69,7 +69,6 @@ export const routesadmin = [
           <>
             <NavbarAdmin />
             <CrearMesa />
-            <ListadoMesas />
           </>
         ),
       },

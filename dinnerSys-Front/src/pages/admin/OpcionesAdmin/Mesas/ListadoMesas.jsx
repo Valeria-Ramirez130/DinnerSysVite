@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getTables } from '../../../../API/Mesas';
 import './ListadoMesas.css'; // Importamos estilos si los hubiera
 
-export function ListadoMesas() {
+export function ListadoMesas({refresh}) {
   const [mesas, setMesas] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export function ListadoMesas() {
       }
     }
     fetchMesas();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="listado-mesas">
