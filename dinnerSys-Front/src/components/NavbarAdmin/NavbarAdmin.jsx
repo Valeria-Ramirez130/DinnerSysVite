@@ -30,7 +30,7 @@ export function NavbarAdmin() {
           <div>
             <img src={logoprincipal} alt="logoprincipal" className="navbar-logo" />
           </div>
-          <Navbar.Brand className="navbar-brand" href="/admin">DinnerSys</Navbar.Brand>
+          <Navbar.Brand className="navbar-brand" href="/admin">Foodify</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">

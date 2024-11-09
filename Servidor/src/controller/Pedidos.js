@@ -518,3 +518,15 @@ const castearPropiedadAFloatYRetornaSuma = (lstObjetos, propiedad) => {
     }
     return suma;
 };
+
+export const getPedidosChatbotDia = async (req, res) => {
+    try {
+      const pedidosChatbot = await pool.query(
+        'SELECT * FROM PedidosChatbot WHERE DATE(FechaPedido) = CURDATE()'
+      );
+      res.status(200).json(pedidosChatbot);
+    } catch (error) {
+      console.error('Error al obtener pedidos chatbot del día:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  };

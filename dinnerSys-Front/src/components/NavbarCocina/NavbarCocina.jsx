@@ -30,7 +30,7 @@ export function NavbarCocina() {
           <div>
             <img src={logoprincipal} alt="logoprincipal" className="navbar-logo" />
           </div>
-          <Navbar.Brand className="navbar-brand" as={Link} to="/cocina">DinnerSys</Navbar.Brand>
+          <Navbar.Brand className="navbar-brand" as={Link} to="/cocina">Foodify</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ml-auto">

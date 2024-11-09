@@ -3,6 +3,7 @@ import { NavbarCocina } from "../components";
 import Cocina from "../pages/cocina/Cocina";
 
 
+
 export const routescocina = [
   {
     path: "/",
@@ -13,7 +14,8 @@ export const routescocina = [
         element: (
           <>
             <NavbarCocina />
-            <Cocina /> 
+            <Cocina />
+            {/* <CocinaDomicilios/>  */}
           </>
         ),
       },

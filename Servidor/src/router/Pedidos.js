@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const routerPedidos = Router();
 
-import { agregarNuevosProductosAlPedido, createPedido, deletePedido, getPedidos, getPedidoActivoXMesaId, getTotalPedido, updatePedido, getPedidosDelDia } from '../controller/Pedidos.js';
+import { agregarNuevosProductosAlPedido, createPedido, deletePedido, getPedidos, getPedidoActivoXMesaId, getTotalPedido, updatePedido, getPedidosDelDia, getPedidosChatbotDia } from '../controller/Pedidos.js';
 
 //PETICIONES GET 
 routerPedidos.get('/getPedidos', getPedidos); //Traer todos los pedidos con el precio, el mesero, la hora, y los productos
@@ -13,5 +13,7 @@ routerPedidos.post('/createPedido', createPedido); //Para crear un pedido
 routerPedidos.put('/updatePedido/:PedidoId', updatePedido); //Para actualizar un pedido
 //PETICIONES DELETE
 routerPedidos.delete('/deletePedido/:pedidoId', deletePedido); //Para eliminar un pedido
+//
+routerPedidos.get('/getPedidosChatbotDia', getPedidosChatbotDia);
 
 export default routerPedidos;
